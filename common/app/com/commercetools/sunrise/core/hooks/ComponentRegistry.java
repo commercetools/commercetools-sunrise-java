@@ -12,6 +12,8 @@ public interface ComponentRegistry {
 
     void add(Class<? extends Component> component);
 
+    void remove(Class<? extends Component> component);
+
     default void addAll(Iterable<Class<? extends Component>> components) {
         components.forEach(this::add);
     }

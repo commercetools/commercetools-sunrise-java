@@ -4,6 +4,7 @@ import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.models.categories.CategoryFinder;
 import com.commercetools.sunrise.models.products.ProductFetcher;
 import com.commercetools.sunrise.models.products.ProductListFetcher;
 import play.libs.concurrent.HttpExecution;
@@ -17,25 +18,34 @@ public abstract class SunriseProductsController extends SunriseController {
     private final TemplateEngine templateEngine;
     private final ProductListFetcher productListFetcher;
     private final ProductFetcher productFetcher;
+    private final CategoryFinder categoryFinder;
 
     protected SunriseProductsController(final TemplateEngine templateEngine,
                                         final ProductListFetcher productListFetcher,
-                                        final ProductFetcher productFetcher) {
+                                        final ProductFetcher productFetcher,
+                                        final CategoryFinder categoryFinder) {
         this.templateEngine = templateEngine;
         this.productListFetcher = productListFetcher;
         this.productFetcher = productFetcher;
+        this.categoryFinder = categoryFinder;
     }
 
     @EnableHooks
     public CompletionStage<Result> list(final String categoryIdentifier) {
-        return search();
+        final PageData pageData = PageData.of();
+        categoryFinder.apply(categoryIdentifier).ifPresent(category -> pageData.put("category", category));
+        return list(pageData);
     }
 
     @EnableHooks
     public CompletionStage<Result> search() {
+        return list(PageData.of());
+    }
+
+    private CompletionStage<Result> list(final PageData pageData) {
         return productListFetcher.get()
-                .thenApply(products -> PageData.of().put("products", products))
-                .thenComposeAsync(pageData -> templateEngine.render("pop", pageData)
+                .thenApply(products -> pageData.put("products", products))
+                .thenComposeAsync(finalPageData -> templateEngine.render("pop", finalPageData)
                         .thenApply(Results::ok), HttpExecution.defaultContext());
     }
 

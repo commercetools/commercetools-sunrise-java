@@ -1,4 +1,4 @@
-import com.commercetools.sunrise.cms.CmsPageComponent;
+import com.commercetools.sunrise.cms.CmsComponent;
 import com.commercetools.sunrise.core.hooks.GlobalComponentRegistry;
 import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.core.viewmodels.meta.TemplateComponent;
@@ -110,7 +110,7 @@ public class Module extends AbstractModule {
         globalComponentRegistry.addAll(CustomerComponentSupplier.get());
         globalComponentRegistry.addAll(WishlistComponentSupplier.get());
         globalComponentRegistry.add(CategoryTreeDisplayingComponent.class);
-        globalComponentRegistry.add(CmsPageComponent.class);
+        globalComponentRegistry.add(CmsComponent.class);
         return globalComponentRegistry;
     }
 }

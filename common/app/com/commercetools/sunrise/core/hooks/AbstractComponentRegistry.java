@@ -12,8 +12,14 @@ public abstract class AbstractComponentRegistry implements ComponentRegistry {
 
     @Override
     public void add(final Class<? extends Component> componentClass) {
-        getLogger().debug("Registered component {}", componentClass.getCanonicalName());
         components.add(componentClass);
+        getLogger().debug("Enabled component {}", componentClass.getCanonicalName());
+    }
+
+    @Override
+    public void remove(final Class<? extends Component> componentClass) {
+        components.remove(componentClass);
+        getLogger().debug("Disabled component {}", componentClass.getCanonicalName());
     }
 
     @Override

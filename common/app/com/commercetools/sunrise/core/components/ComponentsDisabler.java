@@ -13,12 +13,12 @@ import java.util.concurrent.CompletionStage;
 /**
  * Action that registers the provided {@link ControllerComponent} list.
  */
-final class ComponentsRegisterer extends Action<RegisteredComponents> {
+final class ComponentsDisabler extends Action<DisableComponents> {
 
     private final Injector injector;
 
     @Inject
-    ComponentsRegisterer(final Injector injector) {
+    ComponentsDisabler(final Injector injector) {
         this.injector = injector;
     }
 
@@ -27,7 +27,7 @@ final class ComponentsRegisterer extends Action<RegisteredComponents> {
         if (configuration.value().length > 0) {
             // On creation of this action there isn't any HTTP context, necessary to initialize the ComponentRegistry
             final ComponentRegistry componentRegistry = injector.instanceOf(ComponentRegistry.class);
-            Arrays.stream(configuration.value()).forEach(componentRegistry::add);
+            Arrays.stream(configuration.value()).forEach(componentRegistry::remove);
         }
         return delegate.call(ctx);
     }

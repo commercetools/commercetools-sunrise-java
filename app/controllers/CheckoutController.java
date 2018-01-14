@@ -1,6 +1,6 @@
 package controllers;
 
-import com.commercetools.sunrise.core.components.RegisteredComponents;
+import com.commercetools.sunrise.core.components.EnableComponents;
 import com.commercetools.sunrise.controllers.cache.NoCache;
 import com.commercetools.sunrise.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 @LogMetrics
 @NoCache
-@RegisteredComponents({
+@EnableComponents({
         CartShippingInfoExpansionComponent.class,
         CartPaymentInfoExpansionComponent.class
 })

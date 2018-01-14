@@ -1,10 +1,12 @@
 <!-- start catalog/pop/banner.hbs -->
+{{#with category.assets.[0]}}
 <figure class="figure-banner">
-  <img class="img-responsive hidden-sm hidden-md hidden-lg" src="{{banner.imageMobile}}" alt="{{banner.title}}">
-  <img class="img-responsive hidden-xs" src="{{banner.imageDesktop}}" alt="{{banner.title}}">
+  <img class="img-responsive hidden-sm hidden-md hidden-lg" src="{{sources.[0].uri}}" alt="{{name}}">
+  <img class="img-responsive hidden-xs" src="{{sources.[0].uri}}" alt="{{name}}">
   <figcaption class="figcaption-banner-text">
-    <h2>{{banner.title}}</h2>
-    <h3>{{{banner.description}}}</h3>
+    <h2>{{name}}</h2>
+    <h3>{{{description}}}</h3>
   </figcaption>
 </figure>
+{{/with}}
 <!-- end catalog/pop/banner.hbs -->

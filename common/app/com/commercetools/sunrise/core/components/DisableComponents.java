@@ -7,9 +7,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@With(ComponentsRegisterer.class)
+@With(ComponentsDisabler.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RegisteredComponents {
+public @interface DisableComponents {
     Class<? extends ControllerComponent>[] value();
 }

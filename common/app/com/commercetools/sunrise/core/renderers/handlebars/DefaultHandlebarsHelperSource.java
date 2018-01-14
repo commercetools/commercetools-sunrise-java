@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.core.renderers.handlebars;
 
 import com.commercetools.sdk.CtpEnumUtils;
+import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.i18n.LanguageSelector;
 import com.commercetools.sunrise.core.localization.CountrySelector;
@@ -68,7 +69,11 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
      * @return the content
      */
     public CharSequence cms(final String fieldName, final Options options) {
-        return "ZZZZZ";
+        final Object cms = options.context.get("cms");
+        if (cms instanceof CmsPage) {
+            return ((CmsPage) cms).field(fieldName).orElse(null);
+        }
+        return null;
     }
 
     /**
