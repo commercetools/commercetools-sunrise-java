@@ -1,8 +1,10 @@
 <!-- start catalog/product-price.hbs -->
 <p class="product-price">
-  {{#withProductPrice variant}}
-      {{#if previous}}<span class="discounted-price">{{previous}}</span>{{/if}}
-      <span>{{current}}</span>
-  {{/withProductPrice}}
+  {{#if variant.price.discounted}}
+    <span class="discounted-price">{{variant.price.value}}</span>
+    <span>{{variant.price.discounted.value}}</span>
+  {{else}}
+    <span>{{variant.price.value}}</span>
+  {{/if}}
 </p>
 <!-- end catalog/product-price.hbs -->

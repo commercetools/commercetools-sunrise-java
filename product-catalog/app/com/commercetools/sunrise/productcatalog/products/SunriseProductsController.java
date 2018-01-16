@@ -4,7 +4,7 @@ import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.core.viewmodels.PageData;
-import com.commercetools.sunrise.models.categories.CategoryFinder;
+import com.commercetools.sunrise.models.categories.CategoryFetcher;
 import com.commercetools.sunrise.models.products.ProductFetcher;
 import com.commercetools.sunrise.models.products.ProductListFetcher;
 import play.libs.concurrent.HttpExecution;
@@ -18,23 +18,25 @@ public abstract class SunriseProductsController extends SunriseController {
     private final TemplateEngine templateEngine;
     private final ProductListFetcher productListFetcher;
     private final ProductFetcher productFetcher;
-    private final CategoryFinder categoryFinder;
+    private final CategoryFetcher categoryFetcher;
 
     protected SunriseProductsController(final TemplateEngine templateEngine,
                                         final ProductListFetcher productListFetcher,
                                         final ProductFetcher productFetcher,
-                                        final CategoryFinder categoryFinder) {
+                                        final CategoryFetcher categoryFetcher) {
         this.templateEngine = templateEngine;
         this.productListFetcher = productListFetcher;
         this.productFetcher = productFetcher;
-        this.categoryFinder = categoryFinder;
+        this.categoryFetcher = categoryFetcher;
     }
 
     @EnableHooks
     public CompletionStage<Result> list(final String categoryIdentifier) {
-        final PageData pageData = PageData.of();
-        categoryFinder.apply(categoryIdentifier).ifPresent(category -> pageData.put("category", category));
-        return list(pageData);
+        return categoryFetcher.get(categoryIdentifier)
+                .thenApply(categoryOpt -> categoryOpt
+                        .map(category -> PageData.of().put("category", category))
+                        .orElseGet(PageData::of))
+                .thenComposeAsync(this::list, HttpExecution.defaultContext());
     }
 
     @EnableHooks

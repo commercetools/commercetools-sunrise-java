@@ -3,32 +3,28 @@
   <img class="pull-right" src="/assets/img/globe-2-1d536d6c59d33518fb95d7261d6640af.png" alt="{{i18n "main:header.location"}}">
 </button>
 <div class="location-dropdown">
-  {{#withLanguageOptions}}
-  {{#if this.[1]}}
+  {{#if languageOptions.[1]}}
   <form id="form-select-language" action="/language" method="POST">
     <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
     <span class="location-dropdown-label">{{i18n "main:header.language"}}</span>
     <select name="language" id="language-select" class="select location-select">
-      {{#each this}}
+      {{#each languageOptions}}
       <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
       {{/each}}
     </select>
   </form>
   {{/if}}
-  {{/withLanguageOptions}}
 
-  {{#withCountryOptions}}
-  {{#if this.[1]}}
-  <form id="form-select-country" action="/country" method="POST">
-    <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
-    <span class="location-dropdown-label">{{i18n "main:header.country"}}</span>
-    <select name="country" id="country-select" class="select location-select">
-      {{#each this}}
-      <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+  {{#if countryOptions.[1]}}
+      <form id="form-select-country" action="/country" method="POST">
+          <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
+          <span class="location-dropdown-label">{{i18n "main:header.country"}}</span>
+      <select name="country" id="country-select" class="select location-select">
+      {{#each countryOptions}}
+          <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
       {{/each}}
-    </select>
-  </form>
+      </select>
+      </form>
   {{/if}}
-  {{/withCountryOptions}}
 </div>
 <!-- end common/location-selector.hbs -->

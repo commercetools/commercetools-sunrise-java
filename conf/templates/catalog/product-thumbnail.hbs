@@ -1,9 +1,9 @@
 <!-- start catalog/product-thumbnail.hbs -->
 <a id="link-product-thumbnail-{{variant.sku}}" href="/{{#if product}}{{product.slug}}{{else}}{{productSlug}}{{/if}}-{{variant.sku}}.html">
   <div class="shop-item">
-    {{#ifDiscounted variant}}
+    {{#if variant.price.discounted}}
       <div class="sale-flag">{{i18n "catalog:thumbnail.sale"}}</div>
-    {{/ifDiscounted}}
+    {{/if}}
       {{#if product}}
           {{#ifNew product}}
               <div class="new-flag">{{i18n "catalog:thumbnail.new"}}</div>
@@ -17,14 +17,12 @@
       <span class="name-headline">{{#if product}}{{product.name}}{{else}}{{name}}{{/if}}</span>
     </div>
     <div class="pop-item-price">
-      {{#withProductPrice variant}}
-          {{#if previous}}
-              <span class="strikethrough">{{previous}}</span>
-              <span class="pop-item-price-old">{{current}}</span>
-          {{else}}
-              <span class="current-price">{{current}}</span>
-          {{/if}}
-      {{/withProductPrice}}
+      {{#if variant.price.discounted}}
+          <span class="strikethrough">{{variant.price.value}}</span>
+          <span class="pop-item-price-old">{{variant.price.discounted.value}}</span>
+      {{else}}
+          <span class="current-price">{{variant.price.value}}</span>
+      {{/if}}
     </div>
     <div class="pop-product-more-colors">
       {{!-- {{#if thumbnail.moreColors}}{{i18n "catalog:thumbnail.moreColors"}}{{/if}}&nbsp; --}}

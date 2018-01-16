@@ -4,7 +4,8 @@ import com.commercetools.sunrise.controllers.cache.NoCache;
 import com.commercetools.sunrise.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.components.EnableComponents;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
-import com.commercetools.sunrise.models.categories.CategoryFinder;
+import com.commercetools.sunrise.models.BreadcrumbComponent;
+import com.commercetools.sunrise.models.categories.CategoryFetcher;
 import com.commercetools.sunrise.models.products.ProductFetcher;
 import com.commercetools.sunrise.models.products.ProductListFetcher;
 import com.commercetools.sunrise.productcatalog.products.ProductSuggestionsComponent;
@@ -23,7 +24,8 @@ import javax.inject.Inject;
         ProductSearchSortSelectorControllerComponent.class,
         ProductPaginationControllerComponent.class,
         ProductSearchBoxControllerComponent.class,
-        ProductFacetedSearchSelectorControllerComponent.class
+        ProductFacetedSearchSelectorControllerComponent.class,
+        BreadcrumbComponent.class
 })
 public final class ProductsController extends SunriseProductsController {
 
@@ -31,7 +33,7 @@ public final class ProductsController extends SunriseProductsController {
     ProductsController(final TemplateEngine templateEngine,
                        final ProductListFetcher productListFetcher,
                        final ProductFetcher productFetcher,
-                       final CategoryFinder categoryFinder) {
-        super(templateEngine, productListFetcher, productFetcher, categoryFinder);
+                       final CategoryFetcher categoryFetcher) {
+        super(templateEngine, productListFetcher, productFetcher, categoryFetcher);
     }
 }

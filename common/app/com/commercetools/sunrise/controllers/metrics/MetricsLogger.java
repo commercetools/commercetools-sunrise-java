@@ -4,7 +4,6 @@ import com.commercetools.sdk.CtpLogUtils;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.metrics.ObservedTotalDuration;
 import io.sphere.sdk.client.metrics.SimpleMetricsSphereClient;
-import io.sphere.sdk.models.Base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.mvc.Action;
@@ -57,18 +56,8 @@ final class MetricsLogger extends Action.Simple {
     }
 
     private static void logRequestData(final List<ObservedTotalDuration> metrics, final Http.Context ctx, final long totalDuration) {
-        if (LOGGER.isTraceEnabled()) {
-            logTraceRequestData(metrics);
-        } else {
-            logDebugRequestData(metrics, ctx, totalDuration);
-        }
-    }
-
-    private static void logDebugRequestData(final List<ObservedTotalDuration> metrics, final Http.Context ctx, final long totalDuration) {
         String report = metrics.stream()
-                .map(data -> String.format("(%dms) %s",
-                        data.getDurationInMilliseconds(),
-                        CtpLogUtils.printableRequest(data.getRequest())))
+                .map(MetricsLogger::buildReport)
                 .collect(joining("\n"));
         if (!report.isEmpty()) {
             report = ":\n" + report;
@@ -80,12 +69,14 @@ final class MetricsLogger extends Action.Simple {
                 report);
     }
 
-    private static void logTraceRequestData(final List<ObservedTotalDuration> metrics) {
-        final String report = metrics.stream()
-                .map(Base::toString)
-                .collect(joining("\n"));
-        if (!report.isEmpty()) {
-            LOGGER.trace(report);
+    private static String buildReport(final ObservedTotalDuration metric) {
+        String request = String.format("(%dms) %s",
+                metric.getDurationInMilliseconds(),
+                CtpLogUtils.printableRequest(metric.getRequest()));
+        if (!request.isEmpty() && LOGGER.isTraceEnabled()) {
+            request += "\n with correlation ID: " + metric.getCorrelationId();
+            request += "\n" + CtpLogUtils.printableResponse(metric.getSuccessResult());
         }
+        return request;
     }
 }

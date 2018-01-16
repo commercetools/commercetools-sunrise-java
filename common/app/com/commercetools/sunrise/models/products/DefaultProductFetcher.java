@@ -32,15 +32,15 @@ public class DefaultProductFetcher extends AbstractProductFetcher {
     }
 
     @Override
-    public Optional<ProductProjectionQuery> defaultRequest(final String productIdentifier) {
-        return buildSlugPredicate(productIdentifier)
+    public Optional<ProductProjectionQuery> defaultRequest(final String slug) {
+        return buildSlugPredicate(slug)
                 .map(slugPredicate -> ProductProjectionQuery.ofCurrent()
                         .withPriceSelection(priceSelection)
                         .withPredicates(slugPredicate));
     }
 
     @Override
-    protected Optional<ProductProjection> selectProduct(final PagedQueryResult<ProductProjection> result,
+    protected Optional<ProductProjection> selectResource(final PagedQueryResult<ProductProjection> result,
                                                          final String slug, final String sku) {
         if (result.getTotal() > 1) {
             return result.getResults().stream()

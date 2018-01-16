@@ -25,12 +25,12 @@ public abstract class AbstractOrderListFetcher extends AbstractResourceFetcher<O
     }
 
     @Override
-    protected CompletionStage<OrderQuery> runRequestHook(final OrderQuery baseRequest) {
-        return OrderQueryHook.runHook(getHookRunner(), baseRequest);
+    protected CompletionStage<OrderQuery> runRequestHook(final HookRunner hookRunner, final OrderQuery baseRequest) {
+        return OrderQueryHook.runHook(hookRunner, baseRequest);
     }
 
     @Override
-    protected void runPagedResultLoadedHook(final PagedQueryResult<Order> result) {
-        OrderPagedQueryResultLoadedHook.runHook(getHookRunner(), result);
+    protected void runPagedResultLoadedHook(final HookRunner hookRunner, final PagedQueryResult<Order> result) {
+        OrderPagedQueryResultLoadedHook.runHook(hookRunner, result);
     }
 }

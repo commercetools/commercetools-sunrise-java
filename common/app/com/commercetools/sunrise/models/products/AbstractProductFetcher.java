@@ -27,10 +27,10 @@ public abstract class AbstractProductFetcher extends AbstractSingleResourceFetch
     @Override
     public CompletionStage<Optional<ProductWithVariant>> get(final String productIdentifier, @Nullable final String variantIdentifier) {
         return defaultRequest(productIdentifier)
-                .map(request -> executeRequest(request, pagedResult -> selectProduct(pagedResult, productIdentifier, variantIdentifier))
+                .map(request -> executeRequest(request, pagedResult -> selectResource(pagedResult, productIdentifier, variantIdentifier))
                         .thenApplyAsync(productOpt -> productOpt.map(product -> {
                             final ProductWithVariant productWithVariant = ProductWithVariant.of(product, selectVariant(product, variantIdentifier));
-                            runProductVariantLoadedHook(productWithVariant);
+                            runProductVariantLoadedHook(getHookRunner(), productWithVariant);
                             return productWithVariant;
                         }),
                         HttpExecution.defaultContext()))
@@ -38,21 +38,26 @@ public abstract class AbstractProductFetcher extends AbstractSingleResourceFetch
     }
 
     @Override
-    protected final CompletionStage<ProductProjectionQuery> runRequestHook(final ProductProjectionQuery baseRequest) {
-        return ProductProjectionQueryHook.runHook(getHookRunner(), baseRequest);
+    protected final CompletionStage<ProductProjectionQuery> runRequestHook(final HookRunner hookRunner, final ProductProjectionQuery baseRequest) {
+        return ProductProjectionQueryHook.runHook(hookRunner, baseRequest);
     }
 
     @Override
-    protected final void runResourceLoadedHook(final ProductProjection resource) {
-        ProductProjectionLoadedHook.runHook(getHookRunner(), resource);
+    protected final void runResourceLoadedHook(final HookRunner hookRunner, final ProductProjection resource) {
+        ProductProjectionLoadedHook.runHook(hookRunner, resource);
     }
 
-    protected final void runProductVariantLoadedHook(final ProductWithVariant productWithVariant) {
-        ProductWithVariantLoadedHook.runHook(getHookRunner(), productWithVariant);
+    protected final void runProductVariantLoadedHook(final HookRunner hookRunner, final ProductWithVariant productWithVariant) {
+        ProductWithVariantLoadedHook.runHook(hookRunner, productWithVariant);
     }
 
-    protected Optional<ProductProjection> selectProduct(final PagedQueryResult<ProductProjection> pagedResult,
-                                                        final String productIdentifier, @Nullable final String variantIdentifier) {
+    @Override
+    protected final Optional<ProductProjection> selectResource(final PagedQueryResult<ProductProjection> pagedResult) {
+        return super.selectResource(pagedResult);
+    }
+
+    protected Optional<ProductProjection> selectResource(final PagedQueryResult<ProductProjection> pagedResult,
+                                                         final String productIdentifier, @Nullable final String variantIdentifier) {
         return selectResource(pagedResult);
     }
 

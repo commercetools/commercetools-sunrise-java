@@ -35,16 +35,16 @@
                     <div class="your-order-details-title">{{i18n "my-account:myOrder.title"}}</div>
                     <div class="your-order-details">
                       <span class="your-order-details-titles">{{i18n "my-account:myOrder.orderNumber"}}<br>{{i18n "my-account:myOrder.creationDate"}}</span>
-                      <span class="your-order-details-info">{{content.order.orderNumber}}<br>{{formatDateTime content.order.createdAt}}</span>
+                      <span class="your-order-details-info">{{order.orderNumber}}<br>{{order.createdAt}}</span>
                     </div>
                     <button onclick="window.print()" class="my-orders-print-receipt-btn hidden-xs">{{i18n "my-account:myOrder.print"}}</button>
                   </div>
                   <div class="row">
-                      {{> myaccount/order-address title=(i18n "my-account:myOrder.shippingAddress") address=content.order.shippingAddress}}
-                      {{#if content.order.billingAddress}}
-                          {{> myaccount/order-address title=(i18n "my-account:myOrder.billingAddress") address=content.order.billingAddress}}
+                      {{> myaccount/order-address title=(i18n "my-account:myOrder.shippingAddress") address=order.shippingAddress}}
+                      {{#if order.billingAddress}}
+                          {{> myaccount/order-address title=(i18n "my-account:myOrder.billingAddress") address=order.billingAddress}}
                       {{else}}
-                          {{> myaccount/order-address title=(i18n "my-account:myOrder.billingAddress") address=content.order.shippingAddress}}
+                          {{> myaccount/order-address title=(i18n "my-account:myOrder.billingAddress") address=order.shippingAddress}}
                       {{/if}}
                   </div>
                   <div class="row">
@@ -52,20 +52,20 @@
                       <div class="my-orders-order-dark-box">
                         <div class="my-orders-order-dark-box-title">{{i18n "my-account:myOrder.shippingMethod"}}</div>
                           <div>
-                              {{content.order.shippingInfo.shippingMethodName}}
-                              {{#if content.order.shippingInfo.shippingMethod.obj.description}}- {{content.order.shippingInfo.shippingMethod.obj.description}}{{/if}}
+                              {{order.shippingInfo.shippingMethodName}}
+                              {{#if order.shippingInfo.shippingMethod.obj.description}}- {{order.shippingInfo.shippingMethod.obj.description}}{{/if}}
                           </div>
                       </div>
                     </div>
                     <div class="col-sm-6">
                       <div class="my-orders-order-dark-box">
                         <div class="my-orders-order-dark-box-title">{{i18n "my-account:myOrder.paymentDetails"}}</div>
-                        <div>{{content.order.paymentInfo.payments.0.obj.paymentMethodInfo.name}}</div>
+                        <div>{{order.paymentInfo.payments.[0].obj.paymentMethodInfo.name}}</div>
                       </div>
                     </div>
                   </div>
                   <div class="my-orders-order-price-summary-wrapper">
-                      {{#each content.order.discountCodes}}
+                      {{#each order.discountCodes}}
                           <div class="text-right">
                               <span class="my-orders-order-promocode-title">{{i18n "my-account:myOrder.price.discountCode"}}</span>
                               <span class="my-orders-order-promocode">{{discountCode.obj.code}}</span>
@@ -99,7 +99,7 @@
                       </div>
                     </div>
                   </div>
-                    {{#each content.order.lineItems}}
+                    {{#each order.lineItems}}
                         <div class="order-detail-wrapper">
                             <div class="row">
                                 <div class="col-sm-1 col-xs-4 product-img-col">
@@ -107,7 +107,7 @@
                                 </div>
                                 <div class="col-sm-3 col-xs-8 product-info-text">
                                     <p class="cart-item-name">
-                                        <a href="{{variantUrlFromLineItem this}}">{{name}}</a>
+                                        <a href="/{{productSlug}}-{{variant.sku}}.html">{{name}}</a>
                                     </p>
                                     <p class="grey-p">{{variant.sku}}</p>
                                     <!-- TODO MiSc -->
@@ -127,16 +127,18 @@
                                 <div class="col-sm-2 col-xs-7">
                                     <div class="text-right cart-item-price">
                                         <span class="visible-xs xs-price-title">{{i18n "main:common.price"}}</span>
-                                        {{#if price.discounted.value}}
-                                            <span class="discounted-price">{{oldPriceForLineItem this}}</span>
+                                        {{#if variant.price.discounted}}
+                                            <span class="discounted-price">{{variant.price.value}}</span>
+                                            <span>{{variant.price.discounted.value}}</span>
+                                        {{else}}
+                                            <span>{{variant.price.value}}</span>
                                         {{/if}}
-                                        <span>{{currentPriceForLineItem this}}</span>
                                     </div>
                                 </div>
                                 <div class="col-sm-2 col-xs-5">
                                     <div class="text-right cart-item-price">
                                         <span class="visible-xs xs-price-title">{{i18n "checkout:total"}}</span>
-                                        <span>{{formatPrice totalPrice}}</span>
+                                        <span>{{totalPrice}}</span>
                                     </div>
                                 </div>
                             </div>

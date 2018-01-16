@@ -26,12 +26,12 @@ public abstract class AbstractCustomerFetcher extends AbstractSingleResourceFetc
     }
 
     @Override
-    protected final CompletionStage<CustomerQuery> runRequestHook(final CustomerQuery baseRequest) {
-        return CustomerQueryHook.runHook(getHookRunner(), baseRequest);
+    protected final CompletionStage<CustomerQuery> runRequestHook(final HookRunner hookRunner, final CustomerQuery baseRequest) {
+        return CustomerQueryHook.runHook(hookRunner, baseRequest);
     }
 
     @Override
-    protected final void runResourceLoadedHook(final Customer resource) {
-        CustomerLoadedHook.runHook(getHookRunner(), resource);
+    protected final void runResourceLoadedHook(final HookRunner hookRunner, final Customer resource) {
+        CustomerLoadedHook.runHook(hookRunner, resource);
     }
 }

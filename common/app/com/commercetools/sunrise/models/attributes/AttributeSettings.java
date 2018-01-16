@@ -3,8 +3,8 @@ package com.commercetools.sunrise.models.attributes;
 import com.google.inject.ImplementedBy;
 import play.Configuration;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ImplementedBy(AttributeSettingsImpl.class)
 public interface AttributeSettings {
@@ -15,26 +15,22 @@ public interface AttributeSettings {
     List<String> displayed();
 
     /**
-     * Primary attributes are those attributes that affect the aspect of the displayed product,
-     * e.g. the color is a typical secondary attribute for clothes on an online store.
-     * @return the list of primary attributes that allow to change to a different product variant
+     * @return the list of selectable attributes that allow to change to a different product variant
      */
-    List<String> primarySelectable();
+    List<String> selectable();
 
     /**
-     * Secondary attributes are those attributes that do not affect the aspect of the displayed product,
-     * e.g. the size is a typical secondary attribute for clothes on an online store.
-     * @return the list of secondary attributes that allow to change to a different product variant
+     * Secondary attribute is an attribute that does not affect the aspect or price of the displayed product,
+     * hence it does not require reloading the page with the new variant.
+     *
+     * For example the size is a typical secondary attribute for clothes on an online store.
+     *
+     * @return the secondary attribute if any, empty otherwise
      */
-    List<String> secondarySelectable();
+    Optional<String> secondary();
 
-    /**
-     * @return the list of all attributes that allow to change to a different product variant
-     */
-    default List<String> selectable() {
-        final List<String> selectableAttributes = new ArrayList<>(primarySelectable());
-        selectableAttributes.addAll(secondarySelectable());
-        return selectableAttributes;
+    default boolean isSecondary(final String attributeName) {
+        return secondary().map(secondary -> secondary.equals(attributeName)).orElse(false);
     }
 
     static AttributeSettings of(final Configuration globalConfig, final String configPath) {

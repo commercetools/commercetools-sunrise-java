@@ -1,7 +1,7 @@
 <form id="form-add-to-wishlist-{{#if mobile}}mobile-{{/if}}{{sku}}" class="add-to-wishlist" method="post" name="add-to-wishlist" action="/wishlist/add">
     <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
-    <input type="hidden" name="productId" value="{{productId}}">
-    <input type="hidden" name="variantId" value="{{variantId}}">
+    <input type="hidden" name="productId" value="{{product.id}}">
+    <input type="hidden" name="variantId" value="{{variant.id}}">
 
     <button type="submit" class="{{#if mobile}}heart-xs visible-xs{{else}}heart{{/if}}">
         <span class="sr-only">{{i18n "catalog:wishlist.add"}}</span>

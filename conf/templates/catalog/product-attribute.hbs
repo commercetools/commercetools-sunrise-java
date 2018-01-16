@@ -3,12 +3,13 @@
 {{#withSelectableAttributes variant}}
     {{#each this}}
         <li>
-            <p class="text-uppercase">{{label}}</p>
+            <p class="text-uppercase">{{attributeLabel this}}</p>
             <div>
                 <select name="attribute-{{name}}" class="select-product-detail" required>
                     {{#withAttributeOptions this product variant}}
                         {{#each this}}
-                            <option value="{{value}}" {{#if disabled}}disabled{{/if}} {{#if selected}}selected{{/if}}>
+                            <option value="{{#if secondary}}{{value}}{{else}}/{{product.slug}}-{{variant.sku}}.html{{/if}}"
+                                {{#if disabled}}disabled{{/if}} {{#if selected}}selected{{/if}}>
                                 {{label}}
                             </option>
                         {{/each}}

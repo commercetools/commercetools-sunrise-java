@@ -1,6 +1,8 @@
 import com.commercetools.sunrise.cms.CmsComponent;
 import com.commercetools.sunrise.core.hooks.GlobalComponentRegistry;
+import com.commercetools.sunrise.core.i18n.LanguageSelectorComponent;
 import com.commercetools.sunrise.core.injection.RequestScoped;
+import com.commercetools.sunrise.core.localization.CountrySelectorComponent;
 import com.commercetools.sunrise.core.viewmodels.meta.TemplateComponent;
 import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
@@ -111,6 +113,8 @@ public class Module extends AbstractModule {
         globalComponentRegistry.addAll(WishlistComponentSupplier.get());
         globalComponentRegistry.add(CategoryTreeDisplayingComponent.class);
         globalComponentRegistry.add(CmsComponent.class);
+        globalComponentRegistry.add(CountrySelectorComponent.class);
+        globalComponentRegistry.add(LanguageSelectorComponent.class);
         return globalComponentRegistry;
     }
 }

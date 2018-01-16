@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.attributes;
 
 import com.commercetools.sunrise.core.viewmodels.ViewModelFactory;
-import com.commercetools.sunrise.models.SelectOption;
+import com.commercetools.sunrise.models.products.AttributeSelectOption;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
@@ -19,20 +19,20 @@ import static java.util.stream.Collectors.toList;
 @Singleton
 final class AttributeSelectorImpl extends ViewModelFactory implements AttributeSelector {
 
-    private final AttributeSettings attributesSettings;
+    private final AttributeSettings settings;
     private final ProductAttributeFormatter attributeFormatter;
     private final ProductAttributeSorter attributeSorter;
 
     @Inject
-    AttributeSelectorImpl(final AttributeSettings attributesSettings, final ProductAttributeFormatter attributeFormatter,
+    AttributeSelectorImpl(final AttributeSettings settings, final ProductAttributeFormatter attributeFormatter,
                           final ProductAttributeSorter attributeSorter) {
-        this.attributesSettings = attributesSettings;
+        this.settings = settings;
         this.attributeFormatter = attributeFormatter;
         this.attributeSorter = attributeSorter;
     }
 
     @Override
-    public List<SelectOption> options(final String attributeName, final ProductProjection selectedProduct,
+    public List<AttributeSelectOption> options(final String attributeName, final ProductProjection selectedProduct,
                                       final ProductVariant selectedVariant) {
         final Comparator<Attribute> comparator = attributeSorter.compare(attributeName, selectedProduct.getProductType());
         return selectedProduct.getAllVariants().stream()
@@ -44,7 +44,7 @@ final class AttributeSelectorImpl extends ViewModelFactory implements AttributeS
                 .collect(toList());
     }
 
-    private SelectOption createOption(final String attributeName, final ProductProjection selectedProduct,
+    private AttributeSelectOption createOption(final String attributeName, final ProductProjection selectedProduct,
                                       final ProductVariant selectedVariant, final List<ProductVariant> candidates) {
         return findBestTargetVariant(attributeName, selectedVariant, candidates)
                 .map(target -> createOption(attributeName, selectedProduct, selectedVariant, target))
@@ -54,37 +54,27 @@ final class AttributeSelectorImpl extends ViewModelFactory implements AttributeS
                 });
     }
 
-    private SelectOption createOption(final String attributeName, final ProductProjection selectedProduct,
-                                      final ProductVariant selectedVariant, final ProductVariant targetVariant) {
-        final SelectOption option = new SelectOption();
-        final boolean primaryAttribute = isPrimaryAttribute(attributeName);
-        final boolean selected = haveSameAttribute(attributeName, targetVariant, selectedVariant);
+    private AttributeSelectOption createOption(final String attributeName, final ProductProjection selectedProduct,
+                                               final ProductVariant selectedVariant, final ProductVariant targetVariant) {
+        final AttributeSelectOption option = new AttributeSelectOption();
         findLabel(attributeName, selectedProduct, targetVariant).ifPresent(option::setLabel);
-        findValue(selectedProduct, targetVariant, primaryAttribute).ifPresent(option::setValue);
-        option.setSelected(selected);
-        option.setDisabled(isDisabled(attributeName, selectedVariant, targetVariant, primaryAttribute));
+        option.setValue(targetVariant.getId().toString());
+        option.setSelected(haveSameAttribute(attributeName, targetVariant, selectedVariant));
+        option.setDisabled(isDisabled(attributeName, selectedVariant, targetVariant));
+        option.setVariant(targetVariant);
+        option.setSecondary(settings.isSecondary(attributeName));
         return option;
     }
 
     private boolean isDisabled(final String attributeName, final ProductVariant selectedVariant,
-                               final ProductVariant targetVariant, final boolean primaryAttribute) {
-        return !primaryAttribute && !isBestMatch(attributeName, selectedVariant, targetVariant);
+                               final ProductVariant targetVariant) {
+        return settings.isSecondary(attributeName) && !isBestMatch(attributeName, selectedVariant, targetVariant);
     }
 
     private Optional<String> findLabel(final String attributeName, final ProductProjection selectedProduct,
                                        final ProductVariant targetVariant) {
         return Optional.ofNullable(targetVariant.getAttribute(attributeName))
                 .flatMap(attribute -> attributeFormatter.convert(attribute, selectedProduct.getProductType()));
-    }
-
-    private Optional<String> findValue(final ProductProjection selectedProduct, final ProductVariant targetVariant,
-                                       final boolean primaryAttribute) {
-        return primaryAttribute ? findUrl(selectedProduct, targetVariant) : Optional.of(targetVariant.getId().toString());
-    }
-
-    private Optional<String> findUrl(final ProductProjection product, final ProductVariant variant) {
-//        return productReverseRouter.productDetailPageCall(product, variant).map(Call::url);
-        return Optional.empty();
     }
 
     private Optional<ProductVariant> findBestTargetVariant(final String attributeName, final ProductVariant selectedVariant,
@@ -106,7 +96,7 @@ final class AttributeSelectorImpl extends ViewModelFactory implements AttributeS
     }
 
     private boolean matchesAllOtherAttributes(final String attributeName, final ProductVariant selectedVariant, final ProductVariant candidate) {
-        return attributesSettings.selectable().stream()
+        return settings.selectable().stream()
                 .filter(otherAttributeName -> !otherAttributeName.equals(attributeName))
                 .allMatch(otherAttributeName -> haveSameAttribute(otherAttributeName, candidate, selectedVariant));
     }
@@ -116,9 +106,5 @@ final class AttributeSelectorImpl extends ViewModelFactory implements AttributeS
         final Attribute attribute1 = variant1.getAttribute(attributeName);
         final Attribute attribute2 = variant2.getAttribute(attributeName);
         return Objects.equals(attribute1, attribute2);
-    }
-
-    private boolean isPrimaryAttribute(final String attributeName) {
-        return attributesSettings.primarySelectable().stream().anyMatch(attributeName::equals);
     }
 }

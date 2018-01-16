@@ -1,13 +1,14 @@
 package com.commercetools.sdk;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.sphere.sdk.client.HttpRequestIntent;
 import io.sphere.sdk.client.SphereRequest;
 import io.sphere.sdk.http.FormUrlEncodedHttpRequestBody;
 import io.sphere.sdk.http.StringHttpRequestBody;
-import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.search.ProductProjectionSearch;
-import io.sphere.sdk.search.PagedSearchResult;
+import io.sphere.sdk.json.SphereJsonUtils;
+import play.libs.Json;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -16,11 +17,13 @@ public final class CtpLogUtils {
     private CtpLogUtils() {
     }
 
-    public static String printableProductRequest(final ProductProjectionSearch request, final PagedSearchResult<ProductProjection> result) {
-        return String.format("Fetched %s out of %s products with request %s",
-                result.getCount(),
-                result.getTotal(),
-                printableRequest(request));
+    public static <T> String printableResponse(@Nullable final T response) {
+        if (response != null) {
+            final JsonNode jsonNode = SphereJsonUtils.toJsonNode(response);
+            final String prettyResponse = Json.prettyPrint(jsonNode);
+            return " with response:\n" + prettyResponse;
+        }
+        return " without response";
     }
 
     public static String printableRequest(final SphereRequest<?> request) {

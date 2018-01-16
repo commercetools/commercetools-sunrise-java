@@ -1,12 +1,26 @@
 <!-- start catalog/breadcrumb.hbs -->
 <ol class="breadcrumb">
 	<li>
-		<a href="/" {{#unless breadcrumb.links}}class="active"{{/unless}}>{{i18n "main:home"}}</a>
+		<a href="/">{{i18n "main:home"}}</a>
 	</li>
-	{{#each breadcrumb.links}}
-		<li>
-			<a href="{{url}}" {{#if @last}}class="active"{{/if}}>{{text}}</a>
-		</li>
-	{{/each}}
+
+    {{#if category}}
+        {{#each category.ancestors}}
+            <li><a href="/{{obj.slug}}">{{obj.name}}</a></li>
+        {{/each}}
+        <li><a href="/{{category.slug}}" class="active">{{category.name}}</a></li>
+    {{/if}}
+
+    {{#if product}}
+        {{#each product.categories}}
+            {{#if @first}}
+                {{#each obj.ancestors}}
+                    <li><a href="/{{obj.slug}}">{{obj.name}}</a></li>
+                {{/each}}
+                <li><a href="/{{obj.slug}}">{{obj.name}}</a></li>
+            {{/if}}
+        {{/each}}
+        <li><a href="/{{product.slug}}-{{variant.sku}}.html" class="active">{{product.name}}</a></li>
+    {{/if}}
 </ol>
 <!-- end catalog/breadcrumb.hbs -->

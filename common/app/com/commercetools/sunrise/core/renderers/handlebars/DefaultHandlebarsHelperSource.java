@@ -3,12 +3,8 @@ package com.commercetools.sunrise.core.renderers.handlebars;
 import com.commercetools.sdk.CtpEnumUtils;
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
-import com.commercetools.sunrise.core.i18n.LanguageSelector;
-import com.commercetools.sunrise.core.localization.CountrySelector;
 import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
-import com.commercetools.sunrise.models.SelectOption;
 import com.commercetools.sunrise.models.carts.CartPriceUtils;
-import com.commercetools.sunrise.models.products.ProductPriceUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.jknack.handlebars.Options;
 import io.sphere.sdk.carts.CartLike;
@@ -23,8 +19,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.money.MonetaryAmount;
 import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,17 +33,11 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
 
     private final I18nResolver i18nResolver;
     private final PriceFormatter priceFormatter;
-    private final DateTimeFormatter dateTimeFormatter;
-    private final CountrySelector countrySelector;
-    private final LanguageSelector languageSelector;
 
     @Inject
-    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, PriceFormatter priceFormatter, DateTimeFormatter dateTimeFormatter, final CountrySelector countrySelector, final LanguageSelector languageSelector) {
+    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, PriceFormatter priceFormatter) {
         this.i18nResolver = i18nResolver;
         this.priceFormatter = priceFormatter;
-        this.dateTimeFormatter = dateTimeFormatter;
-        this.countrySelector = countrySelector;
-        this.languageSelector = languageSelector;
     }
 
     /**
@@ -90,15 +78,6 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
         return SphereJsonUtils.prettyPrint(json(object));
     }
 
-    public CharSequence currentPriceForLineItem(final LineItem object) {
-        return formatPrice(ProductPriceUtils.calculateAppliedProductPrice(object));
-    }
-
-    public CharSequence oldPriceForLineItem(final LineItem object) {
-        return ProductPriceUtils.calculatePreviousProductPrice(object)
-                .map(this::formatPrice).orElse("");
-    }
-
     public CharSequence formatPrice(final MonetaryAmount object) {
         return priceFormatter.format(object);
     }
@@ -124,10 +103,6 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
         return cartLike.getLineItems().stream()
                     .mapToLong(LineItem::getQuantity)
                     .sum() + "";
-    }
-
-    public CharSequence formatDateTime(final ZonedDateTime time) {
-        return dateTimeFormatter.format(time);
     }
 
     public CharSequence enumToCamelCase(final Object enumValue) {
@@ -160,15 +135,5 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
         final List<?> reversed = new ArrayList<>(ObjectUtils.firstNonNull(list, emptyList()));
         Collections.reverse(reversed);
         return options.fn(reversed);
-    }
-
-    public CharSequence withLanguageOptions(final Options options) throws IOException {
-        final List<SelectOption> languageOptions = languageSelector.options();
-        return languageOptions.isEmpty() ? null : options.fn(languageOptions);
-    }
-
-    public CharSequence withCountryOptions(final Options options) throws IOException {
-        final List<SelectOption> countryOptions = countrySelector.options();
-        return countryOptions.isEmpty() ? null : options.fn(countryOptions);
     }
 }

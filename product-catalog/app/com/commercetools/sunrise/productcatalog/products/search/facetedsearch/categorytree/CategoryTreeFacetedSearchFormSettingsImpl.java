@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.productcatalog.products.search.facetedsearch.categorytree;
 
-import com.commercetools.sunrise.models.categories.CategoryFinder;
 import com.commercetools.sunrise.models.categories.CategorySettings;
 import com.commercetools.sunrise.models.categories.SpecialCategorySettings;
 import com.commercetools.sunrise.models.search.SearchUtils;
@@ -9,8 +8,6 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.FilterExpression;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.mvc.Http;
 
 import java.util.List;
@@ -21,17 +18,13 @@ import static java.util.stream.Collectors.toList;
 
 final class CategoryTreeFacetedSearchFormSettingsImpl extends AbstractFacetedSearchFormSettingsWithOptions<ConfiguredCategoryTreeFacetedSearchFormSettings> implements CategoryTreeFacetedSearchFormSettings {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(CategoryTreeFacetedSearchFormSettings.class);
-
-    private final CategoryFinder categoryFinder;
     private final CategorySettings categorySettings;
     private final CategoryTree categoryTree;
 
     CategoryTreeFacetedSearchFormSettingsImpl(final ConfiguredCategoryTreeFacetedSearchFormSettings settings,
-                                              final Locale locale, final CategoryFinder categoryFinder,
-                                              final CategorySettings categorySettings, final CategoryTree categoryTree) {
+                                              final Locale locale, final CategorySettings categorySettings,
+                                              final CategoryTree categoryTree) {
         super(settings, locale);
-        this.categoryFinder = categoryFinder;
         this.categorySettings = categorySettings;
         this.categoryTree = categoryTree;
     }
@@ -44,7 +37,7 @@ final class CategoryTreeFacetedSearchFormSettingsImpl extends AbstractFacetedSea
     @Override
     public Optional<Category> mapFieldValueToValue(final String categoryIdentifier) {
         if (!categoryIdentifier.isEmpty()) {
-            return categoryFinder.apply(categoryIdentifier);
+            return categoryTree.findBySlug(getLocale(), categoryIdentifier); // TODO hide slug implementation
         }
         return Optional.empty();
     }

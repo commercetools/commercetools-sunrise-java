@@ -1,8 +1,11 @@
 package controllers;
 
-import com.commercetools.sunrise.core.components.EnableComponents;
 import com.commercetools.sunrise.controllers.cache.NoCache;
 import com.commercetools.sunrise.controllers.metrics.LogMetrics;
+import com.commercetools.sunrise.core.components.DisableComponents;
+import com.commercetools.sunrise.core.components.EnableComponents;
+import com.commercetools.sunrise.core.i18n.LanguageSelectorComponent;
+import com.commercetools.sunrise.core.localization.CountrySelectorComponent;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.models.carts.CartPaymentInfoExpansionComponent;
 import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionComponent;
@@ -13,6 +16,10 @@ import javax.inject.Inject;
 
 @LogMetrics
 @NoCache
+@DisableComponents({
+        CountrySelectorComponent.class,
+        LanguageSelectorComponent.class
+})
 @EnableComponents({
         CartShippingInfoExpansionComponent.class,
         CartPaymentInfoExpansionComponent.class
