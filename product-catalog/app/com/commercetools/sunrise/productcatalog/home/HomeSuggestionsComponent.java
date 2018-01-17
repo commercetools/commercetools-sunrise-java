@@ -4,9 +4,9 @@ import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
 import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
-import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTree;
+import com.commercetools.sunrise.models.categories.CategoryTreeInCache;
 import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.models.Resource;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.PriceSelection;
@@ -14,46 +14,48 @@ import io.sphere.sdk.queries.PagedQueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.Configuration;
+import play.cache.CacheApi;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
+import static java.util.stream.Collectors.toList;
 
 public final class HomeSuggestionsComponent implements ControllerComponent, HttpRequestStartedHook, PageDataHook {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeSuggestionsComponent.class);
+    private static final String CACHE_KEY = "home-suggestions-ids";
 
-    private final int numSuggestions;
-    private final List<String> categoryIds;
+    private final CacheApi cacheApi;
+    private final CategoryTreeInCache categoryTreeInCache;
     private final SphereClient sphereClient;
     private final PriceSelection priceSelection;
+    private final List<String> categoryExternalIds;
+    private final int numSuggestions;
 
     private CompletionStage<PagedQueryResult<ProductProjection>> suggestionsStage;
 
     @Inject
-    public HomeSuggestionsComponent(final Configuration configuration, final CategoryTree categoryTree,
-                                    final SphereClient sphereClient, final PriceSelection priceSelection) {
+    public HomeSuggestionsComponent(final Configuration configuration, final CacheApi cacheApi,
+                                    final CategoryTreeInCache categoryTreeInCache, final SphereClient sphereClient,
+                                    final PriceSelection priceSelection) {
         this.numSuggestions = configuration.getInt("homeSuggestions.count", 4);
-        this.categoryIds = configuration.getStringList("homeSuggestions.externalId", emptyList()).stream()
-                .map(categoryTree::findByExternalId)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(Category::getId)
-                .collect(Collectors.toList());
+        this.categoryExternalIds = configuration.getStringList("homeSuggestions.externalId", emptyList());
+        this.cacheApi = cacheApi;
+        this.categoryTreeInCache = categoryTreeInCache;
         this.sphereClient = sphereClient;
         this.priceSelection = priceSelection;
     }
 
-
     @Override
     public void onHttpRequestStarted(final Http.Context context) {
-        this.suggestionsStage = fetchRelatedProducts(categoryIds, numSuggestions);
+        this.suggestionsStage = getSuggestionsCategoryIds().thenCompose(this::fetchRelatedProducts);
     }
 
     @Override
@@ -71,17 +73,41 @@ public final class HomeSuggestionsComponent implements ControllerComponent, Http
     /**
      * Gets products belonging to any of the given categories.
      * @param categoryIds the categories to get suggestions from
-     * @param numProducts the number of products the returned result should contain
      * @return the products related to these categories
      */
-    private CompletionStage<PagedQueryResult<ProductProjection>> fetchRelatedProducts(final List<String> categoryIds, final int numProducts) {
+    private CompletionStage<PagedQueryResult<ProductProjection>> fetchRelatedProducts(final List<String> categoryIds) {
         if (categoryIds.isEmpty()) {
             return completedFuture(PagedQueryResult.empty());
         } else {
             return sphereClient.execute(ProductProjectionQuery.ofCurrent()
                     .withPredicates(product -> product.categories().id().isIn(categoryIds))
                     .withPriceSelection(priceSelection)
-                    .withLimit(numProducts));
+                    .withLimit(numSuggestions));
         }
+    }
+
+    private CompletionStage<List<String>> getSuggestionsCategoryIds() {
+        if (!categoryExternalIds.isEmpty()) {
+            final List<String> nullableCategoryIds = cacheApi.get(CACHE_KEY);
+            return Optional.ofNullable(nullableCategoryIds)
+                    .map(categoryIds -> (CompletionStage<List<String>>) completedFuture(categoryIds))
+                    .orElseGet(this::fetchAndStoreResource);
+        }
+        return completedFuture(emptyList());
+    }
+
+    private CompletionStage<List<String>> fetchAndStoreResource() {
+        final CompletionStage<List<String>> categoryIdsStage = fetchResource();
+        categoryIdsStage.thenAcceptAsync(categoryIds -> cacheApi.set(CACHE_KEY, categoryIds), HttpExecution.defaultContext());
+        return categoryIdsStage;
+    }
+
+    private CompletionStage<List<String>> fetchResource() {
+        return categoryTreeInCache.require()
+                .thenApply(categoryTree -> categoryExternalIds.parallelStream()
+                        .map(externalId -> categoryTree.findByExternalId(externalId).map(Resource::getId))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(toList()));
     }
 }

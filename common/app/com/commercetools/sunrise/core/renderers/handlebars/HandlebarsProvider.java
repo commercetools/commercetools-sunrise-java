@@ -1,8 +1,6 @@
 package com.commercetools.sunrise.core.renderers.handlebars;
 
 import com.commercetools.sunrise.models.attributes.AttributeHelperSource;
-import com.commercetools.sunrise.models.categories.CategoryHelperSource;
-import com.commercetools.sunrise.models.products.ProductHelperSource;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.cache.HighConcurrencyTemplateCache;
 import com.github.jknack.handlebars.helper.StringHelpers;
@@ -17,18 +15,13 @@ public final class HandlebarsProvider implements Provider<Handlebars> {
     private final HandlebarsSettings handlebarsSettings;
     private final HandlebarsHelperSource handlebarsHelperSource;
     private final AttributeHelperSource attributeHelperSource;
-    private final CategoryHelperSource categoryHelperSource;
-    private final ProductHelperSource productHelperSource;
 
     @Inject
     HandlebarsProvider(final HandlebarsSettings handlebarsSettings, final HandlebarsHelperSource handlebarsHelperSource,
-                       final AttributeHelperSource attributeHelperSource, final CategoryHelperSource categoryHelperSource,
-                       final ProductHelperSource productHelperSource) {
+                       final AttributeHelperSource attributeHelperSource) {
         this.handlebarsSettings = handlebarsSettings;
         this.handlebarsHelperSource = handlebarsHelperSource;
         this.attributeHelperSource = attributeHelperSource;
-        this.categoryHelperSource = categoryHelperSource;
-        this.productHelperSource = productHelperSource;
     }
 
     @Override
@@ -41,8 +34,6 @@ public final class HandlebarsProvider implements Provider<Handlebars> {
                 .infiniteLoops(true)
                 .registerHelpers(StringHelpers.class)
                 .registerHelpers(handlebarsHelperSource)
-                .registerHelpers(attributeHelperSource)
-                .registerHelpers(categoryHelperSource)
-                .registerHelpers(productHelperSource);
+                .registerHelpers(attributeHelperSource);
     }
 }

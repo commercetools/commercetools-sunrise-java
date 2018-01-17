@@ -10,7 +10,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TermFacetOptionViewModelFactoryTest {
+public class TermFacetOptionFactoryTest {
 
     private static final TermStats TERM_ONE = TermStats.of("one", 60L, 30L);
     private static final TermStats TERM_TWO = TermStats.of("two", 40L, 20L);
@@ -18,7 +18,7 @@ public class TermFacetOptionViewModelFactoryTest {
 
     @Test
     public void createsInstanceFromTermStats() throws Exception {
-        final FacetOptionViewModel viewModel = viewModelFactory(TERM_TWO, asList(TERM_TWO, TERM_THREE));
+        final FacetOption viewModel = viewModelFactory(TERM_TWO, asList(TERM_TWO, TERM_THREE));
         assertThat(viewModel.getValue()).isEqualTo(TERM_TWO.getTerm());
         assertThat(viewModel.getCount()).isEqualTo(TERM_TWO.getProductCount());
         assertThat(viewModel.isSelected()).isTrue();
@@ -26,13 +26,13 @@ public class TermFacetOptionViewModelFactoryTest {
 
     @Test
     public void createsInstanceFromTermStatsWithUnselectedValue() throws Exception {
-        final FacetOptionViewModel viewModel = viewModelFactory(TERM_THREE, asList(TERM_ONE, TERM_TWO));
+        final FacetOption viewModel = viewModelFactory(TERM_THREE, asList(TERM_ONE, TERM_TWO));
         assertThat(viewModel.getValue()).isEqualTo(TERM_THREE.getTerm());
         assertThat(viewModel.getCount()).isEqualTo(TERM_THREE.getProductCount());
         assertThat(viewModel.isSelected()).isFalse();
     }
 
-    private FacetOptionViewModel viewModelFactory(final TermStats termStats, final List<TermStats> selectedTermStats) {
+    private FacetOption viewModelFactory(final TermStats termStats, final List<TermStats> selectedTermStats) {
         final List<String> selectedValues = selectedTermStats.stream()
                 .map(TermStats::getTerm)
                 .collect(toList());

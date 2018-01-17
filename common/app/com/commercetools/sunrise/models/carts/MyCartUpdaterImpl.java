@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.AbstractResourceUpdater;
+import com.commercetools.sunrise.core.AbstractUserResourceUpdater;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpactions.CartUpdatedActionHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CartUpdatedHook;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
-final class MyCartUpdaterImpl extends AbstractResourceUpdater<Cart, CartUpdateCommand> implements MyCartUpdater {
+final class MyCartUpdaterImpl extends AbstractUserResourceUpdater<Cart, CartUpdateCommand> implements MyCartUpdater {
 
     @Inject
     MyCartUpdaterImpl(final SphereClient sphereClient, final HookRunner hookRunner, final MyCartInCache myCartInCache) {

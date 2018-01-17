@@ -7,9 +7,9 @@ import java.util.concurrent.CompletionStage;
 
 public interface ShoppingListUpdateCommandHook extends CtpRequestHook {
 
-    CompletionStage<ShoppingListUpdateCommand> onCartUpdateCommand(ShoppingListUpdateCommand command);
+    CompletionStage<ShoppingListUpdateCommand> onShoppingListUpdateCommand(ShoppingListUpdateCommand command);
 
     static CompletionStage<ShoppingListUpdateCommand> runHook(final HookRunner hookRunner, final ShoppingListUpdateCommand command) {
-        return hookRunner.runActionHook(ShoppingListUpdateCommandHook.class, ShoppingListUpdateCommandHook::onCartUpdateCommand, command);
+        return hookRunner.runActionHook(ShoppingListUpdateCommandHook.class, ShoppingListUpdateCommandHook::onShoppingListUpdateCommand, command);
     }
 }

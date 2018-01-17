@@ -10,6 +10,6 @@ import static java.util.Collections.singletonList;
 public final class CustomerComponentSupplier implements ComponentSupplier {
 
     public static List<Class<? extends Component>> get() {
-        return singletonList(CustomerComponent.class);
+        return singletonList(MyCustomerComponent.class);
     }
 }

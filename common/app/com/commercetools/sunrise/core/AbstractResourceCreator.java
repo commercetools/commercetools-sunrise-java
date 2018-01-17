@@ -20,7 +20,7 @@ public abstract class AbstractResourceCreator<T, D, C extends CreateCommand<T> &
     }
 
     protected CompletionStage<T> executeRequest(final C baseCommand) {
-        return runCreateCommandHook(getHookRunner(), baseCommand)
+        return runRequestHook(getHookRunner(), baseCommand)
                 .thenCompose(command -> getSphereClient().execute(command)
                         .thenComposeAsync(result -> applyHooks(command, result), HttpExecution.defaultContext()));
     }
@@ -33,7 +33,7 @@ public abstract class AbstractResourceCreator<T, D, C extends CreateCommand<T> &
 
     protected abstract C buildRequest(D draft);
 
-    protected abstract CompletionStage<C> runCreateCommandHook(HookRunner hookRunner, C baseCommand);
+    protected abstract CompletionStage<C> runRequestHook(HookRunner hookRunner, C baseCommand);
 
     protected abstract void runCreatedHook(HookRunner hookRunner, T resource);
 

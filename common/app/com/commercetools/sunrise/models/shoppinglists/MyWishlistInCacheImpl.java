@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.shoppinglists;
 
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.core.sessions.AbstractResourceInCache;
+import com.commercetools.sunrise.core.sessions.AbstractUserResourceInCache;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.cache.CacheApi;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 @RequestScoped
-final class MyWishlistInCacheImpl extends AbstractResourceInCache<ShoppingList> implements MyWishlistInCache {
+final class MyWishlistInCacheImpl extends AbstractUserResourceInCache<ShoppingList> implements MyWishlistInCache {
 
     private final MyWishlistFetcher wishlistFinder;
 

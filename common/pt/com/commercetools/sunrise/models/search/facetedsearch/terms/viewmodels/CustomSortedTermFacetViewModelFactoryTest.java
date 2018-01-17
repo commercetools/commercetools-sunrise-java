@@ -5,7 +5,7 @@ import com.commercetools.sunrise.models.search.facetedsearch.terms.ConfiguredTer
 import com.commercetools.sunrise.models.search.facetedsearch.terms.TermFacetMapperSettings;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.TermFacetedSearchFormSettings;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.TermFacetedSearchFormSettingsFactory;
-import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOptionViewModel;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOption;
 import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
@@ -99,10 +99,10 @@ public class CustomSortedTermFacetViewModelFactoryTest extends WithApplication {
                 .map(term -> TermStats.of(term, 0L))
                 .collect(toList());
         Http.Context.current.set(new Http.Context(Helpers.fakeRequest()));
-        final List<FacetOptionViewModel> options = new CustomSortedTermFacetViewModelFactory(dummyI18nResolver, new TermFacetOptionViewModelFactory())
+        final List<FacetOption> options = new CustomSortedTermFacetViewModelFactory(dummyI18nResolver, new TermFacetOptionViewModelFactory())
                 .createOptions(settings, TermFacetResult.of(0L, 0L, 0L, termStats));
         test.accept(options.stream()
-                .map(FacetOptionViewModel::getValue)
+                .map(FacetOption::getValue)
                 .collect(toList()));
     }
 }

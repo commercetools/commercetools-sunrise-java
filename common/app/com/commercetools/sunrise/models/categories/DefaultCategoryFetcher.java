@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
 
-public class DefaultCategoryFetcher extends AbstractCategoryFetcher implements CategoryFetcher {
+final class DefaultCategoryFetcher extends AbstractCategoryFetcher implements CategoryFetcher {
 
     private final Langs langs;
     private final Locale locale;

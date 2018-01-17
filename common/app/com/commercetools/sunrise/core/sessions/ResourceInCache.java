@@ -12,4 +12,6 @@ public interface ResourceInCache<T> extends StoringOperations<T> {
     default CompletionStage<T> require() {
         return get().thenApply(resourceOpt -> resourceOpt.orElseThrow(NotFoundResourceException::new));
     }
+
+    void purge();
 }

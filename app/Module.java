@@ -8,7 +8,7 @@ import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
 import com.commercetools.sunrise.models.carts.CartComponentSupplier;
-import com.commercetools.sunrise.models.categories.CategoryTreeDisplayingComponent;
+import com.commercetools.sunrise.models.categories.CategoryNavigationComponent;
 import com.commercetools.sunrise.models.customers.CustomerComponentSupplier;
 import com.commercetools.sunrise.models.customers.MyCustomerInSession;
 import com.commercetools.sunrise.models.products.ProductListFetcher;
@@ -111,7 +111,7 @@ public class Module extends AbstractModule {
         globalComponentRegistry.addAll(CartComponentSupplier.get());
         globalComponentRegistry.addAll(CustomerComponentSupplier.get());
         globalComponentRegistry.addAll(WishlistComponentSupplier.get());
-        globalComponentRegistry.add(CategoryTreeDisplayingComponent.class);
+        globalComponentRegistry.add(CategoryNavigationComponent.class);
         globalComponentRegistry.add(CmsComponent.class);
         globalComponentRegistry.add(CountrySelectorComponent.class);
         globalComponentRegistry.add(LanguageSelectorComponent.class);

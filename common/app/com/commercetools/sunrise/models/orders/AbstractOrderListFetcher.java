@@ -30,7 +30,7 @@ public abstract class AbstractOrderListFetcher extends AbstractResourceFetcher<O
     }
 
     @Override
-    protected void runPagedResultLoadedHook(final HookRunner hookRunner, final PagedQueryResult<Order> result) {
+    protected void runResourceLoadedHook(final HookRunner hookRunner, final PagedQueryResult<Order> result) {
         OrderPagedQueryResultLoadedHook.runHook(hookRunner, result);
     }
 }

@@ -9,28 +9,28 @@ public abstract class AbstractFacetOptionViewModelFactory<I, V, S> extends ViewM
     protected AbstractFacetOptionViewModelFactory() {
     }
 
-    protected FacetOptionViewModel newViewModelInstance(final I stats, V value, @Nullable final S selectedValue) {
-        return new FacetOptionViewModel();
+    protected FacetOption newViewModelInstance(final I stats, V value, @Nullable final S selectedValue) {
+        return new FacetOption();
     }
 
-    public FacetOptionViewModel create(final I stats, final V value, @Nullable final S selectedValue) {
-        final FacetOptionViewModel viewModel = newViewModelInstance(stats, value, selectedValue);
+    public FacetOption create(final I stats, final V value, @Nullable final S selectedValue) {
+        final FacetOption viewModel = newViewModelInstance(stats, value, selectedValue);
         initialize(viewModel, stats, value, selectedValue);
         return viewModel;
     }
 
-    protected void initialize(final FacetOptionViewModel viewModel, final I stats, final V value, @Nullable final S selectedValue) {
+    protected void initialize(final FacetOption viewModel, final I stats, final V value, @Nullable final S selectedValue) {
         fillLabel(viewModel, stats, value, selectedValue);
         fillValue(viewModel, stats, value, selectedValue);
         fillSelected(viewModel, stats, value, selectedValue);
         fillCount(viewModel, stats, value, selectedValue);
     }
 
-    protected abstract void fillLabel(final FacetOptionViewModel viewModel, final I stats, final V value, @Nullable final S selectedValue);
+    protected abstract void fillLabel(final FacetOption viewModel, final I stats, final V value, @Nullable final S selectedValue);
 
-    protected abstract void fillValue(final FacetOptionViewModel viewModel, final I stats, final V value, @Nullable final S selectedValue);
+    protected abstract void fillValue(final FacetOption viewModel, final I stats, final V value, @Nullable final S selectedValue);
 
-    protected abstract void fillSelected(final FacetOptionViewModel viewModel, final I stats, final V value, @Nullable final S selectedValue);
+    protected abstract void fillSelected(final FacetOption viewModel, final I stats, final V value, @Nullable final S selectedValue);
 
-    protected abstract void fillCount(final FacetOptionViewModel viewModel, final I stats, final V value, @Nullable final S selectedValue);
+    protected abstract void fillCount(final FacetOption viewModel, final I stats, final V value, @Nullable final S selectedValue);
 }

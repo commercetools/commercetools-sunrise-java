@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.shoppinglists;
 
-import com.commercetools.sunrise.core.AbstractResourceUpdater;
+import com.commercetools.sunrise.core.AbstractUserResourceUpdater;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpactions.ShoppingListUpdatedActionHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListUpdatedHook;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
-final class MyWishlistUpdaterImpl extends AbstractResourceUpdater<ShoppingList, ShoppingListUpdateCommand> implements MyWishlistUpdater {
+final class MyWishlistUpdaterImpl extends AbstractUserResourceUpdater<ShoppingList, ShoppingListUpdateCommand> implements MyWishlistUpdater {
 
     @Inject
     MyWishlistUpdaterImpl(final SphereClient sphereClient, final HookRunner hookRunner, final MyWishlistInCache myWishlistInCache) {

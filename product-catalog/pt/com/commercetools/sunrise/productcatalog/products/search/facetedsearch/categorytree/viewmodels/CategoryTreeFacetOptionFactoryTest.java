@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.products.search.facetedsearch.c
 
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.viewmodels.forms.FormSelectableOptionViewModel;
-import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOptionViewModel;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOption;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.LocalizedString;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 import static play.test.Helpers.fakeRequest;
 import static play.test.Helpers.invokeWithContext;
 
-public class CategoryTreeFacetOptionViewModelFactoryTest extends WithApplication {
+public class CategoryTreeFacetOptionFactoryTest extends WithApplication {
 
     private final static String CAT_A_ID = "d5a0952b-6574-49c9-b0cd-61e0d21d36cc";
     private final static String CAT_B_ID = "e92b6d26-7a34-4960-804c-0fc9e40c64e3";
@@ -127,7 +127,7 @@ public class CategoryTreeFacetOptionViewModelFactoryTest extends WithApplication
             assertThat(viewModelA.isSelected()).isTrue();
             assertThat(viewModelA.getChildren()).hasSize(1);
 
-            final FacetOptionViewModel viewModelB = viewModelA.getChildren().get(0);
+            final FacetOption viewModelB = viewModelA.getChildren().get(0);
             assertThat(viewModelB.getLabel()).isEqualTo("B");
             assertThat(viewModelB.getCount()).isEqualTo(6);
             assertThat(viewModelB.isSelected()).isTrue();
@@ -137,7 +137,7 @@ public class CategoryTreeFacetOptionViewModelFactoryTest extends WithApplication
         });
     }
 
-    private void test(final Category category, final CategoryTree categoryTree, final List<TermStats> termStats, final Consumer<FacetOptionViewModel> test) {
+    private void test(final Category category, final CategoryTree categoryTree, final List<TermStats> termStats, final Consumer<FacetOption> test) {
         invokeWithContext(fakeRequest(), () -> {
             Http.Context.current().changeLang("en");
             final I18nResolver i18nResolver = app.injector().instanceOf(I18nResolver.class);

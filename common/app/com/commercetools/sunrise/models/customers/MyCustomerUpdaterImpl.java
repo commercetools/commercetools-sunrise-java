@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.customers;
 
-import com.commercetools.sunrise.core.AbstractResourceUpdater;
+import com.commercetools.sunrise.core.AbstractUserResourceUpdater;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpactions.CustomerUpdatedActionHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CustomerUpdatedHook;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
-final class MyCustomerUpdaterImpl extends AbstractResourceUpdater<Customer, CustomerUpdateCommand> implements MyCustomerUpdater {
+final class MyCustomerUpdaterImpl extends AbstractUserResourceUpdater<Customer, CustomerUpdateCommand> implements MyCustomerUpdater {
 
     @Inject
     MyCustomerUpdaterImpl(final SphereClient sphereClient, final HookRunner hookRunner, final MyCustomerInCache myCustomerInCache) {

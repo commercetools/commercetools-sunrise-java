@@ -28,6 +28,10 @@ public abstract class AbstractTemplateEngine implements TemplateEngine {
         this.hookContext = hookContext;
     }
 
+    protected final HookContext getHookContext() {
+        return hookContext;
+    }
+
     protected final CompletionStage<PageData> applyPageDataHooks(final PageData pageData) {
         final CompletionStage<PageData> pageDataStage = PageDataHook.runHook(hookContext, pageData);
         pageDataStage.thenAccept(AbstractTemplateEngine::logPageData);

@@ -3,7 +3,7 @@ package com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.BaseTermFacetedSearchFormSettings;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.AbstractFacetWithOptionsViewModelFactory;
-import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOptionViewModel;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOption;
 import io.sphere.sdk.search.TermFacetResult;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public abstract class AbstractTermFacetViewModelFactory<S extends BaseTermFacete
 
     @Override
     protected void fillLimitedOptions(final TermFacetViewModel viewModel, final S settings, final TermFacetResult facetResult) {
-        List<FacetOptionViewModel> options = createOptions(settings, facetResult);
+        List<FacetOption> options = createOptions(settings, facetResult);
         if (settings.getLimit() != null) {
             options = options.stream()
                     .limit(settings.getLimit())
@@ -56,5 +56,5 @@ public abstract class AbstractTermFacetViewModelFactory<S extends BaseTermFacete
         viewModel.setLimitedOptions(options);
     }
 
-    protected abstract List<FacetOptionViewModel> createOptions(final S settings, final TermFacetResult facetResult);
+    protected abstract List<FacetOption> createOptions(final S settings, final TermFacetResult facetResult);
 }

@@ -18,9 +18,9 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * This base class provides an execution strategy to execute a {@link ShoppingListQuery} for a single {@link ShoppingList}
  * with the registred hooks {@link ShoppingListQueryHook} and {@link ShoppingListLoadedHook}.
  */
-public abstract class AbstractShoppingListFetcher extends AbstractSingleResourceFetcher<ShoppingList, ShoppingListQuery, PagedQueryResult<ShoppingList>> implements MyWishlistFetcher {
+public abstract class AbstractMyWishlistFetcher extends AbstractSingleResourceFetcher<ShoppingList, ShoppingListQuery, PagedQueryResult<ShoppingList>> implements MyWishlistFetcher {
 
-    protected AbstractShoppingListFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
+    protected AbstractMyWishlistFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
     }
 

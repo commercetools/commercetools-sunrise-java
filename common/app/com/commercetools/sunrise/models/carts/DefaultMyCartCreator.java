@@ -14,31 +14,19 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public class DefaultMyCartCreator extends AbstractCartCreator {
+final class DefaultMyCartCreator extends AbstractMyCartCreator {
 
     private final CountryCode country;
     private final CurrencyUnit currency;
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
-    protected DefaultMyCartCreator(final SphereClient sphereClient, final HookRunner hookRunner,
-                                   final CountryCode country, final CurrencyUnit currency, final MyCustomerInSession myCustomerInSession) {
-        super(sphereClient, hookRunner);
+    DefaultMyCartCreator(final SphereClient sphereClient, final HookRunner hookRunner, final MyCartInCache myCartInCache,
+                         final CountryCode country, final CurrencyUnit currency, final MyCustomerInSession myCustomerInSession) {
+        super(sphereClient, hookRunner, myCartInCache);
         this.country = country;
         this.currency = currency;
         this.myCustomerInSession = myCustomerInSession;
-    }
-
-    protected final CountryCode getCountry() {
-        return country;
-    }
-
-    protected final CurrencyUnit getCurrency() {
-        return currency;
-    }
-
-    protected final MyCustomerInSession getMyCustomerInSession() {
-        return myCustomerInSession;
     }
 
     @Override

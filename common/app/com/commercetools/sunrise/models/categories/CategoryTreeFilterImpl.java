@@ -14,20 +14,20 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
-class CategoryTreeFilterImpl implements CategoryTreeFilter {
+final class CategoryTreeFilterImpl implements CategoryTreeFilter {
 
-    private final CategorySettings categorySettings;
+    private final CategorySettings settings;
     private final SphereClient sphereClient;
 
     @Inject
-    CategoryTreeFilterImpl(final CategorySettings categorySettings, final SphereClient sphereClient) {
-        this.categorySettings = categorySettings;
+    CategoryTreeFilterImpl(final CategorySettings settings, final SphereClient sphereClient) {
+        this.settings = settings;
         this.sphereClient = sphereClient;
     }
 
     @Override
     public CompletionStage<CategoryTree> filter(final CategoryTree categoryTree) {
-        if (categorySettings.discardEmpty()) {
+        if (settings.discardEmpty()) {
             return fetchEmptyCategoryIds()
                     .thenApply(emptyCategoryIds -> discardEmptyCategories(categoryTree, emptyCategoryIds))
                     .thenApply(CategoryTree::of);

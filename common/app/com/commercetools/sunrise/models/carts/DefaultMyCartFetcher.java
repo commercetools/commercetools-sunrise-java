@@ -9,25 +9,17 @@ import io.sphere.sdk.client.SphereClient;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class DefaultMyCartFetcher extends AbstractCartFetcher {
+final class DefaultMyCartFetcher extends AbstractMyCartFetcher {
 
     private final MyCartInSession myCartInSession;
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
-    protected DefaultMyCartFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
+    DefaultMyCartFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
                                    final MyCartInSession myCartInSession, final MyCustomerInSession myCustomerInSession) {
         super(sphereClient, hookRunner);
         this.myCartInSession = myCartInSession;
         this.myCustomerInSession = myCustomerInSession;
-    }
-
-    protected final MyCartInSession getMyCartInSession() {
-        return myCartInSession;
-    }
-
-    protected final MyCustomerInSession getMyCustomerInSession() {
-        return myCustomerInSession;
     }
 
     @Override

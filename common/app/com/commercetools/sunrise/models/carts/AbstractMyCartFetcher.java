@@ -14,9 +14,9 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractCartFetcher extends AbstractSingleResourceFetcher<Cart, CartQuery, PagedQueryResult<Cart>> implements MyCartFetcher {
+public abstract class AbstractMyCartFetcher extends AbstractSingleResourceFetcher<Cart, CartQuery, PagedQueryResult<Cart>> implements MyCartFetcher {
 
-    protected AbstractCartFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
+    protected AbstractMyCartFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
     }
 

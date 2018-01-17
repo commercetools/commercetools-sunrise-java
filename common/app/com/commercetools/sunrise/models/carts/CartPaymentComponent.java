@@ -20,7 +20,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * @see CartExpansionModel#paymentInfo()
  * @see PaymentInfoExpansionModel#payments()
  */
-public final class CartPaymentInfoExpansionComponent implements ControllerComponent, CartQueryHook, CartUpdateCommandHook {
+public final class CartPaymentComponent implements ControllerComponent, CartQueryHook, CartUpdateCommandHook {
 
     @Override
     public CompletionStage<CartQuery> onCartQuery(final CartQuery query) {

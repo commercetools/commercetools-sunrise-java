@@ -50,7 +50,6 @@ public final class CategoriesWithProductCountQuery extends SingleGraphQLRequest<
         return QUERY;
     }
 
-    @Nullable
     @Override
     public JsonNode getVariables() {
         final ObjectNode objectNode = Json.newObject();
@@ -167,7 +166,6 @@ public final class CategoriesWithProductCountQuery extends SingleGraphQLRequest<
         return this; // not applicable
     }
 
-    @Nullable
     @Override
     public Boolean fetchTotal() {
         return false; // not applicable

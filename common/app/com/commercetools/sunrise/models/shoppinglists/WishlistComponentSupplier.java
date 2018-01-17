@@ -5,14 +5,12 @@ import com.commercetools.sunrise.core.components.ComponentSupplier;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 public final class WishlistComponentSupplier implements ComponentSupplier {
 
     public static List<Class<? extends Component>> get() {
-        return asList(
-                MyWishlistComponent.class,
-                ShoppingListLineItemExpansionComponent.class);
+        return singletonList(MyWishlistComponent.class);
     }
 
 }

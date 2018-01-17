@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.models.carts.MyCartInSession;
-import com.commercetools.sunrise.models.customers.MyCustomerInSession;
+import com.commercetools.sunrise.models.carts.MyCartInCache;
+import com.commercetools.sunrise.models.customers.MyCustomerInCache;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -12,19 +12,19 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class DefaultLogOutAction implements LogOutAction {
 
-    private final MyCustomerInSession myCustomerInSession;
-    private final MyCartInSession myCartInSession;
+    private final MyCustomerInCache myCustomerInCache;
+    private final MyCartInCache myCartInCache;
 
     @Inject
-    protected DefaultLogOutAction(final MyCustomerInSession myCustomerInSession, final MyCartInSession myCartInSession) {
-        this.myCustomerInSession = myCustomerInSession;
-        this.myCartInSession = myCartInSession;
+    protected DefaultLogOutAction(final MyCustomerInCache myCustomerInCache, final MyCartInCache myCartInCache) {
+        this.myCustomerInCache = myCustomerInCache;
+        this.myCartInCache = myCartInCache;
     }
 
     @Override
     public CompletionStage<Result> apply(final Supplier<Result> onSuccess) {
-        myCustomerInSession.remove();
-        myCartInSession.remove();
+        myCustomerInCache.remove();
+        myCartInCache.remove();
         return completedFuture(onSuccess.get());
     }
 }

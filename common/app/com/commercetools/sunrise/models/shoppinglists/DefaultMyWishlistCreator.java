@@ -13,13 +13,14 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public class DefaultMyWishlistCreator extends AbstractShoppingListCreator {
+final class DefaultMyWishlistCreator extends AbstractMyWishlistCreator {
 
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
-    protected DefaultMyWishlistCreator(final SphereClient sphereClient, final HookRunner hookRunner, final MyCustomerInSession myCustomerInSession) {
-        super(sphereClient, hookRunner);
+    DefaultMyWishlistCreator(final SphereClient sphereClient, final HookRunner hookRunner,
+                             final MyWishlistInCache myWishlistInCache, final MyCustomerInSession myCustomerInSession) {
+        super(sphereClient, hookRunner, myWishlistInCache);
         this.myCustomerInSession = myCustomerInSession;
     }
 
@@ -30,7 +31,7 @@ public class DefaultMyWishlistCreator extends AbstractShoppingListCreator {
                 .build());
     }
 
-    protected LocalizedString generateName() {
+    private LocalizedString generateName() {
         return LocalizedString.ofEnglish("Wishlist");
     }
 }

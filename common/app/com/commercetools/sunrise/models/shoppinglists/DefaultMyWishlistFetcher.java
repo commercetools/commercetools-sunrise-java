@@ -8,7 +8,7 @@ import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class DefaultMyWishlistFetcher extends AbstractShoppingListFetcher {
+final class DefaultMyWishlistFetcher extends AbstractMyWishlistFetcher {
 
     private final MyWishlistInSession myWishlistInSession;
     private final MyCustomerInSession myCustomerInSession;
@@ -19,14 +19,6 @@ public class DefaultMyWishlistFetcher extends AbstractShoppingListFetcher {
         super(sphereClient, hookRunner);
         this.myWishlistInSession = myWishlistInSession;
         this.myCustomerInSession = myCustomerInSession;
-    }
-
-    protected final MyWishlistInSession getMyWishlistInSession() {
-        return myWishlistInSession;
-    }
-
-    protected final MyCustomerInSession getMyCustomerInSession() {
-        return myCustomerInSession;
     }
 
     @Override

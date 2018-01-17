@@ -5,7 +5,7 @@ import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.core.viewmodels.forms.FormOption;
 import com.commercetools.sunrise.models.search.facetedsearch.bucketranges.BucketRangeFacetedSearchFormSettings;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.AbstractFacetWithOptionsViewModelFactory;
-import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOptionViewModel;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOption;
 import io.sphere.sdk.search.RangeFacetResult;
 import io.sphere.sdk.search.model.RangeStats;
 import play.mvc.Http;
@@ -66,7 +66,7 @@ public class BucketRangeFacetViewModelFactory extends AbstractFacetWithOptionsVi
                 .map(FormOption::getFieldValue)
                 .collect(toList());
         final Map<String, RangeStats> rangeToStatsMap = mapRangeToStats(facetResult);
-        final List<FacetOptionViewModel> options = new ArrayList<>();
+        final List<FacetOption> options = new ArrayList<>();
         settings.getOptions()
                 .forEach(option -> parseFacetRange(option.getValue())
                         .map(range -> range.toString())

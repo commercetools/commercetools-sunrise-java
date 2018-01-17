@@ -8,12 +8,12 @@ import io.sphere.sdk.orders.queries.OrderQuery;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class DefaultMyOrderListFetcher extends AbstractOrderListFetcher {
+final class DefaultMyOrderListFetcher extends AbstractOrderListFetcher {
 
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
-    protected DefaultMyOrderListFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
+    DefaultMyOrderListFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
                                         final MyCustomerInSession myCustomerInSession) {
         super(sphereClient, hookRunner);
         this.myCustomerInSession = myCustomerInSession;

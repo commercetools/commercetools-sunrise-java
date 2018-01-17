@@ -10,13 +10,17 @@ import io.sphere.sdk.carts.CartDraft;
 import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.expansion.ExpansionPathContainer;
+import play.libs.concurrent.HttpExecution;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class AbstractCartCreator extends AbstractResourceCreator<Cart, CartDraft, CartCreateCommand> implements MyCartCreator {
+public abstract class AbstractMyCartCreator extends AbstractResourceCreator<Cart, CartDraft, CartCreateCommand> implements MyCartCreator {
 
-    protected AbstractCartCreator(final SphereClient sphereClient, final HookRunner hookRunner) {
+    private final MyCartInCache myCartInCache;
+
+    protected AbstractMyCartCreator(final SphereClient sphereClient, final HookRunner hookRunner, final MyCartInCache myCartInCache) {
         super(sphereClient, hookRunner);
+        this.myCartInCache = myCartInCache;
     }
 
     @Override
@@ -25,7 +29,14 @@ public abstract class AbstractCartCreator extends AbstractResourceCreator<Cart, 
     }
 
     @Override
-    protected final CompletionStage<CartCreateCommand> runCreateCommandHook(final HookRunner hookRunner, final CartCreateCommand baseCommand) {
+    protected CompletionStage<Cart> executeRequest(final CartCreateCommand baseCommand) {
+        final CompletionStage<Cart> resourceStage = super.executeRequest(baseCommand);
+        resourceStage.thenAcceptAsync(myCartInCache::store, HttpExecution.defaultContext());
+        return resourceStage;
+    }
+
+    @Override
+    protected final CompletionStage<CartCreateCommand> runRequestHook(final HookRunner hookRunner, final CartCreateCommand baseCommand) {
         return CartCreateCommandHook.runHook(hookRunner, baseCommand);
     }
 

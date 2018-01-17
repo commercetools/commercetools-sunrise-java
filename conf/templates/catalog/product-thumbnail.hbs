@@ -5,9 +5,9 @@
       <div class="sale-flag">{{i18n "catalog:thumbnail.sale"}}</div>
     {{/if}}
       {{#if product}}
-          {{#ifNew product}}
+          {{#ifNewProduct product}}
               <div class="new-flag">{{i18n "catalog:thumbnail.new"}}</div>
-          {{/ifNew}}
+          {{/ifNewProduct}}
       {{/if}}
       {{> catalog/add-to-wishlist-form mobile=true context="mobile" productId=product.id variantId=variant.id sku=variant.sku}}
     <div class="pop-product-image">

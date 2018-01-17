@@ -6,6 +6,8 @@ import com.commercetools.sunrise.core.components.EnableComponents;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.models.BreadcrumbComponent;
 import com.commercetools.sunrise.models.categories.CategoryFetcher;
+import com.commercetools.sunrise.models.products.NewProductFlagComponent;
+import com.commercetools.sunrise.models.products.ProductAvailabilityComponent;
 import com.commercetools.sunrise.models.products.ProductFetcher;
 import com.commercetools.sunrise.models.products.ProductListFetcher;
 import com.commercetools.sunrise.productcatalog.products.ProductSuggestionsComponent;
@@ -25,7 +27,9 @@ import javax.inject.Inject;
         ProductPaginationControllerComponent.class,
         ProductSearchBoxControllerComponent.class,
         ProductFacetedSearchSelectorControllerComponent.class,
-        BreadcrumbComponent.class
+        BreadcrumbComponent.class,
+        NewProductFlagComponent.class,
+        ProductAvailabilityComponent.class
 })
 public final class ProductsController extends SunriseProductsController {
 

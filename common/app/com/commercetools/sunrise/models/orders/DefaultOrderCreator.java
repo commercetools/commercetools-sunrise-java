@@ -7,11 +7,10 @@ import io.sphere.sdk.orders.OrderFromCartDraft;
 import io.sphere.sdk.orders.PaymentState;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-public class DefaultOrderCreator extends AbstractOrderCreator implements OrderCreator {
+final class DefaultOrderCreator extends AbstractOrderCreator implements OrderCreator {
 
     private final MyCartInCache myCartInCache;
 
@@ -21,22 +20,16 @@ public class DefaultOrderCreator extends AbstractOrderCreator implements OrderCr
         this.myCartInCache = myCartInCache;
     }
 
-    protected final MyCartInCache getMyCartInCache() {
-        return myCartInCache;
-    }
-
     @Override
     public CompletionStage<OrderFromCartDraft> defaultDraft() {
         return myCartInCache.require().thenApply(cart -> OrderFromCartDraft.of(cart, generateOrderNumber(), generatePaymentState()));
     }
 
-    @Nullable
-    protected PaymentState generatePaymentState() {
+    private PaymentState generatePaymentState() {
         return PaymentState.PENDING;
     }
 
-    @Nullable
-    protected String generateOrderNumber() {
+    private String generateOrderNumber() {
         return RandomStringUtils.randomNumeric(8);
     }
 }

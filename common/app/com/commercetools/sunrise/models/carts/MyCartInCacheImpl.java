@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.carts;
 
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.core.sessions.AbstractResourceInCache;
+import com.commercetools.sunrise.core.sessions.AbstractUserResourceInCache;
 import io.sphere.sdk.carts.Cart;
 import play.cache.CacheApi;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 @RequestScoped
-final class MyCartInCacheImpl extends AbstractResourceInCache<Cart> implements MyCartInCache {
+final class MyCartInCacheImpl extends AbstractUserResourceInCache<Cart> implements MyCartInCache {
 
     private final MyCartFetcher myCartFetcher;
 

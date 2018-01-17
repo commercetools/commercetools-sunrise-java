@@ -1,12 +1,12 @@
 <!-- start common/nav-menu-category.hbs -->
-{{#withCategoryChildren category categoryTree}}
+{{#withCategoryChildren category}}
   <ul class="dropdown-menu megamenu row dropdown-submenu">
     <li class="col-sm-8">
       <div class="nav-accordion">
         {{#each this}}
           <h3><a href="/{{slug}}">{{name}}</a></h3>
           <ul>
-             {{#withCategoryChildren this categoryTree}}
+             {{#withCategoryChildren this}}
                 {{#each this}}
                   <li><a href="/{{slug}}">{{name}}</a></li>
                 {{/each}}

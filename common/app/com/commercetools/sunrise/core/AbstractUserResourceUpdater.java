@@ -18,11 +18,11 @@ import static io.sphere.sdk.utils.CompletableFutureUtils.exceptionallyCompletedF
 import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends UpdateCommand<T> & ExpansionPathContainer<T>> extends AbstractSphereRequestExecutor implements ResourceUpdater<T> {
+public abstract class AbstractUserResourceUpdater<T extends Resource<T>, C extends UpdateCommand<T> & ExpansionPathContainer<T>> extends AbstractSphereRequestExecutor implements ResourceUpdater<T> {
 
     private final ResourceInCache<T> resourceInCache;
 
-    protected AbstractResourceUpdater(final SphereClient sphereClient, final HookRunner hookRunner, final ResourceInCache<T> resourceInCache) {
+    protected AbstractUserResourceUpdater(final SphereClient sphereClient, final HookRunner hookRunner, final ResourceInCache<T> resourceInCache) {
         super(sphereClient, hookRunner);
         this.resourceInCache = resourceInCache;
     }
@@ -50,8 +50,10 @@ public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends U
             if (command.getUpdateActions().isEmpty()) {
                 return completedFuture(resource);
             } else {
-                return getSphereClient().execute(command).thenComposeAsync(updatedResource ->
-                        applyHooks(command, updatedResource), HttpExecution.defaultContext());
+                final CompletionStage<T> resourceStage = getSphereClient().execute(command)
+                        .thenComposeAsync(updatedResource -> applyHooks(command, updatedResource), HttpExecution.defaultContext());
+                resourceStage.thenAcceptAsync(resourceInCache::store);
+                return resourceStage;
             }
         });
     }
@@ -72,7 +74,7 @@ public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends U
 
     protected CompletionStage<Optional<T>> handleConcurrentModification(final List<? extends UpdateAction<T>> updateActions,
                                                                         final ConcurrentModificationException exception) {
-        resourceInCache.remove();
+        resourceInCache.purge();
         return executeRequest(updateActions, resourceInCache.get());
     }
 }

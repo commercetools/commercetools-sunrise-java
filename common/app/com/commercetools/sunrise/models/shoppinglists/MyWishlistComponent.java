@@ -2,39 +2,39 @@ package com.commercetools.sunrise.models.shoppinglists;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListCreatedHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListLoadedHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListUpdatedHook;
+import com.commercetools.sunrise.core.hooks.ctprequests.ShoppingListQueryHook;
+import com.commercetools.sunrise.core.hooks.ctprequests.ShoppingListUpdateCommandHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.google.inject.Inject;
+import io.sphere.sdk.expansion.ExpansionPath;
 import io.sphere.sdk.shoppinglists.ShoppingList;
+import io.sphere.sdk.shoppinglists.commands.ShoppingListUpdateCommand;
+import io.sphere.sdk.shoppinglists.expansion.ShoppingListExpansionModel;
+import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletionStage;
 
-public final class MyWishlistComponent implements ControllerComponent, ShoppingListCreatedHook, ShoppingListUpdatedHook, ShoppingListLoadedHook, PageDataHook {
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
-    private final MyWishlistInSession myWishlistInSession;
+public final class MyWishlistComponent implements ControllerComponent, PageDataHook, ShoppingListQueryHook, ShoppingListUpdateCommandHook {
+
     private final MyWishlistInCache myWishlistInCache;
 
     @Inject
-    MyWishlistComponent(final MyWishlistInSession myWishlistInSession, final MyWishlistInCache myWishlistInCache) {
-        this.myWishlistInSession = myWishlistInSession;
+    MyWishlistComponent(final MyWishlistInCache myWishlistInCache) {
         this.myWishlistInCache = myWishlistInCache;
     }
 
     @Override
-    public void onShoppingListLoaded(final ShoppingList shoppingList) {
-        storeWishlist(shoppingList);
+    public CompletionStage<ShoppingListQuery> onShoppingListQuery(final ShoppingListQuery query) {
+        return completedFuture(query.plusExpansionPaths(productInformationExpansion()));
     }
 
     @Override
-    public void onShoppingListCreated(final ShoppingList shoppingList) {
-        storeWishlist(shoppingList);
-    }
-
-    @Override
-    public void onShoppingListUpdated(final ShoppingList shoppingList) {
-        storeWishlist(shoppingList);
+    public CompletionStage<ShoppingListUpdateCommand> onShoppingListUpdateCommand(final ShoppingListUpdateCommand command) {
+        return completedFuture(command.plusExpansionPaths(productInformationExpansion()));
     }
 
     @Override
@@ -45,8 +45,10 @@ public final class MyWishlistComponent implements ControllerComponent, ShoppingL
                         .orElse(pageData));
     }
 
-    private void storeWishlist(final ShoppingList shoppingList) {
-        myWishlistInSession.store(shoppingList);
-        myWishlistInCache.store(shoppingList);
+    private List<ExpansionPath<ShoppingList>> productInformationExpansion() {
+        final List<ExpansionPath<ShoppingList>> expansionPaths = new ArrayList<>();
+        expansionPaths.addAll(ShoppingListExpansionModel.of().lineItems().productSlug().expansionPaths());
+        expansionPaths.addAll(ShoppingListExpansionModel.of().lineItems().variant().expansionPaths());
+        return expansionPaths;
     }
 }

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.customers;
 
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.core.sessions.AbstractResourceInCache;
+import com.commercetools.sunrise.core.sessions.AbstractUserResourceInCache;
 import io.sphere.sdk.customers.Customer;
 import play.cache.CacheApi;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 @RequestScoped
-final class MyCustomerInCacheImpl extends AbstractResourceInCache<Customer> implements MyCustomerInCache {
+final class MyCustomerInCacheImpl extends AbstractUserResourceInCache<Customer> implements MyCustomerInCache {
 
     private final MyCustomerFetcher customerFinder;
 

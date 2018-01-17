@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.core.renderers.handlebars;
 
 import com.commercetools.sunrise.core.hooks.HookContext;
+import com.commercetools.sunrise.core.hooks.application.HandlebarsHook;
 import com.commercetools.sunrise.core.renderers.AbstractTemplateEngine;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.core.renderers.TemplateNotFoundException;
@@ -10,6 +11,7 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.ValueResolver;
+import play.libs.concurrent.HttpExecution;
 import play.twirl.api.Content;
 import play.twirl.api.Html;
 
@@ -36,10 +38,10 @@ public class HandlebarsTemplateEngine extends AbstractTemplateEngine implements 
 
     @Override
     public CompletionStage<Content> render(final String templateName, final PageData pageData) {
-        final Template template = compileTemplate(templateName);
-        return applyPageDataHooks(pageData)
-                .thenApply(this::createContext)
-                .thenApply(context -> renderHtml(template, context));
+        return compileTemplate(templateName)
+                .thenComposeAsync(template -> applyPageDataHooks(pageData)
+                        .thenApply(this::createContext)
+                        .thenApply(context -> renderHtml(template, context)), HttpExecution.defaultContext());
     }
 
     protected Context createContext(final PageData pageData) {
@@ -48,12 +50,14 @@ public class HandlebarsTemplateEngine extends AbstractTemplateEngine implements 
                 .build();
     }
 
-    private Template compileTemplate(final String templateName) {
-        try {
-            return handlebars.compile(templateName);
-        } catch (IOException e) {
-            throw new TemplateNotFoundException("Could not find the default template", e);
-        }
+    private CompletionStage<Template> compileTemplate(final String templateName) {
+        return HandlebarsHook.runHook(getHookContext(), handlebars).thenApply(finalHandlebars -> {
+            try {
+                return finalHandlebars.compile(templateName);
+            } catch (IOException e) {
+                throw new TemplateNotFoundException("Could not find the default template", e);
+            }
+        });
     }
 
     private Content renderHtml(final Template template, final Context context) {

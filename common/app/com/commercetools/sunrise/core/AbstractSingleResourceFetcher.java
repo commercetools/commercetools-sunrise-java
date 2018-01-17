@@ -25,7 +25,7 @@ public abstract class AbstractSingleResourceFetcher<T, R extends SphereRequest<P
         return executeRequest(baseRequest, this::selectResource);
     }
 
-    protected CompletionStage<Optional<T>> executeRequest(final R baseRequest, final Function<P, Optional<T>> resourceSelector) {
+    protected final CompletionStage<Optional<T>> executeRequest(final R baseRequest, final Function<P, Optional<T>> resourceSelector) {
         return runRequestHook(getHookRunner(), baseRequest).thenCompose(request ->
                 getSphereClient().execute(request)
                         .thenApply(resourceSelector)

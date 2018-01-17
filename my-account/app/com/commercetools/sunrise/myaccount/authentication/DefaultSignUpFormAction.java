@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
 import com.commercetools.sunrise.core.AbstractFormAction;
-import com.commercetools.sunrise.models.customers.CustomerCreator;
+import com.commercetools.sunrise.models.customers.MyCustomerCreator;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -15,14 +15,14 @@ import static com.commercetools.sdk.errors.ErrorResponseExceptionUtils.isDuplica
 public class DefaultSignUpFormAction extends AbstractFormAction<SignUpFormData> implements SignUpFormAction {
 
     private final SignUpFormData formData;
-    private final CustomerCreator customerCreator;
+    private final MyCustomerCreator myCustomerCreator;
 
     @Inject
     protected DefaultSignUpFormAction(final FormFactory formFactory, final SignUpFormData formData,
-                                      final CustomerCreator customerCreator) {
+                                      final MyCustomerCreator myCustomerCreator) {
         super(formFactory);
         this.formData = formData;
-        this.customerCreator = customerCreator;
+        this.myCustomerCreator = myCustomerCreator;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class DefaultSignUpFormAction extends AbstractFormAction<SignUpFormData> 
 
     @Override
     protected CompletionStage<?> onValidForm(final SignUpFormData formData) {
-        return customerCreator.get(formData.customerDraft());
+        return myCustomerCreator.get(formData.customerDraft());
     }
 
     @Override

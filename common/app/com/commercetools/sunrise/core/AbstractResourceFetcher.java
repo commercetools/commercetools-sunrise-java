@@ -22,12 +22,12 @@ public abstract class AbstractResourceFetcher<T, R extends SphereRequest<P>, P e
     protected final CompletionStage<P> executeRequest(final R baseRequest) {
         return runRequestHook(getHookRunner(), baseRequest).thenCompose(request -> {
             final CompletionStage<P> resultStage = getSphereClient().execute(request);
-            resultStage.thenAcceptAsync(result -> runPagedResultLoadedHook(getHookRunner(), result), HttpExecution.defaultContext());
+            resultStage.thenAcceptAsync(result -> runResourceLoadedHook(getHookRunner(), result), HttpExecution.defaultContext());
             return resultStage;
         });
     }
 
     protected abstract CompletionStage<R> runRequestHook(HookRunner hookRunner, R baseRequest);
 
-    protected abstract void runPagedResultLoadedHook(HookRunner hookRunner, P pagedResult);
+    protected abstract void runResourceLoadedHook(HookRunner hookRunner, P pagedResult);
 }

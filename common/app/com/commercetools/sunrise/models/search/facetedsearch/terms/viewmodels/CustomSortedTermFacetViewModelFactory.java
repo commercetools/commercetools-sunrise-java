@@ -3,7 +3,7 @@ package com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.TermFacetedSearchFormSettings;
-import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOptionViewModel;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOption;
 import io.sphere.sdk.search.TermFacetResult;
 
 import javax.inject.Inject;
@@ -26,7 +26,7 @@ public final class CustomSortedTermFacetViewModelFactory extends TermFacetViewMo
     }
 
     @Override
-    protected List<FacetOptionViewModel> createOptions(final TermFacetedSearchFormSettings<?> settings, final TermFacetResult facetResult) {
+    protected List<FacetOption> createOptions(final TermFacetedSearchFormSettings<?> settings, final TermFacetResult facetResult) {
         final List<String> customSortedValues = customSortedValues(settings);
         return super.createOptions(settings, facetResult).stream()
 //                .sorted((left, right) -> comparePositions(left.getValue(), right.getValue(), customSortedValues))

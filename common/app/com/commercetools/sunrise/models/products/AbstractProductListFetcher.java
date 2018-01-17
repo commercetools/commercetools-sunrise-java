@@ -34,7 +34,7 @@ public abstract class AbstractProductListFetcher extends AbstractResourceFetcher
     }
 
     @Override
-    protected void runPagedResultLoadedHook(final HookRunner hookRunner, final PagedSearchResult<ProductProjection> result) {
+    protected void runResourceLoadedHook(final HookRunner hookRunner, final PagedSearchResult<ProductProjection> result) {
         ProductProjectionPagedSearchResultLoadedHook.runHook(hookRunner, result);
     }
 

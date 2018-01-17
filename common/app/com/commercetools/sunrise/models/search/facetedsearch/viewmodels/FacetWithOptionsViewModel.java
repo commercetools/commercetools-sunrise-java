@@ -7,7 +7,7 @@ public abstract class FacetWithOptionsViewModel extends FacetViewModel {
     private String key;
     private boolean multiSelect;
     private boolean matchingAll;
-    private List<FacetOptionViewModel> limitedOptions;
+    private List<FacetOption> limitedOptions;
 
     public FacetWithOptionsViewModel() {
     }
@@ -20,11 +20,11 @@ public abstract class FacetWithOptionsViewModel extends FacetViewModel {
         this.key = key;
     }
 
-    public List<FacetOptionViewModel> getLimitedOptions() {
+    public List<FacetOption> getLimitedOptions() {
         return limitedOptions;
     }
 
-    public void setLimitedOptions(final List<FacetOptionViewModel> limitedOptions) {
+    public void setLimitedOptions(final List<FacetOption> limitedOptions) {
         this.limitedOptions = limitedOptions;
     }
 

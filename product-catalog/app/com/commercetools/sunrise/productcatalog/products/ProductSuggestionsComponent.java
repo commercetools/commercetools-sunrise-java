@@ -44,7 +44,7 @@ public final class ProductSuggestionsComponent implements ControllerComponent, P
 
     @Override
     public void onProductProjectionLoaded(final ProductProjection product) {
-        this.suggestionsStage = fetchRelatedProducts(product, numRecommendations);
+        this.suggestionsStage = fetchRelatedProducts(product);
     }
 
     @Override
@@ -62,10 +62,9 @@ public final class ProductSuggestionsComponent implements ControllerComponent, P
     /**
      * Gets products from the same categories as the given product, excluding the product itself.
      * @param product the product to get suggestions for
-     * @param numProducts the number of products the returned result should contain
      * @return the products related to this product
      */
-    private CompletionStage<PagedQueryResult<ProductProjection>> fetchRelatedProducts(final ProductProjection product, final int numProducts) {
+    private CompletionStage<PagedQueryResult<ProductProjection>> fetchRelatedProducts(final ProductProjection product) {
         final Set<String> categoryIds = product.getCategories().stream()
                 .map(Reference::getId)
                 .collect(toSet());
@@ -76,7 +75,7 @@ public final class ProductSuggestionsComponent implements ControllerComponent, P
                     .plusPredicates(m -> m.categories().id().isIn(categoryIds))
                     .plusPredicates(m -> m.id().isNot(product.getId()))
                     .withPriceSelection(priceSelection)
-                    .withLimit(numProducts));
+                    .withLimit(numRecommendations));
         }
     }
 }

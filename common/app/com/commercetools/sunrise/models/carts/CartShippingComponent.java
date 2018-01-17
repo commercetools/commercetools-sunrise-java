@@ -18,7 +18,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * @see CartExpansionModel#shippingInfo()
  * @see ShippingInfoExpansionModel#shippingMethod()
  */
-public final class CartShippingInfoExpansionComponent implements ControllerComponent, CartQueryHook {
+public final class CartShippingComponent implements ControllerComponent, CartQueryHook {
 
     @Override
     public CompletionStage<CartQuery> onCartQuery(final CartQuery query) {

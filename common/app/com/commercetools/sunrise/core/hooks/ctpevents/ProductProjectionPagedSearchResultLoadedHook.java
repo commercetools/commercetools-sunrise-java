@@ -6,9 +6,9 @@ import io.sphere.sdk.search.PagedSearchResult;
 
 public interface ProductProjectionPagedSearchResultLoadedHook extends CtpEventHook {
 
-    void onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> productProjectionPagedSearchResult); // Why was it returning void?
+    void onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> pagedSearchResult);
 
-    static void runHook(final HookRunner hookRunner, final PagedSearchResult<ProductProjection> productProjectionPagedSearchResult) {
-        hookRunner.runEventHook(ProductProjectionPagedSearchResultLoadedHook.class, hook -> hook.onProductProjectionPagedSearchResultLoaded(productProjectionPagedSearchResult));
+    static void runHook(final HookRunner hookRunner, final PagedSearchResult<ProductProjection> pagedSearchResult) {
+        hookRunner.runEventHook(ProductProjectionPagedSearchResultLoadedHook.class, hook -> hook.onProductProjectionPagedSearchResultLoaded(pagedSearchResult));
     }
 }

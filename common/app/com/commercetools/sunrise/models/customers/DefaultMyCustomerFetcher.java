@@ -10,19 +10,15 @@ import javax.inject.Inject;
 import java.util.Optional;
 
 @RequestScoped
-public class DefaultMyCustomerFetcher extends AbstractCustomerFetcher {
+final class DefaultMyCustomerFetcher extends AbstractMyCustomerFetcher {
 
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
-    protected DefaultMyCustomerFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
+    DefaultMyCustomerFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
                                        final MyCustomerInSession myCustomerInSession) {
         super(sphereClient, hookRunner);
         this.myCustomerInSession = myCustomerInSession;
-    }
-
-    protected final MyCustomerInSession getMyCustomerInSession() {
-        return myCustomerInSession;
     }
 
     @Override

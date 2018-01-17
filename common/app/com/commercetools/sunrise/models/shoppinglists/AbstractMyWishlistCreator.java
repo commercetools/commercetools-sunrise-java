@@ -10,13 +10,18 @@ import io.sphere.sdk.expansion.ExpansionPathContainer;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import io.sphere.sdk.shoppinglists.ShoppingListDraft;
 import io.sphere.sdk.shoppinglists.commands.ShoppingListCreateCommand;
+import play.libs.concurrent.HttpExecution;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class AbstractShoppingListCreator extends AbstractResourceCreator<ShoppingList, ShoppingListDraft, ShoppingListCreateCommand> implements MyWishlistCreator {
+public abstract class AbstractMyWishlistCreator extends AbstractResourceCreator<ShoppingList, ShoppingListDraft, ShoppingListCreateCommand> implements MyWishlistCreator {
 
-    protected AbstractShoppingListCreator(final SphereClient sphereClient, final HookRunner hookRunner) {
+    private final MyWishlistInCache myWishlistInCache;
+
+    protected AbstractMyWishlistCreator(final SphereClient sphereClient, final HookRunner hookRunner,
+                                        final MyWishlistInCache myWishlistInCache) {
         super(sphereClient, hookRunner);
+        this.myWishlistInCache = myWishlistInCache;
     }
 
     @Override
@@ -24,8 +29,14 @@ public abstract class AbstractShoppingListCreator extends AbstractResourceCreato
         return ShoppingListCreateCommand.of(draft);
     }
 
+    protected CompletionStage<ShoppingList> executeRequest(final ShoppingListCreateCommand baseCommand) {
+        final CompletionStage<ShoppingList> resourceStage = super.executeRequest(baseCommand);
+        resourceStage.thenAcceptAsync(myWishlistInCache::store, HttpExecution.defaultContext());
+        return resourceStage;
+    }
+
     @Override
-    protected final CompletionStage<ShoppingListCreateCommand> runCreateCommandHook(final HookRunner hookRunner, final ShoppingListCreateCommand baseCommand) {
+    protected final CompletionStage<ShoppingListCreateCommand> runRequestHook(final HookRunner hookRunner, final ShoppingListCreateCommand baseCommand) {
         return ShoppingListCreateCommandHook.runHook(hookRunner, baseCommand);
     }
 
