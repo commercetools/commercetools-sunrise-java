@@ -2,9 +2,10 @@ package com.commercetools.sunrise.myaccount.changepassword;
 
 import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpevents.CustomerChangedPasswordHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.CustomerPasswordUpdatedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.CustomerUpdatedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.CustomerChangePasswordCommandHook;
-import com.commercetools.sunrise.models.customers.MyCustomerInCache;
+import com.commercetools.sunrise.models.customers.MyCustomer;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerChangePasswordCommand;
@@ -24,17 +25,17 @@ final class DefaultChangePasswordFormAction extends AbstractFormAction<ChangePas
     private final ChangePasswordFormData formData;
     private final SphereClient sphereClient;
     private final HookRunner hookRunner;
-    private final MyCustomerInCache myCustomerInCache;
+    private final MyCustomer myCustomer;
 
     @Inject
     DefaultChangePasswordFormAction(final FormFactory formFactory, final ChangePasswordFormData formData,
                                     final SphereClient sphereClient, final HookRunner hookRunner,
-                                    final MyCustomerInCache myCustomerInCache) {
+                                    final MyCustomer myCustomer) {
         super(formFactory);
         this.formData = formData;
         this.sphereClient = sphereClient;
         this.hookRunner = hookRunner;
-        this.myCustomerInCache = myCustomerInCache;
+        this.myCustomer = myCustomer;
     }
 
     @Override
@@ -44,7 +45,7 @@ final class DefaultChangePasswordFormAction extends AbstractFormAction<ChangePas
 
     @Override
     protected CompletionStage<?> onValidForm(final ChangePasswordFormData formData) {
-        return myCustomerInCache.require()
+        return myCustomer.require()
                 .thenApply(customer -> CustomerChangePasswordCommand.of(customer, formData.oldPassword(), formData.newPassword()))
                 .thenComposeAsync(this::executeWithHooks, HttpExecution.defaultContext());
     }
@@ -62,7 +63,7 @@ final class DefaultChangePasswordFormAction extends AbstractFormAction<ChangePas
     protected final CompletionStage<Customer> executeWithHooks(final CustomerChangePasswordCommand baseCommand) {
         final CompletionStage<Customer> resultStage = CustomerChangePasswordCommandHook.runHook(hookRunner, baseCommand)
                 .thenCompose(sphereClient::execute);
-        resultStage.thenAcceptAsync(resource -> CustomerChangedPasswordHook.runHook(hookRunner, resource), HttpExecution.defaultContext());
+        resultStage.thenAcceptAsync(resource -> CustomerUpdatedHook.runHook(hookRunner, resource), HttpExecution.defaultContext());
         return resultStage;
     }
 }

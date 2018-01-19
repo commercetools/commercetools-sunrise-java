@@ -11,21 +11,21 @@ import java.util.concurrent.CompletionStage;
 
 public final class MyCartComponent implements ControllerComponent, OrderCreatedHook, PageDataHook {
 
-    private final MyCartInCache myCartInCache;
+    private final MyCart myCart;
 
     @Inject
-    MyCartComponent(final MyCartInCache myCartInCache) {
-        this.myCartInCache = myCartInCache;
+    MyCartComponent(final MyCart myCart) {
+        this.myCart = myCart;
     }
 
     @Override
     public void onOrderCreated(final Order order) {
-        myCartInCache.remove();
+        myCart.remove();
     }
 
     @Override
     public CompletionStage<PageData> onPageDataReady(final PageData pageData) {
-        return myCartInCache.get()
+        return myCart.get()
                 .thenApply(cartOpt -> cartOpt
                         .map(cart -> pageData.put("cart", cart))
                         .orElse(pageData));

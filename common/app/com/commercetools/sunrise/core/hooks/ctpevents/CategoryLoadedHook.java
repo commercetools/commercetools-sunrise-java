@@ -1,14 +1,16 @@
 package com.commercetools.sunrise.core.hooks.ctpevents;
 
+import com.commercetools.sunrise.core.hooks.ConsumerHook;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.categories.Category;
 
-public interface CategoryLoadedHook extends CtpEventHook {
+@FunctionalInterface
+public interface CategoryLoadedHook extends ConsumerHook {
 
-    void onCategoryLoaded(final Category category);
+    void onLoaded(Category category);
 
-    static void runHook(final HookRunner hookRunner, final Category category) {
-        hookRunner.runEventHook(CategoryLoadedHook.class, hook -> hook.onCategoryLoaded(category));
+    static void run(final HookRunner hookRunner, final Category resource) {
+        hookRunner.run(CategoryLoadedHook.class, h -> h.onLoaded(resource));
     }
 }
 

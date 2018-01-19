@@ -3,7 +3,8 @@ package com.commercetools.sunrise.myaccount.authentication;
 import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpactions.CustomerSignedInActionHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.CustomerSignInResultLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.CartLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.CustomerLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.CustomerSignInCommandHook;
 import com.commercetools.sunrise.models.carts.MyCartInSession;
 import io.sphere.sdk.client.SphereClient;
@@ -73,7 +74,12 @@ public class DefaultLogInFormAction extends AbstractFormAction<LogInFormData> im
 
     private CompletionStage<CustomerSignInResult> applyHooks(final CustomerSignInResult result) {
         final CompletionStage<CustomerSignInResult> finalResultStage = CustomerSignedInActionHook.runHook(hookRunner, result, null);
-        finalResultStage.thenAcceptAsync(finalResult -> CustomerSignInResultLoadedHook.runHook(hookRunner, finalResult), HttpExecution.defaultContext());
+        finalResultStage.thenAcceptAsync(finalResult -> {
+            if (finalResult.getCart() != null) {
+                hookRunner.run(CartLoadedHook.class, h -> h.onLoaded(finalResult.getCart()));
+            }
+            hookRunner.run(CustomerLoadedHook.class, h -> h.onLoaded(finalResult.getCustomer()));
+        }, HttpExecution.defaultContext());
         return finalResultStage;
     }
 

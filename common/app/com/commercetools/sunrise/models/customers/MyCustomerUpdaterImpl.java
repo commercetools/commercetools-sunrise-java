@@ -18,8 +18,8 @@ import java.util.concurrent.CompletionStage;
 final class MyCustomerUpdaterImpl extends AbstractUserResourceUpdater<Customer, CustomerUpdateCommand> implements MyCustomerUpdater {
 
     @Inject
-    MyCustomerUpdaterImpl(final SphereClient sphereClient, final HookRunner hookRunner, final MyCustomerInCache myCustomerInCache) {
-        super(sphereClient, hookRunner, myCustomerInCache);
+    MyCustomerUpdaterImpl(final SphereClient sphereClient, final HookRunner hookRunner, final MyCustomer myCustomer) {
+        super(sphereClient, hookRunner, myCustomer);
     }
 
     @Override
@@ -28,13 +28,13 @@ final class MyCustomerUpdaterImpl extends AbstractUserResourceUpdater<Customer, 
     }
 
     @Override
-    protected CompletionStage<CustomerUpdateCommand> runUpdateCommandHook(final HookRunner hookRunner, final CustomerUpdateCommand baseCommand) {
+    protected CompletionStage<CustomerUpdateCommand> runRequestHook(final HookRunner hookRunner, final CustomerUpdateCommand baseCommand) {
         return CustomerUpdateCommandHook.runHook(hookRunner, baseCommand);
     }
 
     @Override
-    protected CompletionStage<Customer> runActionHook(final HookRunner hookRunner, final Customer resource,
-                                                      final ExpansionPathContainer<Customer> expansionPathContainer) {
+    protected CompletionStage<Customer> runResponseHook(final HookRunner hookRunner, final Customer resource,
+                                                        final ExpansionPathContainer<Customer> expansionPathContainer) {
         return CustomerUpdatedActionHook.runHook(hookRunner, resource, expansionPathContainer);
     }
 

@@ -10,12 +10,12 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 @RequestScoped
-final class MyCustomerInCacheImpl extends AbstractUserResourceInCache<Customer> implements MyCustomerInCache {
+final class MyCustomerImpl extends AbstractUserResourceInCache<Customer> implements MyCustomer {
 
     private final MyCustomerFetcher customerFinder;
 
     @Inject
-    MyCustomerInCacheImpl(final MyCustomerInSession myCustomerInSession, final CacheApi cacheApi, final MyCustomerFetcher customerFinder) {
+    MyCustomerImpl(final MyCustomerInSession myCustomerInSession, final CacheApi cacheApi, final MyCustomerFetcher customerFinder) {
         super(myCustomerInSession, cacheApi);
         this.customerFinder = customerFinder;
     }

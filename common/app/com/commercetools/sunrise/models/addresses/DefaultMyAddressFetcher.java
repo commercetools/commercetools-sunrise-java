@@ -26,7 +26,7 @@ final class DefaultMyAddressFetcher implements MyAddressFetcher {
                 .thenApply(customerOpt -> customerOpt
                         .flatMap(customer -> {
                             final Optional<Address> addressOpt = customer.findAddressById(identifier);
-                            addressOpt.ifPresent(address -> AddressLoadedHook.runHook(hookRunner, address));
+                            addressOpt.ifPresent(address -> AddressLoadedHook.run(hookRunner, address));
                             return addressOpt;
                         }));
     }

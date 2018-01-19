@@ -5,6 +5,7 @@ import com.google.inject.ImplementedBy;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 @ImplementedBy(HookContextImpl.class)
 public interface HookRunner {
@@ -18,10 +19,10 @@ public interface HookRunner {
      * hence the successful result is not used directly by the framework.
      *
      * @param hookClass the class which represents the hook
-     * @param f         a possible asynchronous computation using the hook
+     * @param consumer         a possible asynchronous computation using the hook
      * @param <H>       the type of the hook
      */
-    <H extends Hook> void runEventHook(final Class<H> hookClass, final Consumer<H> f);
+    <H extends ConsumerHook> void run(Class<H> hookClass, Consumer<H> consumer);
 
     /**
      * Executes a hook with one parameter that returns a value of the same type as the parameter, wrapped in a {@link CompletionStage}.
@@ -29,12 +30,15 @@ public interface HookRunner {
      *
      * A typical use case is to use this as filter especially in combination with "withers".
      *
-     * @param hookClass the class which represents the hook
-     * @param f a computation (filter) that takes the hook and the parameter of type {@code R} as argument and returns a computed value of the type {@code R}
-     * @param param the initial parameter for the filter
      * @param <H> the type of the hook
      * @param <R> the type of the parameter
+     * @param hookClass the class which represents the hook
+     * @param identity the initial parameter for the filter
+     * @param asyncAccumulator a computation (filter) that takes the hook and the parameter of type {@code R} as argument and returns a computed value of the type {@code R}
      * @return the result of the filter chain, if there is no hooks then it will be the parameter itself, if there are multiple hooks then it will be applied like this: f<sub>3</sub>(f<sub>2</sub>(f<sub>1</sub>(initialParameter)))
      */
-    <H extends Hook, R> CompletionStage<R> runActionHook(final Class<H> hookClass, final BiFunction<H, R, CompletionStage<R>> f, final R param);
+    <H extends ReducerHook, R> CompletionStage<R> run(Class<H> hookClass, R identity, BiFunction<R, H, CompletionStage<R>> asyncAccumulator);
+
+    <H extends FilterHook, I, O> CompletionStage<O> run(Class<H> hookClass, I input, Function<I, CompletionStage<O>> execution,
+                                                        Function<H, BiFunction<I, Function<I, CompletionStage<O>>, CompletionStage<O>>> accumulator);
 }

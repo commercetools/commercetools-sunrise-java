@@ -1,16 +1,15 @@
 package com.commercetools.sunrise.core.hooks.ctpevents;
 
+import com.commercetools.sunrise.core.hooks.ConsumerHook;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 
-import java.util.concurrent.CompletionStage;
+@FunctionalInterface
+public interface ShoppingListLoadedHook extends ConsumerHook {
 
-public interface ShoppingListLoadedHook extends CtpEventHook {
+    void onLoaded(ShoppingList shoppingList);
 
-    void onShoppingListLoaded(ShoppingList shoppingList);
-
-    static void runHook(final HookRunner hookRunner, final ShoppingList shoppingList) {
-        hookRunner.runEventHook(ShoppingListLoadedHook.class, hook -> hook.onShoppingListLoaded(shoppingList));
+    static void run(final HookRunner hookRunner, final ShoppingList resource) {
+        hookRunner.run(ShoppingListLoadedHook.class, h -> h.onLoaded(resource));
     }
-
 }

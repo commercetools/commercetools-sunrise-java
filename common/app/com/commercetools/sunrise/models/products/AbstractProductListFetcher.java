@@ -2,7 +2,7 @@ package com.commercetools.sunrise.models.products;
 
 import com.commercetools.sunrise.core.AbstractResourceFetcher;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpevents.ProductProjectionPagedSearchResultLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.ProductSearchResultHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.ProductProjectionSearchHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
@@ -35,7 +35,7 @@ public abstract class AbstractProductListFetcher extends AbstractResourceFetcher
 
     @Override
     protected void runResourceLoadedHook(final HookRunner hookRunner, final PagedSearchResult<ProductProjection> result) {
-        ProductProjectionPagedSearchResultLoadedHook.runHook(hookRunner, result);
+        ProductSearchResultHook.runHook(hookRunner, result);
     }
 
     // TODO Replace once implemented in JVM SDK (issue https://github.com/commercetools/commercetools-jvm-sdk/issues/1662)

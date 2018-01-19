@@ -11,7 +11,7 @@ public interface CustomerUpdatedActionHook extends CtpActionHook {
     CompletionStage<Customer> onCustomerUpdatedAction(final Customer customer, final ExpansionPathContainer<Customer> expansionPathContainer);
 
     static CompletionStage<Customer> runHook(final HookRunner hookRunner, final Customer customer, final ExpansionPathContainer<Customer> expansionPathContainer) {
-        return hookRunner.runActionHook(CustomerUpdatedActionHook.class, (hook, updatedCart) -> hook.onCustomerUpdatedAction(updatedCart, expansionPathContainer), customer);
+        return hookRunner.run(CustomerUpdatedActionHook.class, customer, (hook, updatedCart) -> hook.onCustomerUpdatedAction(updatedCart, expansionPathContainer));
     }
 
 }

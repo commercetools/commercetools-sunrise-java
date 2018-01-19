@@ -1,15 +1,18 @@
 package com.commercetools.sunrise.core.hooks.ctprequests;
 
+import com.commercetools.sunrise.core.hooks.FilterHook;
 import com.commercetools.sunrise.core.hooks.HookRunner;
+import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerChangePasswordCommand;
 
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
-public interface CustomerChangePasswordCommandHook extends CtpRequestHook {
+public interface CustomerChangePasswordCommandHook extends FilterHook {
 
-    CompletionStage<CustomerChangePasswordCommand> onCustomerChangePasswordCommand(final CustomerChangePasswordCommand command);
+    CompletionStage<Customer> on(CustomerChangePasswordCommand request, Function<CustomerChangePasswordCommand, CompletionStage<Customer>> nextComponent);
 
-    static CompletionStage<CustomerChangePasswordCommand> runHook(final HookRunner hookRunner, final CustomerChangePasswordCommand command) {
-        return hookRunner.runActionHook(CustomerChangePasswordCommandHook.class, CustomerChangePasswordCommandHook::onCustomerChangePasswordCommand, command);
+    static CompletionStage<Customer> run(final HookRunner hookRunner, final CustomerChangePasswordCommand request, final Function<CustomerChangePasswordCommand, CompletionStage<Customer>> execution) {
+        return hookRunner.run(CustomerChangePasswordCommandHook.class, request, execution, h -> h::on);
     }
 }

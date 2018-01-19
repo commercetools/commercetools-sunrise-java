@@ -20,11 +20,11 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class MyWishlistComponent implements ControllerComponent, PageDataHook, ShoppingListQueryHook, ShoppingListUpdateCommandHook {
 
-    private final MyWishlistInCache myWishlistInCache;
+    private final MyWishlist myWishlist;
 
     @Inject
-    MyWishlistComponent(final MyWishlistInCache myWishlistInCache) {
-        this.myWishlistInCache = myWishlistInCache;
+    MyWishlistComponent(final MyWishlist myWishlist) {
+        this.myWishlist = myWishlist;
     }
 
     @Override
@@ -39,7 +39,7 @@ public final class MyWishlistComponent implements ControllerComponent, PageDataH
 
     @Override
     public CompletionStage<PageData> onPageDataReady(final PageData pageData) {
-        return myWishlistInCache.get()
+        return myWishlist.get()
                 .thenApply(wishlistOpt -> wishlistOpt
                         .map(wishlist -> pageData.put("wishlist", wishlist))
                         .orElse(pageData));

@@ -7,8 +7,8 @@ import io.sphere.sdk.customers.Customer;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-@ImplementedBy(MyCustomerInCacheImpl.class)
-public interface MyCustomerInCache extends ResourceInCache<Customer> {
+@ImplementedBy(MyCustomerImpl.class)
+public interface MyCustomer extends ResourceInCache<Customer> {
 
     @Override
     CompletionStage<Optional<Customer>> get();

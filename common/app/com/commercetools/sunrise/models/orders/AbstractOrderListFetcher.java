@@ -2,7 +2,7 @@ package com.commercetools.sunrise.models.orders;
 
 import com.commercetools.sunrise.core.AbstractResourceFetcher;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpevents.OrderPagedQueryResultLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.OrderQueryResultHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.OrderQueryHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.orders.Order;
@@ -31,6 +31,6 @@ public abstract class AbstractOrderListFetcher extends AbstractResourceFetcher<O
 
     @Override
     protected void runResourceLoadedHook(final HookRunner hookRunner, final PagedQueryResult<Order> result) {
-        OrderPagedQueryResultLoadedHook.runHook(hookRunner, result);
+        OrderQueryResultHook.runHook(hookRunner, result);
     }
 }

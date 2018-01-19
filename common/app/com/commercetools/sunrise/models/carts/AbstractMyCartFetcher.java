@@ -32,6 +32,6 @@ public abstract class AbstractMyCartFetcher extends AbstractSingleResourceFetche
 
     @Override
     protected final void runResourceLoadedHook(final HookRunner hookRunner, final Cart resource) {
-        CartLoadedHook.runHook(hookRunner, resource);
+        hookRunner.run(CartLoadedHook.class, h -> h.onLoaded(resource));
     }
 }

@@ -13,6 +13,6 @@ public interface PageDataHook extends ApplicationHook {
     CompletionStage<PageData> onPageDataReady(final PageData pageData);
 
     static CompletionStage<PageData> runHook(final HookRunner hookRunner, final PageData pageData) {
-        return hookRunner.runActionHook(PageDataHook.class, PageDataHook::onPageDataReady, pageData);
+        return hookRunner.run(PageDataHook.class, pageData, PageDataHook::onPageDataReady);
     }
 }

@@ -2,7 +2,7 @@ package com.commercetools.sunrise.models.products;
 
 import com.commercetools.sunrise.core.AbstractSingleResourceFetcher;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpevents.ProductProjectionLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.ProductLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.ProductWithVariantLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.ProductProjectionQueryHook;
 import io.sphere.sdk.client.SphereClient;
@@ -44,7 +44,7 @@ public abstract class AbstractProductFetcher extends AbstractSingleResourceFetch
 
     @Override
     protected final void runResourceLoadedHook(final HookRunner hookRunner, final ProductProjection resource) {
-        ProductProjectionLoadedHook.runHook(hookRunner, resource);
+        ProductLoadedHook.runHook(hookRunner, resource);
     }
 
     protected final void runProductVariantLoadedHook(final HookRunner hookRunner, final ProductWithVariant productWithVariant) {

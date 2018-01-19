@@ -18,8 +18,8 @@ import java.util.concurrent.CompletionStage;
 final class MyWishlistUpdaterImpl extends AbstractUserResourceUpdater<ShoppingList, ShoppingListUpdateCommand> implements MyWishlistUpdater {
 
     @Inject
-    MyWishlistUpdaterImpl(final SphereClient sphereClient, final HookRunner hookRunner, final MyWishlistInCache myWishlistInCache) {
-        super(sphereClient, hookRunner, myWishlistInCache);
+    MyWishlistUpdaterImpl(final SphereClient sphereClient, final HookRunner hookRunner, final MyWishlist myWishlist) {
+        super(sphereClient, hookRunner, myWishlist);
     }
 
     @Override
@@ -28,13 +28,13 @@ final class MyWishlistUpdaterImpl extends AbstractUserResourceUpdater<ShoppingLi
     }
 
     @Override
-    protected CompletionStage<ShoppingListUpdateCommand> runUpdateCommandHook(final HookRunner hookRunner, final ShoppingListUpdateCommand baseCommand) {
+    protected CompletionStage<ShoppingListUpdateCommand> runRequestHook(final HookRunner hookRunner, final ShoppingListUpdateCommand baseCommand) {
         return ShoppingListUpdateCommandHook.runHook(hookRunner, baseCommand);
     }
 
     @Override
-    protected CompletionStage<ShoppingList> runActionHook(final HookRunner hookRunner, final ShoppingList resource,
-                                                          final ExpansionPathContainer<ShoppingList> expansionPathContainer) {
+    protected CompletionStage<ShoppingList> runResponseHook(final HookRunner hookRunner, final ShoppingList resource,
+                                                            final ExpansionPathContainer<ShoppingList> expansionPathContainer) {
         return ShoppingListUpdatedActionHook.runHook(hookRunner, resource, expansionPathContainer);
     }
 

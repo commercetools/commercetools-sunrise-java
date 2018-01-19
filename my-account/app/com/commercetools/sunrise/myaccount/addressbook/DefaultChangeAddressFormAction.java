@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
 import com.commercetools.sunrise.core.AbstractFormAction;
-import com.commercetools.sunrise.models.customers.MyCustomerInCache;
+import com.commercetools.sunrise.models.customers.MyCustomer;
 import com.commercetools.sunrise.models.customers.MyCustomerUpdater;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
@@ -23,15 +23,15 @@ public class DefaultChangeAddressFormAction extends AbstractFormAction<ChangeAdd
 
     private final ChangeAddressFormData formData;
     private final MyCustomerUpdater myCustomerUpdater;
-    private final MyCustomerInCache myCustomerInCache;
+    private final MyCustomer myCustomer;
 
     @Inject
     protected DefaultChangeAddressFormAction(final FormFactory formFactory, final ChangeAddressFormData formData,
-                                             final MyCustomerUpdater myCustomerUpdater, final MyCustomerInCache myCustomerInCache) {
+                                             final MyCustomerUpdater myCustomerUpdater, final MyCustomer myCustomer) {
         super(formFactory);
         this.formData = formData;
         this.myCustomerUpdater = myCustomerUpdater;
-        this.myCustomerInCache = myCustomerInCache;
+        this.myCustomer = myCustomer;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DefaultChangeAddressFormAction extends AbstractFormAction<ChangeAdd
 
     @Override
     protected CompletionStage<?> onValidForm(final ChangeAddressFormData formData) {
-        return myCustomerInCache.require()
+        return myCustomer.require()
                 .thenApply(customer -> buildUpdateActions(formData, customer))
                 .thenComposeAsync(myCustomerUpdater::force, HttpExecution.defaultContext());
     }

@@ -4,10 +4,10 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Locale;
 
-public final class CmsComponent extends AbstractCmsComponent {
+public final class DefaultCmsComponent extends AbstractCmsComponent {
 
     @Inject
-    CmsComponent(final CmsService cmsService, final Provider<Locale> localeProvider) {
+    DefaultCmsComponent(final CmsService cmsService, final Provider<Locale> localeProvider) {
         super(cmsService, localeProvider);
     }
 

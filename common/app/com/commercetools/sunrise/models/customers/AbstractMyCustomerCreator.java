@@ -3,9 +3,10 @@ package com.commercetools.sunrise.models.customers;
 import com.commercetools.sunrise.core.AbstractResourceCreator;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpactions.CustomerSignedInActionHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.CustomerSignInResultLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.CartLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.CustomerCreatedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.CustomerCreateCommandHook;
-import com.commercetools.sunrise.models.carts.MyCartInCache;
+import com.commercetools.sunrise.models.carts.MyCart;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerSignInResult;
@@ -17,14 +18,14 @@ import java.util.concurrent.CompletionStage;
 
 public abstract class AbstractMyCustomerCreator extends AbstractResourceCreator<CustomerSignInResult, CustomerDraft, CustomerCreateCommand> implements MyCustomerCreator {
 
-    private final MyCustomerInCache myCustomerInCache;
-    private final MyCartInCache myCartInCache;
+    private final MyCustomer myCustomer;
+    private final MyCart myCart;
 
     protected AbstractMyCustomerCreator(final SphereClient sphereClient, final HookRunner hookRunner,
-                                        final MyCustomerInCache myCustomerInCache, final MyCartInCache myCartInCache) {
+                                        final MyCustomer myCustomer, final MyCart myCart) {
         super(sphereClient, hookRunner);
-        this.myCustomerInCache = myCustomerInCache;
-        this.myCartInCache = myCartInCache;
+        this.myCustomer = myCustomer;
+        this.myCart = myCart;
     }
 
     @Override
@@ -36,20 +37,23 @@ public abstract class AbstractMyCustomerCreator extends AbstractResourceCreator<
     protected CompletionStage<CustomerSignInResult> executeRequest(final CustomerCreateCommand baseCommand) {
         final CompletionStage<CustomerSignInResult> resourceStage = super.executeRequest(baseCommand);
         resourceStage.thenAcceptAsync(result -> {
-            myCustomerInCache.store(result.getCustomer());
-            myCartInCache.store(result.getCart());
+            myCustomer.store(result.getCustomer());
+            myCart.store(result.getCart());
         }, HttpExecution.defaultContext());
         return resourceStage;
     }
 
     @Override
-    protected final CompletionStage<CustomerCreateCommand> runRequestHook(final HookRunner hookRunner, final CustomerCreateCommand baseCommand) {
-        return CustomerCreateCommandHook.runHook(hookRunner, baseCommand);
+    protected final CompletionStage<CustomerCreateCommand> runRequestHook(final CustomerCreateCommand baseCommand) {
+        return CustomerCreateCommandHook.runHook(getHookRunner(), baseCommand);
     }
 
     @Override
     protected final void runCreatedHook(final HookRunner hookRunner, final CustomerSignInResult resource) {
-        CustomerSignInResultLoadedHook.runHook(hookRunner, resource);
+        if (resource.getCart() != null) {
+            CartLoadedHook., h -> h.onLoaded(resource.getCart()));
+        }
+        hookRunner.run(CustomerCreatedHook.class, h -> h.onCreated(resource.getCustomer()));
     }
 
     @Override

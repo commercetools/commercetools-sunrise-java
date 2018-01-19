@@ -1,13 +1,15 @@
 package com.commercetools.sunrise.core.hooks.ctpevents;
 
+import com.commercetools.sunrise.core.hooks.ConsumerHook;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.orders.Order;
 
-public interface OrderCreatedHook extends CtpEventHook {
+@FunctionalInterface
+public interface OrderCreatedHook extends ConsumerHook {
 
-    void onOrderCreated(final Order order);
+    void onCreated(Order order);
 
-    static void runHook(final HookRunner hookRunner, final Order order) {
-        hookRunner.runEventHook(OrderCreatedHook.class, hook -> hook.onOrderCreated(order));
+    static void run(final HookRunner hookRunner, final Order resource) {
+        hookRunner.run(OrderCreatedHook.class, h -> h.onCreated(resource));
     }
 }

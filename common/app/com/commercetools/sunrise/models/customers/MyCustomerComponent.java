@@ -9,16 +9,16 @@ import java.util.concurrent.CompletionStage;
 
 public final class MyCustomerComponent implements ControllerComponent, PageDataHook {
 
-    private final MyCustomerInCache myCustomerInCache;
+    private final MyCustomer myCustomer;
 
     @Inject
-    MyCustomerComponent(final MyCustomerInCache myCustomerInCache) {
-        this.myCustomerInCache = myCustomerInCache;
+    MyCustomerComponent(final MyCustomer myCustomer) {
+        this.myCustomer = myCustomer;
     }
 
     @Override
     public CompletionStage<PageData> onPageDataReady(final PageData pageData) {
-        return myCustomerInCache.get()
+        return myCustomer.get()
                 .thenApply(customerOpt -> customerOpt
                         .map(customer -> pageData.put("customer", customer))
                         .orElse(pageData));

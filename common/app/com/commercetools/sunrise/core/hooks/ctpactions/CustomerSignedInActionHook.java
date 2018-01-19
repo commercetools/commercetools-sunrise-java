@@ -12,7 +12,7 @@ public interface CustomerSignedInActionHook extends CtpActionHook {
     CompletionStage<CustomerSignInResult> onCustomerSignedInAction(final CustomerSignInResult customerSignInResult, @Nullable final ExpansionPathContainer<CustomerSignInResult> expansionPathContainer);
 
     static CompletionStage<CustomerSignInResult> runHook(final HookRunner hookRunner, final CustomerSignInResult customerSignInResult, @Nullable final ExpansionPathContainer<CustomerSignInResult> expansionPathContainer) {
-        return hookRunner.runActionHook(CustomerSignedInActionHook.class, (hook, updatedCustomerSignInResult) -> hook.onCustomerSignedInAction(updatedCustomerSignInResult, expansionPathContainer), customerSignInResult);
+        return hookRunner.run(CustomerSignedInActionHook.class, customerSignInResult, (hook, updatedCustomerSignInResult) -> hook.onCustomerSignedInAction(updatedCustomerSignInResult, expansionPathContainer));
     }
 
 }

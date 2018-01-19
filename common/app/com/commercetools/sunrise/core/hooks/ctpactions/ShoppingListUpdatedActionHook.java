@@ -11,7 +11,7 @@ public interface ShoppingListUpdatedActionHook extends CtpActionHook {
     CompletionStage<ShoppingList> onShoppingListUpdatedAction(final ShoppingList shoppingList, final ExpansionPathContainer<ShoppingList> expansionPathContainer);
 
     static CompletionStage<ShoppingList> runHook(final HookRunner hookRunner, final ShoppingList shoppingList, final ExpansionPathContainer<ShoppingList> expansionPathContainer) {
-        return hookRunner.runActionHook(ShoppingListUpdatedActionHook.class, (hook, updatedShoppingList) -> hook.onShoppingListUpdatedAction(updatedShoppingList, expansionPathContainer), shoppingList);
+        return hookRunner.run(ShoppingListUpdatedActionHook.class, shoppingList, (hook, updatedShoppingList) -> hook.onShoppingListUpdatedAction(updatedShoppingList, expansionPathContainer));
     }
 
 }

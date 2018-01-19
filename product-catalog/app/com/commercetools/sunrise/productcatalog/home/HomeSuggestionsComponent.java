@@ -4,7 +4,7 @@ import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
 import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
-import com.commercetools.sunrise.models.categories.CategoryTreeInCache;
+import com.commercetools.sunrise.models.categories.CachedCategoryTree;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Resource;
 import io.sphere.sdk.products.ProductProjection;
@@ -33,7 +33,7 @@ public final class HomeSuggestionsComponent implements ControllerComponent, Http
     private static final String CACHE_KEY = "home-suggestions-ids";
 
     private final CacheApi cacheApi;
-    private final CategoryTreeInCache categoryTreeInCache;
+    private final CachedCategoryTree cachedCategoryTree;
     private final SphereClient sphereClient;
     private final PriceSelection priceSelection;
     private final List<String> categoryExternalIds;
@@ -43,12 +43,12 @@ public final class HomeSuggestionsComponent implements ControllerComponent, Http
 
     @Inject
     public HomeSuggestionsComponent(final Configuration configuration, final CacheApi cacheApi,
-                                    final CategoryTreeInCache categoryTreeInCache, final SphereClient sphereClient,
+                                    final CachedCategoryTree cachedCategoryTree, final SphereClient sphereClient,
                                     final PriceSelection priceSelection) {
         this.numSuggestions = configuration.getInt("homeSuggestions.count", 4);
         this.categoryExternalIds = configuration.getStringList("homeSuggestions.externalId", emptyList());
         this.cacheApi = cacheApi;
-        this.categoryTreeInCache = categoryTreeInCache;
+        this.cachedCategoryTree = cachedCategoryTree;
         this.sphereClient = sphereClient;
         this.priceSelection = priceSelection;
     }
@@ -103,7 +103,7 @@ public final class HomeSuggestionsComponent implements ControllerComponent, Http
     }
 
     private CompletionStage<List<String>> fetchResource() {
-        return categoryTreeInCache.require()
+        return cachedCategoryTree.require()
                 .thenApply(categoryTree -> categoryExternalIds.parallelStream()
                         .map(externalId -> categoryTree.findByExternalId(externalId).map(Resource::getId))
                         .filter(Optional::isPresent)

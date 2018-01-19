@@ -21,9 +21,9 @@ final class DefaultMyCartCreator extends AbstractMyCartCreator {
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
-    DefaultMyCartCreator(final SphereClient sphereClient, final HookRunner hookRunner, final MyCartInCache myCartInCache,
+    DefaultMyCartCreator(final SphereClient sphereClient, final HookRunner hookRunner, final MyCart myCart,
                          final CountryCode country, final CurrencyUnit currency, final MyCustomerInSession myCustomerInSession) {
-        super(sphereClient, hookRunner, myCartInCache);
+        super(sphereClient, hookRunner, myCart);
         this.country = country;
         this.currency = currency;
         this.myCustomerInSession = myCustomerInSession;

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.customers;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.models.carts.MyCartInCache;
+import com.commercetools.sunrise.models.carts.MyCart;
 import com.commercetools.sunrise.models.carts.MyCartInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerDraft;
@@ -19,9 +19,9 @@ final class DefaultMyCustomerCreator extends AbstractMyCustomerCreator {
 
     @Inject
     DefaultMyCustomerCreator(final SphereClient sphereClient, final HookRunner hookRunner,
-                             final MyCustomerInCache myCustomerInCache, final MyCartInCache myCartInCache,
+                             final MyCustomer myCustomer, final MyCart myCart,
                              final MyCartInSession myCartInSession) {
-        super(sphereClient, hookRunner, myCustomerInCache, myCartInCache);
+        super(sphereClient, hookRunner, myCustomer, myCart);
         this.myCartInSession = myCartInSession;
     }
 

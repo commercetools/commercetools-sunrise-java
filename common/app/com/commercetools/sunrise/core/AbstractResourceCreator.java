@@ -4,9 +4,9 @@ import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.commands.CreateCommand;
 import io.sphere.sdk.expansion.ExpansionPathContainer;
-import play.libs.concurrent.HttpExecution;
 
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 public abstract class AbstractResourceCreator<T, D, C extends CreateCommand<T> & ExpansionPathContainer<T>> extends AbstractSphereRequestExecutor implements ResourceCreator<T, D> {
 
@@ -20,22 +20,10 @@ public abstract class AbstractResourceCreator<T, D, C extends CreateCommand<T> &
     }
 
     protected CompletionStage<T> executeRequest(final C baseCommand) {
-        return runRequestHook(getHookRunner(), baseCommand)
-                .thenCompose(command -> getSphereClient().execute(command)
-                        .thenComposeAsync(result -> applyHooks(command, result), HttpExecution.defaultContext()));
-    }
-
-    private CompletionStage<T> applyHooks(final C command, final T resource) {
-        final CompletionStage<T> finalResourceStage = runActionHook(getHookRunner(), resource, command);
-        finalResourceStage.thenAcceptAsync(finalResource -> runCreatedHook(getHookRunner(), finalResource), HttpExecution.defaultContext());
-        return finalResourceStage;
+        return runHook(baseCommand, command -> getSphereClient().execute(command));
     }
 
     protected abstract C buildRequest(D draft);
 
-    protected abstract CompletionStage<C> runRequestHook(HookRunner hookRunner, C baseCommand);
-
-    protected abstract void runCreatedHook(HookRunner hookRunner, T resource);
-
-    protected abstract CompletionStage<T> runActionHook(HookRunner hookRunner, T resource, ExpansionPathContainer<T> expansionPathContainer);
+    protected abstract CompletionStage<T> runHook(C command, Function<C, CompletionStage<T>> execution);
 }

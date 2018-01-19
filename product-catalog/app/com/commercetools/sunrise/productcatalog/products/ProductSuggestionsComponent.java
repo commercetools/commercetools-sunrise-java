@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.products;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.ProductProjectionLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.ProductLoadedHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Reference;
@@ -24,7 +24,7 @@ import static java.util.stream.Collectors.toSet;
 /**
  * Loads some other products that are related to the loaded product in the controller.
  */
-public final class ProductSuggestionsComponent implements ControllerComponent, ProductProjectionLoadedHook, PageDataHook {
+public final class ProductSuggestionsComponent implements ControllerComponent, ProductLoadedHook, PageDataHook {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductSuggestionsComponent.class);
 

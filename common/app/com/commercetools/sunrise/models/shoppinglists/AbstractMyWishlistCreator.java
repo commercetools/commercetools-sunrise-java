@@ -16,12 +16,12 @@ import java.util.concurrent.CompletionStage;
 
 public abstract class AbstractMyWishlistCreator extends AbstractResourceCreator<ShoppingList, ShoppingListDraft, ShoppingListCreateCommand> implements MyWishlistCreator {
 
-    private final MyWishlistInCache myWishlistInCache;
+    private final MyWishlist myWishlist;
 
     protected AbstractMyWishlistCreator(final SphereClient sphereClient, final HookRunner hookRunner,
-                                        final MyWishlistInCache myWishlistInCache) {
+                                        final MyWishlist myWishlist) {
         super(sphereClient, hookRunner);
-        this.myWishlistInCache = myWishlistInCache;
+        this.myWishlist = myWishlist;
     }
 
     @Override
@@ -31,7 +31,7 @@ public abstract class AbstractMyWishlistCreator extends AbstractResourceCreator<
 
     protected CompletionStage<ShoppingList> executeRequest(final ShoppingListCreateCommand baseCommand) {
         final CompletionStage<ShoppingList> resourceStage = super.executeRequest(baseCommand);
-        resourceStage.thenAcceptAsync(myWishlistInCache::store, HttpExecution.defaultContext());
+        resourceStage.thenAcceptAsync(myWishlist::store, HttpExecution.defaultContext());
         return resourceStage;
     }
 

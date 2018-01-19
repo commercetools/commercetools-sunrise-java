@@ -68,7 +68,7 @@ public class DefaultAddDiscountCodeFormActionTest {
     private void mockHookRunnerThatReturnsCart() {
         when(fakeHookRunner.runUnaryOperatorHook(any(), any(), cartUpdateCommandCaptor.capture()))
                 .thenAnswer(invocation -> invocation.getArgument(2));
-        when(fakeHookRunner.runActionHook(any(), any(), any()))
+        when(fakeHookRunner.run(any(), any(), any()))
                 .thenAnswer(invocation -> CompletableFuture.completedFuture(invocation.getArgument(2)));
     }
 }

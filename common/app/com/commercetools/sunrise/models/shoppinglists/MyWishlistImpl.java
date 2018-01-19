@@ -10,12 +10,12 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 @RequestScoped
-final class MyWishlistInCacheImpl extends AbstractUserResourceInCache<ShoppingList> implements MyWishlistInCache {
+final class MyWishlistImpl extends AbstractUserResourceInCache<ShoppingList> implements MyWishlist {
 
     private final MyWishlistFetcher wishlistFinder;
 
     @Inject
-    MyWishlistInCacheImpl(final MyWishlistInSession myWishlistInSession, final CacheApi cacheApi, final MyWishlistFetcher wishlistFinder) {
+    MyWishlistImpl(final MyWishlistInSession myWishlistInSession, final CacheApi cacheApi, final MyWishlistFetcher wishlistFinder) {
         super(myWishlistInSession, cacheApi);
         this.wishlistFinder = wishlistFinder;
     }

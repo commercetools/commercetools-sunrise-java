@@ -7,8 +7,8 @@ import io.sphere.sdk.shoppinglists.ShoppingList;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-@ImplementedBy(MyWishlistInCacheImpl.class)
-public interface MyWishlistInCache extends ResourceInCache<ShoppingList> {
+@ImplementedBy(MyWishlistImpl.class)
+public interface MyWishlist extends ResourceInCache<ShoppingList> {
 
     @Override
     CompletionStage<Optional<ShoppingList>> get();

@@ -3,7 +3,7 @@ package com.commercetools.sunrise.models.products;
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.HandlebarsHook;
 import com.commercetools.sunrise.models.categories.CategorySettings;
-import com.commercetools.sunrise.models.categories.CategoryTreeInCache;
+import com.commercetools.sunrise.models.categories.CachedCategoryTree;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Helper;
 import io.sphere.sdk.categories.CategoryTree;
@@ -29,14 +29,14 @@ public final class NewProductFlagComponent implements ControllerComponent, Handl
     private static final String CACHE_KEY = "new-product-flag-ids";
 
     private final CacheApi cacheApi;
-    private final CategoryTreeInCache categoryTreeInCache;
+    private final CachedCategoryTree cachedCategoryTree;
     @Nullable
     private final String newExtId;
 
     @Inject
-    NewProductFlagComponent(final CacheApi cacheApi, final CategoryTreeInCache categoryTreeInCache, final CategorySettings settings) {
+    NewProductFlagComponent(final CacheApi cacheApi, final CachedCategoryTree cachedCategoryTree, final CategorySettings settings) {
         this.cacheApi = cacheApi;
-        this.categoryTreeInCache = categoryTreeInCache;
+        this.cachedCategoryTree = cachedCategoryTree;
         this.newExtId = settings.newExtId().orElse(null);
     }
 
@@ -71,7 +71,7 @@ public final class NewProductFlagComponent implements ControllerComponent, Handl
     }
 
     private CompletionStage<List<String>> fetchResource(@Nonnull final String extId) {
-        return categoryTreeInCache.require()
+        return cachedCategoryTree.require()
                 .thenApply(categoryTree -> categoryTree.findByExternalId(extId)
                         .map(categoryTree::findChildren)
                         .map(categoryTree::getSubtree)

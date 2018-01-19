@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.products.search.facetedsearch.c
 
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.models.categories.CategoryTreeInCache;
+import com.commercetools.sunrise.models.categories.CachedCategoryTree;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.AbstractFacetOptionViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOption;
 import io.sphere.sdk.categories.Category;
@@ -27,9 +27,9 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
 
     @Inject
     public CategoryTreeFacetOptionViewModelFactory(final I18nResolver i18nResolver,
-                                                   final CategoryTreeInCache categoryTreeInCache) {
+                                                   final CachedCategoryTree cachedCategoryTree) {
         this.i18nResolver = i18nResolver;
-        this.categoryTree = blockingWait(categoryTreeInCache.require(), Duration.ofSeconds(30));
+        this.categoryTree = blockingWait(cachedCategoryTree.require(), Duration.ofSeconds(30));
     }
 
     protected final I18nResolver getI18nResolver() {

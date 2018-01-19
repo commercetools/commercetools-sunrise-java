@@ -1,4 +1,4 @@
-import com.commercetools.sunrise.cms.CmsComponent;
+import com.commercetools.sunrise.cms.DefaultCmsComponent;
 import com.commercetools.sunrise.core.hooks.GlobalComponentRegistry;
 import com.commercetools.sunrise.core.i18n.LanguageSelectorComponent;
 import com.commercetools.sunrise.core.injection.RequestScoped;
@@ -112,7 +112,7 @@ public class Module extends AbstractModule {
         globalComponentRegistry.addAll(CustomerComponentSupplier.get());
         globalComponentRegistry.addAll(WishlistComponentSupplier.get());
         globalComponentRegistry.add(CategoryNavigationComponent.class);
-        globalComponentRegistry.add(CmsComponent.class);
+        globalComponentRegistry.add(DefaultCmsComponent.class);
         globalComponentRegistry.add(CountrySelectorComponent.class);
         globalComponentRegistry.add(LanguageSelectorComponent.class);
         return globalComponentRegistry;

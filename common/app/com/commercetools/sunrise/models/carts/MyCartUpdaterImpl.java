@@ -18,8 +18,8 @@ import java.util.concurrent.CompletionStage;
 final class MyCartUpdaterImpl extends AbstractUserResourceUpdater<Cart, CartUpdateCommand> implements MyCartUpdater {
 
     @Inject
-    MyCartUpdaterImpl(final SphereClient sphereClient, final HookRunner hookRunner, final MyCartInCache myCartInCache) {
-        super(sphereClient, hookRunner, myCartInCache);
+    MyCartUpdaterImpl(final SphereClient sphereClient, final HookRunner hookRunner, final MyCart myCart) {
+        super(sphereClient, hookRunner, myCart);
     }
 
     @Override
@@ -28,13 +28,13 @@ final class MyCartUpdaterImpl extends AbstractUserResourceUpdater<Cart, CartUpda
     }
 
     @Override
-    protected CompletionStage<CartUpdateCommand> runUpdateCommandHook(final HookRunner hookRunner, final CartUpdateCommand baseCommand) {
+    protected CompletionStage<CartUpdateCommand> runRequestHook(final HookRunner hookRunner, final CartUpdateCommand baseCommand) {
         return CartUpdateCommandHook.runHook(hookRunner, baseCommand);
     }
 
     @Override
-    protected CompletionStage<Cart> runActionHook(final HookRunner hookRunner, final Cart resource,
-                                                  final ExpansionPathContainer<Cart> expansionPathContainer) {
+    protected CompletionStage<Cart> runResponseHook(final HookRunner hookRunner, final Cart resource,
+                                                    final ExpansionPathContainer<Cart> expansionPathContainer) {
         return CartUpdatedActionHook.runHook(hookRunner, resource, expansionPathContainer);
     }
 

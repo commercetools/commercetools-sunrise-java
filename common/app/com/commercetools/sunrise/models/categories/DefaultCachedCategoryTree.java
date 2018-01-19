@@ -8,12 +8,12 @@ import javax.inject.Inject;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public final class DefaultCategoryTreeInCache extends AbstractResourceInCache<CategoryTree> implements CategoryTreeInCache {
+public final class DefaultCachedCategoryTree extends AbstractResourceInCache<CategoryTree> implements CachedCategoryTree {
 
     private final CategoryTreeFetcher categoryTreeFetcher;
 
     @Inject
-    DefaultCategoryTreeInCache(final CacheApi cacheApi, final CategoryTreeFetcher categoryTreeFetcher) {
+    DefaultCachedCategoryTree(final CacheApi cacheApi, final CategoryTreeFetcher categoryTreeFetcher) {
         super(cacheApi);
         this.categoryTreeFetcher = categoryTreeFetcher;
     }

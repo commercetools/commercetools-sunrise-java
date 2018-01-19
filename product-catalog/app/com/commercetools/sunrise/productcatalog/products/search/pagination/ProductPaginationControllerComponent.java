@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.products.search.pagination;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.ctpevents.ProductProjectionPagedSearchResultLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.ProductSearchResultHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.models.search.pagination.AbstractPaginationControllerComponent;
 import io.sphere.sdk.products.ProductProjection;
@@ -17,7 +17,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class ProductPaginationControllerComponent extends AbstractPaginationControllerComponent
-        implements ControllerComponent, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
+        implements ControllerComponent, ProductProjectionSearchHook, ProductSearchResultHook {
 
     @Nullable
     private PagedResult<?> pagedResult;

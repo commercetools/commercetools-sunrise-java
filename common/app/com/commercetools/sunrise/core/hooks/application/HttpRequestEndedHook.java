@@ -15,6 +15,6 @@ public interface HttpRequestEndedHook extends ApplicationHook {
     CompletionStage<Result> onHttpRequestEnded(final Result result);
 
     static CompletionStage<Result> runHook(final HookRunner hookRunner, final Result result) {
-        return hookRunner.runActionHook(HttpRequestEndedHook.class, HttpRequestEndedHook::onHttpRequestEnded, result);
+        return hookRunner.run(HttpRequestEndedHook.class, result, HttpRequestEndedHook::onHttpRequestEnded);
     }
 }

@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.products.search.facetedsearch.c
 
 import com.commercetools.sunrise.core.SunriseModel;
 import com.commercetools.sunrise.models.categories.CategorySettings;
-import com.commercetools.sunrise.models.categories.CategoryTreeInCache;
+import com.commercetools.sunrise.models.categories.CachedCategoryTree;
 import io.sphere.sdk.categories.CategoryTree;
 
 import javax.inject.Inject;
@@ -19,10 +19,10 @@ public class CategoryTreeFacetedSearchFormSettingsFactory extends SunriseModel {
 
     @Inject
     public CategoryTreeFacetedSearchFormSettingsFactory(final Locale locale, final CategorySettings categorySettings,
-                                                        final CategoryTreeInCache categoryTreeInCache) {
+                                                        final CachedCategoryTree cachedCategoryTree) {
         this.locale = locale;
         this.categorySettings = categorySettings;
-        this.categoryTree = blockingWait(categoryTreeInCache.require(), Duration.ofSeconds(30));
+        this.categoryTree = blockingWait(cachedCategoryTree.require(), Duration.ofSeconds(30));
     }
 
     public CategoryTreeFacetedSearchFormSettings create(final ConfiguredCategoryTreeFacetedSearchFormSettings configuration) {

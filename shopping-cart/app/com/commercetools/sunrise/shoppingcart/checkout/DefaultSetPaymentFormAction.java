@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout;
 
 import com.commercetools.sunrise.core.AbstractFormAction;
-import com.commercetools.sunrise.models.carts.MyCartInCache;
+import com.commercetools.sunrise.models.carts.MyCart;
 import com.commercetools.sunrise.models.carts.MyCartUpdater;
 import com.commercetools.sunrise.models.payments.PaymentSettings;
 import io.sphere.sdk.carts.Cart;
@@ -41,18 +41,18 @@ final class DefaultSetPaymentFormAction extends AbstractFormAction<SetPaymentFor
 
     private final SetPaymentFormData formData;
     private final MyCartUpdater myCartUpdater;
-    private final MyCartInCache myCartInCache;
+    private final MyCart myCart;
     private final PaymentSettings paymentSettings;
     private final SphereClient sphereClient;
 
     @Inject
     DefaultSetPaymentFormAction(final FormFactory formFactory, final SetPaymentFormData formData,
-                                final MyCartUpdater myCartUpdater, final MyCartInCache myCartInCache,
+                                final MyCartUpdater myCartUpdater, final MyCart myCart,
                                 final PaymentSettings paymentSettings, final SphereClient sphereClient) {
         super(formFactory);
         this.formData = formData;
         this.myCartUpdater = myCartUpdater;
-        this.myCartInCache = myCartInCache;
+        this.myCart = myCart;
         this.paymentSettings = paymentSettings;
         this.sphereClient = sphereClient;
     }
@@ -64,7 +64,7 @@ final class DefaultSetPaymentFormAction extends AbstractFormAction<SetPaymentFor
 
     @Override
     protected CompletionStage<?> onValidForm(final SetPaymentFormData formData) {
-        return myCartInCache.require().thenComposeAsync(cart ->
+        return myCart.require().thenComposeAsync(cart ->
                 createPayment(cart, formData).thenComposeAsync(payment -> replacePayment(cart, payment), HttpExecution.defaultContext()),
                 HttpExecution.defaultContext());
     }

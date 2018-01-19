@@ -4,6 +4,4 @@ import com.commercetools.sunrise.core.hooks.Hook;
 
 interface CtpRequestHook extends Hook {
 
-
-
 }

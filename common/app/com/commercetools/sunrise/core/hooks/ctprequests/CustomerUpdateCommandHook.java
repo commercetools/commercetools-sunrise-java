@@ -1,15 +1,18 @@
 package com.commercetools.sunrise.core.hooks.ctprequests;
 
+import com.commercetools.sunrise.core.hooks.FilterHook;
 import com.commercetools.sunrise.core.hooks.HookRunner;
+import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
 
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
-public interface CustomerUpdateCommandHook extends CtpRequestHook {
+public interface CustomerUpdateCommandHook extends FilterHook {
 
-    CompletionStage<CustomerUpdateCommand> onCustomerUpdateCommand(final CustomerUpdateCommand command);
+    CompletionStage<Customer> on(CustomerUpdateCommand request, Function<CustomerUpdateCommand, CompletionStage<Customer>> nextComponent);
 
-    static CompletionStage<CustomerUpdateCommand> runHook(final HookRunner hookRunner, final CustomerUpdateCommand command) {
-        return hookRunner.runActionHook(CustomerUpdateCommandHook.class, CustomerUpdateCommandHook::onCustomerUpdateCommand, command);
+    static CompletionStage<Customer> run(final HookRunner hookRunner, final CustomerUpdateCommand request, final Function<CustomerUpdateCommand, CompletionStage<Customer>> execution) {
+        return hookRunner.run(CustomerUpdateCommandHook.class, request, execution, h -> h::on);
     }
 }

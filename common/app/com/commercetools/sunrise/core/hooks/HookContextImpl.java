@@ -9,14 +9,16 @@ import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 import static io.sphere.sdk.utils.CompletableFutureUtils.successful;
+import static java.util.stream.Collectors.toList;
 
 @RequestScoped
 final class HookContextImpl extends AbstractComponentRegistry implements HookContext {
@@ -34,34 +36,66 @@ final class HookContextImpl extends AbstractComponentRegistry implements HookCon
     }
 
     @Override
-    public <H extends Hook> void runEventHook(final Class<H> hookClass, final Consumer<H> f) {
-        LOGGER.debug("Running EventHook {}", hookClass.getSimpleName());
+    public <H extends ConsumerHook> void run(final Class<H> hookClass, final Consumer<H> consumer) {
+        LOGGER.debug("Running ConsumerHook {}", hookClass.getSimpleName());
         components().stream()
                 .filter(hookClass::isAssignableFrom)
-                .peek(hook -> LOGGER.debug("Executing {} triggered by {}", hook.getSimpleName(), hookClass.getSimpleName()))
                 .map(this::getComponent)
-                .forEach(hook -> f.accept((H) hook));
+                .peek(component -> LOGGER.debug("Executing {} triggered by {}", component.getClass().getSimpleName(), hookClass.getSimpleName()))
+                .map(component -> (H) component)
+                .forEach(consumer);
     }
 
     @Override
-    public <H extends Hook, R> CompletionStage<R> runActionHook(final Class<H> hookClass, final BiFunction<H, R, CompletionStage<R>> f, final R param) {
-        LOGGER.debug("Running ActionHook {}", hookClass.getSimpleName());
-        CompletionStage<R> result = successful(param);
+    public <H extends ReducerHook, R> CompletionStage<R> run(final Class<H> hookClass, final R identity,
+                                                             final BiFunction<R, H, CompletionStage<R>> asyncAccumulator) {
+        LOGGER.debug("Running ReducerHook {}", hookClass.getSimpleName());
+        CompletionStage<R> resultStage = successful(identity);
         final List<H> applicableHooks = components().stream()
                 .filter(hookClass::isAssignableFrom)
                 .map(this::getComponent)
-                .map(x -> (H) x)
-                .collect(Collectors.toList());
+                .peek(component -> LOGGER.debug("Executing {} triggered by {}", component.getClass().getSimpleName(), hookClass.getSimpleName()))
+                .map(component -> (H) component)
+                .collect(toList());
         for (final H hook : applicableHooks) {
             LOGGER.debug("Executing {} triggered by {}", hook.getClass().getSimpleName(), hookClass.getSimpleName());
-            result = result.thenComposeAsync(res -> f.apply(hook, res), HttpExecution.defaultContext());
+            resultStage = resultStage.thenComposeAsync(res -> asyncAccumulator.apply(res, hook), HttpExecution.defaultContext());
         }
-        return result;
+        return resultStage;
     }
+
+    @Override
+    public <H extends FilterHook, I, O> CompletionStage<O> run(final Class<H> hookClass, final I input,
+                                                               final Function<I, CompletionStage<O>> execution,
+                                                               final Function<H, BiFunction<I, Function<I, CompletionStage<O>>, CompletionStage<O>>> accumulator) {
+        final List<H> applicableHooks = getComponents(hookClass);
+        return runRecursive(applicableHooks.iterator(), input, execution, accumulator);
+    }
+
+    private <H extends FilterHook, I, O> CompletionStage<O> runRecursive(final Iterator<H> iterator, final I input,
+                                                                         final Function<I, CompletionStage<O>> execution,
+                                                                         final Function<H, BiFunction<I, Function<I, CompletionStage<O>>, CompletionStage<O>>> accumulator) {
+        if (!iterator.hasNext()) {
+            return execution.apply(input);
+        } else {
+            return accumulator.apply(iterator.next())
+                    .apply(input, res -> runRecursive(iterator, res, execution, accumulator));
+        }
+    }
+
 
     @Override
     protected Logger getLogger() {
         return LOGGER;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <H extends FilterHook> List<H> getComponents(final Class<H> hookClass) {
+        return components().stream()
+                .filter(hookClass::isAssignableFrom)
+                .map(this::getComponent)
+                .map(component -> (H) component)
+                .collect(toList());
     }
 
     private Component getComponent(final Class<? extends Component> componentClass) {

@@ -7,8 +7,8 @@ import io.sphere.sdk.carts.Cart;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-@ImplementedBy(MyCartInCacheImpl.class)
-public interface MyCartInCache extends ResourceInCache<Cart> {
+@ImplementedBy(MyCartImpl.class)
+public interface MyCart extends ResourceInCache<Cart> {
 
     @Override
     CompletionStage<Optional<Cart>> get();

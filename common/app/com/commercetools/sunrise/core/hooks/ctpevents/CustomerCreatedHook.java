@@ -5,11 +5,11 @@ import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.customers.Customer;
 
 @FunctionalInterface
-public interface CustomerUpdatedHook extends ConsumerHook {
+public interface CustomerCreatedHook extends ConsumerHook {
 
-    void onUpdated(Customer customer);
+    void onCreated(Customer customer);
 
     static void run(final HookRunner hookRunner, final Customer resource) {
-        hookRunner.run(CustomerUpdatedHook.class, h -> h.onUpdated(resource));
+        hookRunner.run(CustomerCreatedHook.class, h -> h.onCreated(resource));
     }
 }

@@ -1,13 +1,15 @@
 package com.commercetools.sunrise.core.hooks.ctpevents;
 
+import com.commercetools.sunrise.core.hooks.ConsumerHook;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.models.products.ProductWithVariant;
 
-public interface ProductWithVariantLoadedHook extends CtpEventHook {
+@FunctionalInterface
+public interface ProductWithVariantLoadedHook extends ConsumerHook {
 
-    void onProductVariantLoaded(final ProductWithVariant productWithVariant);
+    void onLoaded(ProductWithVariant productWithVariant);
 
-    static void runHook(final HookRunner hookRunner, final ProductWithVariant productWithVariant) {
-        hookRunner.runEventHook(ProductWithVariantLoadedHook.class, hook -> hook.onProductVariantLoaded(productWithVariant));
+    static void run(final HookRunner hookRunner, final ProductWithVariant resource) {
+        hookRunner.run(ProductWithVariantLoadedHook.class, h -> h.onLoaded(resource));
     }
 }

@@ -19,8 +19,8 @@ final class DefaultMyWishlistCreator extends AbstractMyWishlistCreator {
 
     @Inject
     DefaultMyWishlistCreator(final SphereClient sphereClient, final HookRunner hookRunner,
-                             final MyWishlistInCache myWishlistInCache, final MyCustomerInSession myCustomerInSession) {
-        super(sphereClient, hookRunner, myWishlistInCache);
+                             final MyWishlist myWishlist, final MyCustomerInSession myCustomerInSession) {
+        super(sphereClient, hookRunner, myWishlist);
         this.myCustomerInSession = myCustomerInSession;
     }
 

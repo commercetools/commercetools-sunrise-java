@@ -24,15 +24,15 @@ public final class CategoryNavigationComponent implements ControllerComponent, H
     private static final String CACHE_KEY = "nav-category-tree";
 
     private final CacheApi cacheApi;
-    private final CategoryTreeInCache categoryTreeInCache;
+    private final CachedCategoryTree cachedCategoryTree;
     private final CategoryTreeFilter categoryTreeFilter;
     private final CategorySettings settings;
 
     @Inject
-    CategoryNavigationComponent(final CacheApi cacheApi, final CategoryTreeInCache categoryTreeInCache,
+    CategoryNavigationComponent(final CacheApi cacheApi, final CachedCategoryTree cachedCategoryTree,
                                 final CategoryTreeFilter categoryTreeFilter, final CategorySettings settings) {
         this.cacheApi = cacheApi;
-        this.categoryTreeInCache = categoryTreeInCache;
+        this.cachedCategoryTree = cachedCategoryTree;
         this.categoryTreeFilter = categoryTreeFilter;
         this.settings = settings;
     }
@@ -77,7 +77,7 @@ public final class CategoryNavigationComponent implements ControllerComponent, H
     }
 
     private CompletionStage<CategoryTree> fetchAndStoreResource() {
-        final CompletionStage<CategoryTree> categoryTreeStage = categoryTreeInCache.require()
+        final CompletionStage<CategoryTree> categoryTreeStage = cachedCategoryTree.require()
                 .thenComposeAsync(categoryTreeFilter::filter, HttpExecution.defaultContext());
         categoryTreeStage.thenAcceptAsync(categoryTree -> cacheApi.set(CACHE_KEY, categoryTree));
         return categoryTreeStage;

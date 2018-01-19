@@ -1,13 +1,15 @@
 package com.commercetools.sunrise.core.hooks.ctpevents;
 
+import com.commercetools.sunrise.core.hooks.ConsumerHook;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.models.Address;
 
-public interface AddressLoadedHook extends CtpEventHook {
+@FunctionalInterface
+public interface AddressLoadedHook extends ConsumerHook<Address> {
 
-    void onAddressLoaded(final Address address);
+    void onLoaded(Address address);
 
-    static void runHook(final HookRunner hookRunner, final Address address) {
-        hookRunner.runEventHook(AddressLoadedHook.class, hook -> hook.onAddressLoaded(address));
+    static void run(final HookRunner hookRunner, final Address address) {
+        hookRunner.run(AddressLoadedHook.class, h -> h.onLoaded(address));
     }
 }

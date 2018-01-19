@@ -13,6 +13,6 @@ public interface HttpRequestStartedHook extends ApplicationHook {
     void onHttpRequestStarted(final Http.Context httpContext);
 
     static void runHook(final HookRunner hookRunner, final Http.Context httpContext) {
-        hookRunner.runEventHook(HttpRequestStartedHook.class, hook -> hook.onHttpRequestStarted(httpContext));
+        hookRunner.run(HttpRequestStartedHook.class, hook -> hook.onHttpRequestStarted(httpContext));
     }
 }

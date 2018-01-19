@@ -1,15 +1,18 @@
 package com.commercetools.sunrise.core.hooks.ctprequests;
 
+import com.commercetools.sunrise.core.hooks.FilterHook;
 import com.commercetools.sunrise.core.hooks.HookRunner;
+import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
 
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
-public interface CustomerSignInCommandHook extends CtpRequestHook {
+public interface CustomerSignInCommandHook extends FilterHook {
 
-    CompletionStage<CustomerSignInCommand> onCustomerSignInCommand(final CustomerSignInCommand command);
+    CompletionStage<CustomerSignInResult> on(CustomerSignInCommand request, Function<CustomerSignInCommand, CompletionStage<CustomerSignInResult>> nextComponent);
 
-    static CompletionStage<CustomerSignInCommand> runHook(final HookRunner hookRunner, final CustomerSignInCommand command) {
-        return hookRunner.runActionHook(CustomerSignInCommandHook.class, CustomerSignInCommandHook::onCustomerSignInCommand, command);
+    static CompletionStage<CustomerSignInResult> run(final HookRunner hookRunner, final CustomerSignInCommand request, final Function<CustomerSignInCommand, CompletionStage<CustomerSignInResult>> execution) {
+        return hookRunner.run(CustomerSignInCommandHook.class, request, execution, h -> h::on);
     }
 }

@@ -10,6 +10,6 @@ public interface HandlebarsHook extends ApplicationHook {
     CompletionStage<Handlebars> onHandlebarsCreated(final Handlebars handlebars);
 
     static CompletionStage<Handlebars> runHook(final HookRunner hookRunner, final Handlebars handlebars) {
-        return hookRunner.runActionHook(HandlebarsHook.class, HandlebarsHook::onHandlebarsCreated, handlebars);
+        return hookRunner.run(HandlebarsHook.class, handlebars, HandlebarsHook::onHandlebarsCreated);
     }
 }

@@ -2,25 +2,42 @@ package controllers;
 
 import com.commercetools.sunrise.controllers.cache.NoCache;
 import com.commercetools.sunrise.controllers.metrics.LogMetrics;
+import com.commercetools.sunrise.core.SunriseController;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
+import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.myaccount.changepassword.ChangePasswordFormAction;
-import com.commercetools.sunrise.myaccount.changepassword.SunriseChangePasswordController;
 import play.mvc.Result;
+import play.mvc.Results;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletionStage;
 
 @LogMetrics
 @NoCache
-public final class ChangePasswordController extends SunriseChangePasswordController {
+public class ChangePasswordController extends SunriseController {
+
+    private static final String TEMPLATE = "my-account-change-password";
+
+    private final TemplateEngine templateEngine;
+    private final ChangePasswordFormAction formAction;
 
     @Inject
-    public ChangePasswordController(final TemplateEngine templateEngine,
-                                    final ChangePasswordFormAction controllerAction) {
-        super(templateEngine, controllerAction);
+    ChangePasswordController(final TemplateEngine templateEngine,
+                             final ChangePasswordFormAction formAction) {
+        this.templateEngine = templateEngine;
+        this.formAction = formAction;
     }
 
-    @Override
-    public Result onChanged() {
-        return redirect(routes.ChangePasswordController.show());
+    @EnableHooks
+    public CompletionStage<Result> show() {
+        return templateEngine.render(TEMPLATE).thenApply(Results::ok);
+    }
+
+    @EnableHooks
+    public CompletionStage<Result> change() {
+        return formAction.apply(
+                () -> routes.ChangePasswordController.show(),
+                form -> templateEngine.render(TEMPLATE, PageData.of().put("changePasswordForm", form)));
     }
 }
