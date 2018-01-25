@@ -2,10 +2,7 @@ package com.commercetools.sunrise.myaccount.authentication;
 
 import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpactions.CustomerSignedInActionHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.CartLoadedHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.CustomerLoadedHook;
-import com.commercetools.sunrise.core.hooks.ctprequests.CustomerSignInCommandHook;
+import com.commercetools.sunrise.core.hooks.ctprequests.LogInFormActionHook;
 import com.commercetools.sunrise.models.carts.MyCartInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerSignInResult;
@@ -16,6 +13,8 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
+import play.mvc.Results;
+import play.twirl.api.Content;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
@@ -58,29 +57,16 @@ public class DefaultLogInFormAction extends AbstractFormAction<LogInFormData> im
 
     @Override
     protected CompletionStage<Result> onFailedRequest(final Form<? extends LogInFormData> form, final Throwable throwable,
-                                                      final Function<Form<? extends LogInFormData>, CompletionStage<Result>> onBadRequest) {
+                                                      final Function<Form<? extends LogInFormData>, CompletionStage<Content>> onBadRequest) {
         if (isCustomerInvalidCredentialsError(throwable.getCause())) {
             form.reject("errors.invalidCredentials");
-            return onBadRequest.apply(form);
+            return onBadRequest.apply(form).thenApply(Results::badRequest);
         }
         return super.onFailedRequest(form, throwable, onBadRequest);
     }
 
-    protected final CompletionStage<CustomerSignInResult> executeWithHooks(final CustomerSignInCommand baseRequest) {
-        return CustomerSignInCommandHook.runHook(hookRunner, baseRequest)
-                .thenCompose(sphereClient::execute)
-                .thenComposeAsync(this::applyHooks, HttpExecution.defaultContext());
-    }
-
-    private CompletionStage<CustomerSignInResult> applyHooks(final CustomerSignInResult result) {
-        final CompletionStage<CustomerSignInResult> finalResultStage = CustomerSignedInActionHook.runHook(hookRunner, result, null);
-        finalResultStage.thenAcceptAsync(finalResult -> {
-            if (finalResult.getCart() != null) {
-                hookRunner.run(CartLoadedHook.class, h -> h.onLoaded(finalResult.getCart()));
-            }
-            hookRunner.run(CustomerLoadedHook.class, h -> h.onLoaded(finalResult.getCustomer()));
-        }, HttpExecution.defaultContext());
-        return finalResultStage;
+    protected final CompletionStage<CustomerSignInResult> executeWithHooks(final CustomerSignInCommand request) {
+        return hookRunner.run(LogInFormActionHook.class, request, sphereClient::execute, h -> h::on);
     }
 
     private CompletableFuture<CustomerSignInResult> recoverIfMergingCartFailed(final LogInFormData formData,

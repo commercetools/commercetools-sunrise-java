@@ -14,7 +14,7 @@ import com.commercetools.sunrise.models.products.ProductAvailabilityComponent;
 import com.commercetools.sunrise.models.products.ProductFetcher;
 import com.commercetools.sunrise.models.products.ProductListFetcher;
 import com.commercetools.sunrise.productcatalog.products.ProductSuggestionsComponent;
-import com.commercetools.sunrise.productcatalog.products.search.facetedsearch.ProductFacetedSearchSelectorControllerComponent;
+import com.commercetools.sunrise.productcatalog.products.search.facetedsearch.ProductFacetedSearchSelectorComponent;
 import com.commercetools.sunrise.productcatalog.products.search.pagination.ProductPaginationControllerComponent;
 import com.commercetools.sunrise.productcatalog.products.search.searchbox.ProductSearchBoxControllerComponent;
 import com.commercetools.sunrise.productcatalog.products.search.sort.ProductSearchSortSelectorControllerComponent;
@@ -32,7 +32,7 @@ import java.util.concurrent.CompletionStage;
         ProductSearchSortSelectorControllerComponent.class,
         ProductPaginationControllerComponent.class,
         ProductSearchBoxControllerComponent.class,
-        ProductFacetedSearchSelectorControllerComponent.class,
+        ProductFacetedSearchSelectorComponent.class,
         BreadcrumbComponent.class,
         NewProductFlagComponent.class,
         ProductAvailabilityComponent.class

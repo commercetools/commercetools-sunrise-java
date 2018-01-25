@@ -9,21 +9,21 @@ import io.sphere.sdk.client.SphereClient;
 import javax.inject.Inject;
 import java.util.Optional;
 
-final class DefaultMyCartFetcher extends AbstractMyCartFetcher {
+public final class DefaultMyCartFetcher extends AbstractMyCartFetcher {
 
     private final MyCartInSession myCartInSession;
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
-    DefaultMyCartFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
-                                   final MyCartInSession myCartInSession, final MyCustomerInSession myCustomerInSession) {
-        super(sphereClient, hookRunner);
+    DefaultMyCartFetcher(final HookRunner hookRunner, final SphereClient sphereClient,
+                         final MyCartInSession myCartInSession, final MyCustomerInSession myCustomerInSession) {
+        super(hookRunner, sphereClient);
         this.myCartInSession = myCartInSession;
         this.myCustomerInSession = myCustomerInSession;
     }
 
     @Override
-    public Optional<CartQuery> defaultRequest() {
+    protected Optional<CartQuery> buildRequest() {
         return tryBuildQueryByCustomerId()
                 .map(Optional::of)
                 .orElseGet(this::tryBuildQueryByCartId)

@@ -4,15 +4,19 @@ import com.commercetools.sunrise.core.ResourceUpdater;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.shoppinglists.ShoppingList;
+import io.sphere.sdk.shoppinglists.commands.ShoppingListUpdateCommand;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-@ImplementedBy(MyWishlistUpdaterImpl.class)
-@FunctionalInterface
-public interface MyWishlistUpdater extends ResourceUpdater<ShoppingList> {
+import static java.util.Collections.singletonList;
 
-    @Override
-    CompletionStage<Optional<ShoppingList>> apply(List<? extends UpdateAction<ShoppingList>> updateActions);
+@ImplementedBy(DefaultMyWishlistUpdater.class)
+public interface MyWishlistUpdater extends ResourceUpdater<ShoppingList, ShoppingListUpdateCommand> {
+
+    CompletionStage<ShoppingList> applyOrCreate(List<? extends UpdateAction<ShoppingList>> updateActions);
+
+    default CompletionStage<ShoppingList> applyOrCreate(UpdateAction<ShoppingList> updateAction) {
+        return applyOrCreate(singletonList(updateAction));
+    }
 }

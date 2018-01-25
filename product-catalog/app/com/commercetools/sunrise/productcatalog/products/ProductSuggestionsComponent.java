@@ -2,8 +2,9 @@ package com.commercetools.sunrise.productcatalog.products;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.ProductLoadedHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.models.products.ProductFetcherHook;
+import com.commercetools.sunrise.models.products.ProductWithVariant;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductProjection;
@@ -15,8 +16,10 @@ import org.slf4j.LoggerFactory;
 import play.Configuration;
 
 import javax.inject.Inject;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toSet;
@@ -24,7 +27,7 @@ import static java.util.stream.Collectors.toSet;
 /**
  * Loads some other products that are related to the loaded product in the controller.
  */
-public final class ProductSuggestionsComponent implements ControllerComponent, ProductLoadedHook, PageDataHook {
+public final class ProductSuggestionsComponent implements ControllerComponent, ProductFetcherHook, PageDataHook {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductSuggestionsComponent.class);
 
@@ -43,14 +46,18 @@ public final class ProductSuggestionsComponent implements ControllerComponent, P
     }
 
     @Override
-    public void onProductProjectionLoaded(final ProductProjection product) {
-        this.suggestionsStage = fetchRelatedProducts(product);
+    public CompletionStage<Optional<ProductWithVariant>> on(final ProductProjectionQuery request, final Function<ProductProjectionQuery, CompletionStage<Optional<ProductWithVariant>>> nextComponent) {
+        final CompletionStage<Optional<ProductWithVariant>> productStage = nextComponent.apply(request);
+        productStage.thenAccept(productOpt -> productOpt
+                .ifPresent(product -> suggestionsStage = fetchRelatedProducts(product.getProduct())));
+        return productStage;
     }
 
     @Override
     public CompletionStage<PageData> onPageDataReady(final PageData pageData) {
         if (suggestionsStage != null) {
-            return suggestionsStage.thenApply(products -> pageData.put("suggestions", products))
+            return suggestionsStage
+                    .thenApply(products -> pageData.put("suggestions", products))
                     .exceptionally(throwable -> {
                         LOGGER.error("Failed to fetch suggested products", throwable);
                         return pageData;

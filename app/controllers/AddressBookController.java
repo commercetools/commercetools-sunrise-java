@@ -56,8 +56,7 @@ public class AddressBookController extends SunriseController {
 
     @EnableHooks
     public CompletionStage<Result> addAddress() {
-        return addAddressFormAction.apply(
-                () -> routes.AddressBookController.show(),
+        return addAddressFormAction.apply(routes.AddressBookController::show,
                 form -> templateEngine.render(NEW_ADDRESS_TEMPLATE, PageData.of().put("addAddressForm", form)));
     }
 
@@ -71,15 +70,13 @@ public class AddressBookController extends SunriseController {
 
     @EnableHooks
     public CompletionStage<Result> changeAddress() {
-        return changeAddressFormAction.apply(
-                () -> routes.AddressBookController.show(),
+        return changeAddressFormAction.apply(routes.AddressBookController::show,
                 form -> templateEngine.render(EDIT_ADDRESS_TEMPLATE, PageData.of().put("changeAddressForm", form)));
     }
 
     @EnableHooks
     public CompletionStage<Result> removeAddress() {
-        return removeAddressFormAction.apply(
-                () -> routes.AddressBookController.show(),
+        return removeAddressFormAction.apply(routes.AddressBookController::show,
                 form -> templateEngine.render(ADDRESS_BOOK_TEMPLATE, PageData.of().put("removeAddressForm", form)));
     }
 }

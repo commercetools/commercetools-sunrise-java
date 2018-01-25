@@ -1,10 +1,12 @@
 package com.commercetools.sunrise.productcatalog.products.search.searchbox;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.ctprequests.ProductProjectionSearchHook;
+import com.commercetools.sunrise.models.products.ProductListFetcherHook;
 import com.commercetools.sunrise.models.search.searchbox.AbstractSearchBoxControllerComponent;
 import io.sphere.sdk.models.LocalizedStringEntry;
+import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
+import io.sphere.sdk.search.PagedSearchResult;
 import play.mvc.Http;
 
 import javax.annotation.Nullable;
@@ -12,10 +14,9 @@ import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
-public final class ProductSearchBoxControllerComponent extends AbstractSearchBoxControllerComponent implements ControllerComponent, ProductProjectionSearchHook {
+public final class ProductSearchBoxControllerComponent extends AbstractSearchBoxControllerComponent implements ControllerComponent, ProductListFetcherHook {
 
     @Nullable
     private final LocalizedStringEntry searchText;
@@ -32,11 +33,11 @@ public final class ProductSearchBoxControllerComponent extends AbstractSearchBox
     }
 
     @Override
-    public CompletionStage<ProductProjectionSearch> onProductProjectionSearch(final ProductProjectionSearch search) {
-        if (searchText != null) {
-            return completedFuture(search.withText(searchText));
-        } else {
-            return completedFuture(search);
-        }
+    public CompletionStage<PagedSearchResult<ProductProjection>> on(final ProductProjectionSearch request, final Function<ProductProjectionSearch, CompletionStage<PagedSearchResult<ProductProjection>>> nextComponent) {
+        return nextComponent.apply(requestWithSearchText(request));
+    }
+
+    private ProductProjectionSearch requestWithSearchText(final ProductProjectionSearch search) {
+        return searchText != null ? search.withText(searchText) : search;
     }
 }

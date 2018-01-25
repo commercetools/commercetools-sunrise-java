@@ -14,42 +14,23 @@ import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
 
-final class DefaultCategoryFetcher extends AbstractCategoryFetcher implements CategoryFetcher {
+public final class DefaultCategoryFetcher extends AbstractCategoryFetcher {
 
     private final Langs langs;
     private final Locale locale;
 
     @Inject
-    DefaultCategoryFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
+    DefaultCategoryFetcher(final HookRunner hookRunner, final SphereClient sphereClient,
                            final Langs langs, final Locale locale) {
-        super(sphereClient, hookRunner);
+        super(hookRunner, sphereClient);
         this.langs = langs;
         this.locale = locale;
     }
 
     @Override
-    public Optional<CategoryQuery> defaultRequest(final String slug) {
+    protected Optional<CategoryQuery> buildRequest(final String slug) {
         return buildSlugPredicate(slug)
                 .map(slugPredicate -> CategoryQuery.of().withPredicates(slugPredicate));
-    }
-
-    @Override
-    protected Optional<Category> selectResource(final PagedQueryResult<Category> result, final String slug) {
-        if (result.getTotal() > 1) {
-            return result.getResults().stream()
-                    .filter(product -> productMatchesSlugInUsersLanguage(product, slug))
-                    .findAny()
-                    .map(Optional::of)
-                    .orElseGet(() -> super.selectResource(result));
-        } else {
-            return super.selectResource(result);
-        }
-    }
-
-    private boolean productMatchesSlugInUsersLanguage(final Category category, final String slug) {
-        return category.getSlug().find(locale)
-                .map(slugInUsersLang -> slugInUsersLang.equals(slug))
-                .orElse(false);
     }
 
     private Optional<QueryPredicate<Category>> buildSlugPredicate(final String slug) {
@@ -61,5 +42,22 @@ final class DefaultCategoryFetcher extends AbstractCategoryFetcher implements Ca
 
     private QueryPredicate<Category> buildSingleSlugPredicate(final String slug, final Lang lang) {
         return CategoryQueryModel.of().slug().lang(lang.toLocale()).is(slug);
+    }
+
+    @Override
+    protected Optional<Category> selectResult(final PagedQueryResult<Category> results, final String slug) {
+        if (results.getTotal() > 1) {
+            return results.getResults().stream()
+                    .filter(product -> productMatchesSlugInUsersLanguage(product, slug))
+                    .findAny();
+        } else {
+            return results.head();
+        }
+    }
+
+    private boolean productMatchesSlugInUsersLanguage(final Category category, final String slug) {
+        return category.getSlug().find(locale)
+                .map(slugInUsersLang -> slugInUsersLang.equals(slug))
+                .orElse(false);
     }
 }

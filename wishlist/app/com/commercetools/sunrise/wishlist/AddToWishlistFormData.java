@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.wishlist;
 
 import com.google.inject.ImplementedBy;
-import io.sphere.sdk.shoppinglists.commands.updateactions.AddLineItem;
+import io.sphere.sdk.shoppinglists.LineItemDraft;
 
 @ImplementedBy(DefaultAddToWishlistFormData.class)
 public interface AddToWishlistFormData {
 
-    AddLineItem addLineItem();
+    LineItemDraft lineItemDraft();
 }

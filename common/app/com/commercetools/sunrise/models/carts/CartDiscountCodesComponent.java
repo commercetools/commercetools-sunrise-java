@@ -1,24 +1,23 @@
 package com.commercetools.sunrise.models.carts;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.ctprequests.CartQueryHook;
-import com.commercetools.sunrise.core.hooks.ctprequests.CartUpdateCommandHook;
+import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.queries.CartQuery;
 
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
-public final class CartDiscountCodesComponent implements ControllerComponent, CartQueryHook, CartUpdateCommandHook {
+public final class CartDiscountCodesComponent implements ControllerComponent, MyCartFetcherHook, MyCartUpdaterHook {
 
     @Override
-    public CompletionStage<CartQuery> onCartQuery(final CartQuery query) {
-        return completedFuture(query.plusExpansionPaths(m -> m.discountCodes().discountCode()));
+    public CompletionStage<Optional<Cart>> on(final CartQuery request, final Function<CartQuery, CompletionStage<Optional<Cart>>> nextComponent) {
+        return nextComponent.apply(request.plusExpansionPaths(c -> c.discountCodes().discountCode()));
     }
 
     @Override
-    public CompletionStage<CartUpdateCommand> onCartUpdateCommand(final CartUpdateCommand command){
-        return completedFuture(command.plusExpansionPaths(m -> m.discountCodes().discountCode()));
+    public CompletionStage<Cart> on(final CartUpdateCommand request, final Function<CartUpdateCommand, CompletionStage<Cart>> nextComponent) {
+        return nextComponent.apply(request.plusExpansionPaths(c -> c.discountCodes().discountCode()));
     }
 }

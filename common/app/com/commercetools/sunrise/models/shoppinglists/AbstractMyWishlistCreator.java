@@ -1,52 +1,40 @@
 package com.commercetools.sunrise.models.shoppinglists;
 
-import com.commercetools.sunrise.core.AbstractResourceCreator;
+import com.commercetools.sunrise.core.AbstractHookRunner;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpactions.ShoppingListCreatedActionHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListCreatedHook;
-import com.commercetools.sunrise.core.hooks.ctprequests.ShoppingListCreateCommandHook;
 import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.expansion.ExpansionPathContainer;
 import io.sphere.sdk.shoppinglists.ShoppingList;
-import io.sphere.sdk.shoppinglists.ShoppingListDraft;
 import io.sphere.sdk.shoppinglists.commands.ShoppingListCreateCommand;
 import play.libs.concurrent.HttpExecution;
 
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
-public abstract class AbstractMyWishlistCreator extends AbstractResourceCreator<ShoppingList, ShoppingListDraft, ShoppingListCreateCommand> implements MyWishlistCreator {
+public abstract class AbstractMyWishlistCreator extends AbstractHookRunner<ShoppingList, ShoppingListCreateCommand> implements MyWishlistCreator {
 
+    private final SphereClient sphereClient;
     private final MyWishlist myWishlist;
 
-    protected AbstractMyWishlistCreator(final SphereClient sphereClient, final HookRunner hookRunner,
+    protected AbstractMyWishlistCreator(final HookRunner hookRunner, final SphereClient sphereClient,
                                         final MyWishlist myWishlist) {
-        super(sphereClient, hookRunner);
+        super(hookRunner);
+        this.sphereClient = sphereClient;
         this.myWishlist = myWishlist;
     }
 
     @Override
-    protected ShoppingListCreateCommand buildRequest(final ShoppingListDraft draft) {
-        return ShoppingListCreateCommand.of(draft);
-    }
-
-    protected CompletionStage<ShoppingList> executeRequest(final ShoppingListCreateCommand baseCommand) {
-        final CompletionStage<ShoppingList> resourceStage = super.executeRequest(baseCommand);
-        resourceStage.thenAcceptAsync(myWishlist::store, HttpExecution.defaultContext());
-        return resourceStage;
-    }
-
-    @Override
-    protected final CompletionStage<ShoppingListCreateCommand> runRequestHook(final HookRunner hookRunner, final ShoppingListCreateCommand baseCommand) {
-        return ShoppingListCreateCommandHook.runHook(hookRunner, baseCommand);
+    public CompletionStage<ShoppingList> get() {
+        return runHook(buildRequest(), r -> {
+            final CompletionStage<ShoppingList> resultStage = sphereClient.execute(r);
+            resultStage.thenAcceptAsync(myWishlist::store, HttpExecution.defaultContext());
+            return resultStage;
+        });
     }
 
     @Override
-    protected final void runCreatedHook(final HookRunner hookRunner, final ShoppingList resource) {
-        ShoppingListCreatedHook.runHook(hookRunner, resource);
+    protected CompletionStage<ShoppingList> runHook(final ShoppingListCreateCommand request, final Function<ShoppingListCreateCommand, CompletionStage<ShoppingList>> execution) {
+        return hookRunner().run(MyWishlistCreatorHook.class, request, execution, h -> h::on);
     }
 
-    @Override
-    protected final CompletionStage<ShoppingList> runActionHook(final HookRunner hookRunner, final ShoppingList resource, final ExpansionPathContainer<ShoppingList> expansionPathContainer) {
-        return ShoppingListCreatedActionHook.runHook(hookRunner, resource, expansionPathContainer);
-    }
+    protected abstract ShoppingListCreateCommand buildRequest();
 }

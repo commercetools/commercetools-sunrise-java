@@ -1,67 +1,46 @@
 package com.commercetools.sunrise.models.products;
 
-import com.commercetools.sunrise.core.AbstractSingleResourceFetcher;
+import com.commercetools.sunrise.core.AbstractHookRunner;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpevents.ProductLoadedHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.ProductWithVariantLoadedHook;
-import com.commercetools.sunrise.core.hooks.ctprequests.ProductProjectionQueryHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
-import play.libs.concurrent.HttpExecution;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractProductFetcher extends AbstractSingleResourceFetcher<ProductProjection, ProductProjectionQuery, PagedQueryResult<ProductProjection>> implements ProductFetcher {
+public abstract class AbstractProductFetcher extends AbstractHookRunner<Optional<ProductWithVariant>, ProductProjectionQuery> implements ProductFetcher {
 
-    protected AbstractProductFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
-        super(sphereClient, hookRunner);
+    private final SphereClient sphereClient;
+
+    protected AbstractProductFetcher(final HookRunner hookRunner, final SphereClient sphereClient) {
+        super(hookRunner);
+        this.sphereClient = sphereClient;
     }
 
     @Override
     public CompletionStage<Optional<ProductWithVariant>> get(final String productIdentifier, @Nullable final String variantIdentifier) {
-        return defaultRequest(productIdentifier)
-                .map(request -> executeRequest(request, pagedResult -> selectResource(pagedResult, productIdentifier, variantIdentifier))
-                        .thenApplyAsync(productOpt -> productOpt.map(product -> {
-                            final ProductWithVariant productWithVariant = ProductWithVariant.of(product, selectVariant(product, variantIdentifier));
-                            runProductVariantLoadedHook(getHookRunner(), productWithVariant);
-                            return productWithVariant;
-                        }),
-                        HttpExecution.defaultContext()))
+        return buildRequest(productIdentifier, variantIdentifier)
+                .map(request -> runHook(request, r -> sphereClient.execute(r)
+                        .thenApply(results -> selectResult(results, productIdentifier, variantIdentifier))))
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
     @Override
-    protected final CompletionStage<ProductProjectionQuery> runRequestHook(final HookRunner hookRunner, final ProductProjectionQuery baseRequest) {
-        return ProductProjectionQueryHook.runHook(hookRunner, baseRequest);
+    protected CompletionStage<Optional<ProductWithVariant>> runHook(final ProductProjectionQuery request,
+                                                                    final Function<ProductProjectionQuery, CompletionStage<Optional<ProductWithVariant>>> execution) {
+        return hookRunner().run(ProductFetcherHook.class, request, execution, h -> h::on);
     }
 
-    @Override
-    protected final void runResourceLoadedHook(final HookRunner hookRunner, final ProductProjection resource) {
-        ProductLoadedHook.runHook(hookRunner, resource);
-    }
+    protected abstract Optional<ProductProjectionQuery> buildRequest(final String productIdentifier, final String variantIdentifier);
 
-    protected final void runProductVariantLoadedHook(final HookRunner hookRunner, final ProductWithVariant productWithVariant) {
-        ProductWithVariantLoadedHook.runHook(hookRunner, productWithVariant);
-    }
-
-    @Override
-    protected final Optional<ProductProjection> selectResource(final PagedQueryResult<ProductProjection> pagedResult) {
-        return super.selectResource(pagedResult);
-    }
-
-    protected Optional<ProductProjection> selectResource(final PagedQueryResult<ProductProjection> pagedResult,
-                                                         final String productIdentifier, @Nullable final String variantIdentifier) {
-        return selectResource(pagedResult);
-    }
-
-    protected ProductVariant selectVariant(final ProductProjection product, @Nullable final String variantIdentifier) {
-        return product.findFirstMatchingVariant().orElseGet(product::getMasterVariant);
+    protected Optional<ProductWithVariant> selectResult(final PagedQueryResult<ProductProjection> results,
+                                                        final String productIdentifier, final String variantIdentifier) {
+        return results.head().map(product -> ProductWithVariant.of(product, product.getMasterVariant()));
     }
 }

@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.core.i18n.api
 
 import java.net.URL
-import javax.inject.{Inject, Provider, Singleton}
+import javax.inject.{Inject, Singleton}
 
-import com.google.inject.ProvisionException
-import io.sphere.sdk.projects.Project
+import com.commercetools.sunrise.models.project.CachedProject
+import io.sphere.sdk.client.SphereTimeoutException
 import play.api.i18n._
 import play.api.{Configuration, Environment, Logger}
 import play.ext.i18n.MessagesLoader
@@ -78,7 +78,7 @@ class SunriseMessagesApi @Inject()(environment: Environment, configuration: Conf
 }
 
 @Singleton
-class SunriseLangs @Inject()(configuration: Configuration, projectProvider: Provider[Project]) extends DefaultLangs(configuration) {
+class SunriseLangs @Inject()(configuration: Configuration, cachedProject: CachedProject) extends DefaultLangs(configuration) {
   import scala.collection.JavaConversions._
 
   override val availables: Seq[Lang] = configuredLangs match {
@@ -92,11 +92,11 @@ class SunriseLangs @Inject()(configuration: Configuration, projectProvider: Prov
 
   def loadFallbackLangs: Seq[Lang] = {
     try {
-      val projectLangs = projectProvider.get.getLanguageLocales.map(Lang.apply)
+      val projectLangs = cachedProject.blockingGet.getLanguageLocales.map(Lang.apply)
       if (projectLangs.isEmpty) Seq(Lang.defaultLang) else projectLangs
     } catch {
-      case pe: ProvisionException =>
-        Logger.warn("Languages from CTP could not be provided, falling back to default locale", pe)
+      case e: SphereTimeoutException =>
+        Logger.warn("Languages from CTP could not be provided, falling back to default locale", e)
         Seq(Lang.defaultLang)
     }
   }

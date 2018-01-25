@@ -1,41 +1,34 @@
 package com.commercetools.sunrise.models.orders;
 
-import com.commercetools.sunrise.core.AbstractResourceCreator;
+import com.commercetools.sunrise.core.AbstractHookRunner;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpactions.OrderCreatedActionHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.OrderCreatedHook;
-import com.commercetools.sunrise.core.hooks.ctprequests.OrderFromCartCreateCommandHook;
 import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.expansion.ExpansionPathContainer;
 import io.sphere.sdk.orders.Order;
-import io.sphere.sdk.orders.OrderFromCartDraft;
 import io.sphere.sdk.orders.commands.OrderFromCartCreateCommand;
+import play.libs.concurrent.HttpExecution;
 
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
-public abstract class AbstractOrderCreator extends AbstractResourceCreator<Order, OrderFromCartDraft, OrderFromCartCreateCommand> implements OrderCreator {
+public abstract class AbstractOrderCreator extends AbstractHookRunner<Order, OrderFromCartCreateCommand> implements OrderCreator {
 
-    protected AbstractOrderCreator(final SphereClient sphereClient, final HookRunner hookRunner) {
-        super(sphereClient, hookRunner);
+    private final SphereClient sphereClient;
+
+    protected AbstractOrderCreator(final HookRunner hookRunner, final SphereClient sphereClient) {
+        super(hookRunner);
+        this.sphereClient = sphereClient;
     }
 
     @Override
-    protected OrderFromCartCreateCommand buildRequest(final OrderFromCartDraft draft) {
-        return OrderFromCartCreateCommand.of(draft);
+    public CompletionStage<Order> get() {
+        return buildRequest().thenComposeAsync(request -> runHook(request, sphereClient::execute), HttpExecution.defaultContext());
     }
 
     @Override
-    protected final CompletionStage<OrderFromCartCreateCommand> runRequestHook(final HookRunner hookRunner, final OrderFromCartCreateCommand baseCommand) {
-        return OrderFromCartCreateCommandHook.runHook(hookRunner, baseCommand);
+    protected CompletionStage<Order> runHook(final OrderFromCartCreateCommand request,
+                                             final Function<OrderFromCartCreateCommand, CompletionStage<Order>> execution) {
+        return hookRunner().run(OrderCreatorHook.class, request, execution, h -> h::on);
     }
 
-    @Override
-    protected final void runCreatedHook(final HookRunner hookRunner, final Order resource) {
-        OrderCreatedHook.runHook(hookRunner, resource);
-    }
-
-    @Override
-    protected final CompletionStage<Order> runActionHook(final HookRunner hookRunner, final Order resource, final ExpansionPathContainer<Order> expansionPathContainer) {
-        return OrderCreatedActionHook.runHook(hookRunner, resource, expansionPathContainer);
-    }
+    protected abstract CompletionStage<OrderFromCartCreateCommand> buildRequest();
 }

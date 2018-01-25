@@ -12,56 +12,32 @@ import io.sphere.sdk.queries.QueryPredicate;
 import play.i18n.Lang;
 import play.i18n.Langs;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
 
-public class DefaultProductFetcher extends AbstractProductFetcher {
+public final class DefaultProductFetcher extends AbstractProductFetcher {
 
     private final Locale locale;
     private final Langs langs;
     private final PriceSelection priceSelection;
 
     @Inject
-    protected DefaultProductFetcher(final SphereClient sphereClient, final HookRunner hookRunner, final Locale locale,
-                                    final Langs langs, final PriceSelection priceSelection) {
-        super(sphereClient, hookRunner);
+    DefaultProductFetcher(final HookRunner hookRunner, final SphereClient sphereClient,
+                          final Locale locale, final Langs langs, final PriceSelection priceSelection) {
+        super(hookRunner, sphereClient);
         this.locale = locale;
         this.langs = langs;
         this.priceSelection = priceSelection;
     }
 
     @Override
-    public Optional<ProductProjectionQuery> defaultRequest(final String slug) {
+    protected Optional<ProductProjectionQuery> buildRequest(final String slug, final String sku) {
         return buildSlugPredicate(slug)
                 .map(slugPredicate -> ProductProjectionQuery.ofCurrent()
                         .withPriceSelection(priceSelection)
                         .withPredicates(slugPredicate));
-    }
-
-    @Override
-    protected Optional<ProductProjection> selectResource(final PagedQueryResult<ProductProjection> result,
-                                                         final String slug, final String sku) {
-        if (result.getTotal() > 1) {
-            return result.getResults().stream()
-                    .filter(product -> productMatchesSlugInUsersLanguage(product, slug))
-                    .findAny()
-                    .map(Optional::of)
-                    .orElseGet(() -> super.selectResource(result));
-        } else {
-            return super.selectResource(result);
-        }
-    }
-
-    @Override
-    protected ProductVariant selectVariant(final ProductProjection product, final String sku) {
-        return product.findVariantBySku(sku).orElseGet(product::getMasterVariant);
-    }
-
-    private boolean productMatchesSlugInUsersLanguage(final ProductProjection product, final String slug) {
-        return product.getSlug().find(locale)
-                .map(slugInUsersLang -> slugInUsersLang.equals(slug))
-                .orElse(false);
     }
 
     private Optional<QueryPredicate<ProductProjection>> buildSlugPredicate(final String slug) {
@@ -73,5 +49,31 @@ public class DefaultProductFetcher extends AbstractProductFetcher {
 
     private QueryPredicate<ProductProjection> buildSingleSlugPredicate(final String slug, final Lang lang) {
         return ProductProjectionQueryModel.of().slug().lang(lang.toLocale()).is(slug);
+    }
+
+    @Override
+    protected Optional<ProductWithVariant> selectResult(final PagedQueryResult<ProductProjection> result,
+                                                        final String slug, @Nullable final String sku) {
+        return selectProduct(result, slug)
+                .map(product -> ProductWithVariant.of(product, selectVariant(product, sku)));
+    }
+
+    private Optional<ProductProjection> selectProduct(final PagedQueryResult<ProductProjection> pagedResult, final String slug) {
+        if (pagedResult.getTotal() > 1) {
+            return pagedResult.getResults().stream()
+                    .filter(product -> productMatchesSlugInUsersLanguage(product, slug))
+                    .findAny();
+        }
+        return pagedResult.head();
+    }
+
+    private ProductVariant selectVariant(final ProductProjection product, final String sku) {
+        return product.findVariantBySku(sku).orElseGet(product::getMasterVariant);
+    }
+
+    private boolean productMatchesSlugInUsersLanguage(final ProductProjection product, final String slug) {
+        return product.getSlug().find(locale)
+                .map(slugInUsersLang -> slugInUsersLang.equals(slug))
+                .orElse(false);
     }
 }

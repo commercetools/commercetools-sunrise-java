@@ -1,9 +1,7 @@
 package com.commercetools.sunrise.core.hooks;
 
-import com.commercetools.sunrise.core.hooks.application.HttpRequestEndedHook;
-import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
+import com.commercetools.sunrise.core.hooks.application.HttpRequestHook;
 import play.inject.Injector;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -11,9 +9,6 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-/**
- * Action that runs the {@link HttpRequestStartedHook} and {@link HttpRequestEndedHook}.
- */
 final class HooksEnabler extends Action<EnableHooks> {
 
     private final Injector injector;
@@ -27,8 +22,6 @@ final class HooksEnabler extends Action<EnableHooks> {
     public CompletionStage<Result> call(final Http.Context ctx) {
         // On creation of this action there isn't any HTTP context, necessary to initialize the HookRunner
         final HookContext hookRunner = injector.instanceOf(HookContext.class);
-        HttpRequestStartedHook.runHook(hookRunner, ctx);
-        return delegate.call(ctx).thenComposeAsync(result ->
-                HttpRequestEndedHook.runHook(hookRunner, result), HttpExecution.defaultContext());
+        return hookRunner.run(HttpRequestHook.class, ctx, c -> delegate.call(c), h -> h::on);
     }
 }

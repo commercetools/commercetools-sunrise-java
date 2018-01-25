@@ -14,7 +14,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractPaginationControllerComponent extends Base implements ControllerComponent, PageDataHook {
+public abstract class AbstractPaginationControllerComponent<P extends PagedResult<?>> extends Base implements ControllerComponent, PageDataHook {
 
     private final PaginationSettings paginationSettings;
     private final EntriesPerPageFormSettings entriesPerPageFormSettings;
@@ -41,15 +41,16 @@ public abstract class AbstractPaginationControllerComponent extends Base impleme
     }
 
     @Nullable
-    protected abstract PagedResult<?> getPagedResult();
+    protected abstract CompletionStage<P> getResultStage();
 
     @Override
     public CompletionStage<PageData> onPageDataReady(final PageData pageData) {
-        final PagedResult<?> pagedResult = getPagedResult();
-        if (pagedResult != null) {
+        final CompletionStage<P> resultStage = getResultStage();
+        if (resultStage != null) {
             final Long currentPage = paginationSettings.getSelectedValueOrDefault(Http.Context.current());
-            pageData.put("pagination", paginationViewModelFactory.create(pagedResult, currentPage))
-                    .put("displaySelector", entriesPerPageSelectorViewModelFactory.create(pagedResult));
+            return resultStage.thenApply(result ->
+                    pageData.put("pagination", paginationViewModelFactory.create(result, currentPage))
+                            .put("displaySelector", entriesPerPageSelectorViewModelFactory.create(result)));
         }
         return completedFuture(pageData);
     }

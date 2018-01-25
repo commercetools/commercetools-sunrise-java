@@ -18,12 +18,12 @@ public abstract class AbstractResourceInCache<T> implements ResourceInCache<T> {
     }
 
     @Override
-    public CompletionStage<Optional<T>> get() {
+    public CompletionStage<T> get() {
+        // TODO use expiration date!
         final String cacheKey = cacheKey();
         final T nullableResource = cacheApi.get(cacheKey);
         return Optional.ofNullable(nullableResource)
-                .map(Optional::of)
-                .map(cart -> (CompletionStage<Optional<T>>) completedFuture(cart))
+                .map(cart -> (CompletionStage<T>) completedFuture(cart))
                 .orElseGet(() -> fetchAndStoreResource(cacheKey));
     }
 
@@ -46,14 +46,13 @@ public abstract class AbstractResourceInCache<T> implements ResourceInCache<T> {
         remove();
     }
 
-    private CompletionStage<Optional<T>> fetchAndStoreResource(final String cacheKey) {
-        final CompletionStage<Optional<T>> resourceStage = fetchResource();
-        resourceStage.thenAcceptAsync(resourceOpt -> resourceOpt
-                .ifPresent(resource -> cacheApi.set(cacheKey, resource)), HttpExecution.defaultContext());
+    private CompletionStage<T> fetchAndStoreResource(final String cacheKey) {
+        final CompletionStage<T> resourceStage = fetchResource();
+        resourceStage.thenAcceptAsync(resource -> cacheApi.set(cacheKey, resource), HttpExecution.defaultContext());
         return resourceStage;
     }
 
-    protected abstract CompletionStage<Optional<T>> fetchResource();
+    protected abstract CompletionStage<T> fetchResource();
 
     protected abstract String cacheKey();
 }

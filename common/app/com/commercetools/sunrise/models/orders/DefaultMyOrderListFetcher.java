@@ -8,22 +8,21 @@ import io.sphere.sdk.orders.queries.OrderQuery;
 import javax.inject.Inject;
 import java.util.Optional;
 
-final class DefaultMyOrderListFetcher extends AbstractOrderListFetcher {
+public final class DefaultMyOrderListFetcher extends AbstractMyOrderListFetcher {
 
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
-    DefaultMyOrderListFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
-                                        final MyCustomerInSession myCustomerInSession) {
-        super(sphereClient, hookRunner);
+    DefaultMyOrderListFetcher(final HookRunner hookRunner, final SphereClient sphereClient,
+                              final MyCustomerInSession myCustomerInSession) {
+        super(hookRunner, sphereClient);
         this.myCustomerInSession = myCustomerInSession;
     }
 
     @Override
-    public Optional<OrderQuery> defaultRequest() {
+    protected Optional<OrderQuery> buildRequest() {
         return myCustomerInSession.findId()
-                .map(customerId -> OrderQuery.of()
-                        .byCustomerId(customerId)
+                .map(customerId -> OrderQuery.of().byCustomerId(customerId)
                         .withSort(order -> order.createdAt().sort().desc()));
     }
 }

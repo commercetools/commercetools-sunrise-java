@@ -7,15 +7,12 @@ import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.Ab
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOption;
 import com.commercetools.sunrise.productcatalog.products.search.facetedsearch.categorytree.CategoryTreeFacetedSearchFormSettings;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.search.TermFacetResult;
 import play.mvc.Http;
 
 import javax.inject.Inject;
-import java.time.Duration;
 import java.util.List;
 
-import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -25,7 +22,7 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public final class CategoryTreeFacetViewModelFactory extends AbstractTermFacetViewModelFactory<CategoryTreeFacetedSearchFormSettings> {
 
-    private final CategoryTree categoryTree;
+    private final CachedCategoryTree cachedCategoryTree;
     private final CategoryTreeFacetOptionViewModelFactory categoryTreeFacetOptionViewModelFactory;
 
     @Inject
@@ -33,14 +30,14 @@ public final class CategoryTreeFacetViewModelFactory extends AbstractTermFacetVi
                                              final CachedCategoryTree cachedCategoryTree,
                                              final CategoryTreeFacetOptionViewModelFactory categoryTreeFacetOptionViewModelFactory) {
         super(i18nResolver);
-        this.categoryTree = blockingWait(cachedCategoryTree.require(), Duration.ofSeconds(30));
+        this.cachedCategoryTree = cachedCategoryTree;
         this.categoryTreeFacetOptionViewModelFactory = categoryTreeFacetOptionViewModelFactory;
     }
 
     @Override
     protected List<FacetOption> createOptions(final CategoryTreeFacetedSearchFormSettings settings, final TermFacetResult facetResult) {
         final Category selectedValue = settings.getSelectedValue(Http.Context.current()).orElse(null);
-        return categoryTree.getSubtreeRoots().stream()
+        return cachedCategoryTree.blockingGet().getSubtreeRoots().stream()
                 .map(root -> categoryTreeFacetOptionViewModelFactory.create(facetResult, root, selectedValue))
                 .filter(root -> root.getCount() > 0)
                 .collect(toList());

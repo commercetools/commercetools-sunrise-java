@@ -2,8 +2,6 @@ package com.commercetools.sunrise.myaccount.changepassword;
 
 import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpevents.CustomerPasswordUpdatedHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.CustomerUpdatedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.CustomerChangePasswordCommandHook;
 import com.commercetools.sunrise.models.customers.MyCustomer;
 import io.sphere.sdk.client.SphereClient;
@@ -13,6 +11,8 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
+import play.mvc.Results;
+import play.twirl.api.Content;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
@@ -52,18 +52,15 @@ final class DefaultChangePasswordFormAction extends AbstractFormAction<ChangePas
 
     @Override
     protected CompletionStage<Result> onFailedRequest(final Form<? extends ChangePasswordFormData> form, final Throwable throwable,
-                                                      final Function<Form<? extends ChangePasswordFormData>, CompletionStage<Result>> onBadRequest) {
+                                                      final Function<Form<? extends ChangePasswordFormData>, CompletionStage<Content>> onBadRequest) {
         if (isCustomerInvalidCurrentPasswordError(throwable.getCause())) {
             form.reject("errors.invalidCurrentPassword");
-            return onBadRequest.apply(form);
+            return onBadRequest.apply(form).thenApply(Results::badRequest);
         }
         return super.onFailedRequest(form, throwable, onBadRequest);
     }
 
-    protected final CompletionStage<Customer> executeWithHooks(final CustomerChangePasswordCommand baseCommand) {
-        final CompletionStage<Customer> resultStage = CustomerChangePasswordCommandHook.runHook(hookRunner, baseCommand)
-                .thenCompose(sphereClient::execute);
-        resultStage.thenAcceptAsync(resource -> CustomerUpdatedHook.runHook(hookRunner, resource), HttpExecution.defaultContext());
-        return resultStage;
+    protected final CompletionStage<Customer> executeWithHooks(final CustomerChangePasswordCommand request) {
+        return hookRunner.run(CustomerChangePasswordCommandHook.class, request, sphereClient::execute, h -> h::on);
     }
 }

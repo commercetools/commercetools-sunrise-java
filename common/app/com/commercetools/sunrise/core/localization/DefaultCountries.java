@@ -1,15 +1,14 @@
 package com.commercetools.sunrise.core.localization;
 
-import com.google.inject.ProvisionException;
+import com.commercetools.sunrise.models.project.CachedProject;
 import com.neovisionaries.i18n.CountryCode;
-import io.sphere.sdk.projects.Project;
+import io.sphere.sdk.client.SphereTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.Configuration;
 import play.i18n.Lang;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
@@ -31,12 +30,12 @@ public final class DefaultCountries implements Countries {
     }
 
     @Inject
-    DefaultCountries(final Configuration configuration, final Provider<Project> projectProvider) {
+    DefaultCountries(final Configuration configuration, final CachedProject cachedProject) {
         this(configuredCountries(configuration)
                 .map(countries -> countries.stream()
                         .map(CountryCode::getByCodeIgnoreCase)
                         .collect(toList()))
-                .orElseGet(() -> loadFallbackCountries(projectProvider)));
+                .orElseGet(() -> loadFallbackCountries(cachedProject)));
     }
 
     @Override
@@ -59,11 +58,11 @@ public final class DefaultCountries implements Countries {
         return countries.isEmpty() ? Optional.empty() : Optional.of(countries);
     }
 
-    private static List<CountryCode> loadFallbackCountries(final Provider<Project> projectProvider) {
+    private static List<CountryCode> loadFallbackCountries(final CachedProject cachedProject) {
         try {
-            final List<CountryCode> projectCountries = projectProvider.get().getCountries();
+            final List<CountryCode> projectCountries = cachedProject.blockingGet().getCountries();
             return projectCountries.isEmpty() ? singletonList(SYSTEM_DEFAULT_COUNTRY) : projectCountries;
-        } catch (ProvisionException e) {
+        } catch (SphereTimeoutException e) {
             LOGGER.warn("Countries from CTP could not be provided, falling back to default country", e);
             return singletonList(SYSTEM_DEFAULT_COUNTRY);
         }

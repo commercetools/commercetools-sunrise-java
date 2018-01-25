@@ -1,9 +1,7 @@
 package com.commercetools.sunrise.models.categories;
 
-import com.commercetools.sunrise.core.AbstractSingleResourceFetcher;
+import com.commercetools.sunrise.core.AbstractHookRunner;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpevents.CategoryLoadedHook;
-import com.commercetools.sunrise.core.hooks.ctprequests.CategoryQueryHook;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.client.SphereClient;
@@ -11,38 +9,35 @@ import io.sphere.sdk.queries.PagedQueryResult;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractCategoryFetcher extends AbstractSingleResourceFetcher<Category, CategoryQuery, PagedQueryResult<Category>> implements CategoryFetcher {
+public abstract class AbstractCategoryFetcher extends AbstractHookRunner<Optional<Category>, CategoryQuery> implements CategoryFetcher {
 
-    protected AbstractCategoryFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
-        super(sphereClient, hookRunner);
+    private final SphereClient sphereClient;
+
+    protected AbstractCategoryFetcher(final HookRunner hookRunner, final SphereClient sphereClient) {
+        super(hookRunner);
+        this.sphereClient = sphereClient;
     }
 
     @Override
     public CompletionStage<Optional<Category>> get(final String categoryIdentifier) {
-        return defaultRequest(categoryIdentifier)
-                .map(request -> executeRequest(request, result -> selectResource(result, categoryIdentifier)))
+        return buildRequest(categoryIdentifier)
+                .map(request -> runHook(request, r -> sphereClient.execute(r)
+                        .thenApply(results -> selectResult(results, categoryIdentifier))))
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
     @Override
-    protected final CompletionStage<CategoryQuery> runRequestHook(final HookRunner hookRunner, final CategoryQuery baseRequest) {
-        return CategoryQueryHook.runHook(hookRunner, baseRequest);
+    protected CompletionStage<Optional<Category>> runHook(final CategoryQuery request, final Function<CategoryQuery, CompletionStage<Optional<Category>>> execution) {
+        return hookRunner().run(CategoryFetcherHook.class, request, execution, h -> h::on);
     }
 
-    @Override
-    protected final void runResourceLoadedHook(final HookRunner hookRunner, final Category resource) {
-        CategoryLoadedHook.runHook(hookRunner, resource);
-    }
+    protected abstract Optional<CategoryQuery> buildRequest(String categoryIdentifier);
 
-    @Override
-    protected final Optional<Category> selectResource(final PagedQueryResult<Category> pagedResult) {
-        return super.selectResource(pagedResult);
-    }
-
-    protected Optional<Category> selectResource(final PagedQueryResult<Category> result, final String categoryIdentifier) {
-        return selectResource(result);
+    protected Optional<Category> selectResult(final PagedQueryResult<Category> results, final String categoryIdentifier) {
+        return results.head();
     }
 }

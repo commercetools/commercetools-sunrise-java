@@ -5,7 +5,6 @@ import io.sphere.sdk.categories.CategoryTree;
 import play.cache.CacheApi;
 
 import javax.inject.Inject;
-import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 public final class DefaultCachedCategoryTree extends AbstractResourceInCache<CategoryTree> implements CachedCategoryTree {
@@ -24,7 +23,7 @@ public final class DefaultCachedCategoryTree extends AbstractResourceInCache<Cat
     }
 
     @Override
-    protected CompletionStage<Optional<CategoryTree>> fetchResource() {
-        return categoryTreeFetcher.get().thenApply(Optional::of);
+    protected CompletionStage<CategoryTree> fetchResource() {
+        return categoryTreeFetcher.get();
     }
 }

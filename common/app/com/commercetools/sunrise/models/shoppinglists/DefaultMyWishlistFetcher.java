@@ -3,26 +3,39 @@ package com.commercetools.sunrise.models.shoppinglists;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.models.customers.MyCustomerInSession;
 import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.queries.PagedQueryResult;
+import io.sphere.sdk.shoppinglists.ShoppingList;
 import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
 
 import javax.inject.Inject;
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 final class DefaultMyWishlistFetcher extends AbstractMyWishlistFetcher {
 
+    private final SphereClient sphereClient;
     private final MyWishlistInSession myWishlistInSession;
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
-    protected DefaultMyWishlistFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
+    protected DefaultMyWishlistFetcher(final HookRunner hookRunner, final SphereClient sphereClient,
                                        final MyWishlistInSession myWishlistInSession, final MyCustomerInSession myCustomerInSession) {
-        super(sphereClient, hookRunner);
+        super(hookRunner);
+        this.sphereClient = sphereClient;
         this.myWishlistInSession = myWishlistInSession;
         this.myCustomerInSession = myCustomerInSession;
     }
 
     @Override
-    public Optional<ShoppingListQuery> defaultRequest() {
+    public CompletionStage<Optional<ShoppingList>> get() {
+        return buildRequest()
+                .map(request -> runHook(request, r -> sphereClient.execute(r).thenApply(PagedQueryResult::head)))
+                .orElseGet(() -> completedFuture(Optional.empty()));
+    }
+
+    private Optional<ShoppingListQuery> buildRequest() {
         return tryBuildQueryByCustomerId()
                 .map(Optional::of)
                 .orElseGet(this::tryBuildQueryByWishlistId)

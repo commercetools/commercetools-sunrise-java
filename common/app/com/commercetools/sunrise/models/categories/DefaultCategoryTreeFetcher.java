@@ -8,24 +8,23 @@ import io.sphere.sdk.queries.QuerySort;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-final class DefaultCategoryTreeFetcher extends AbstractCategoryTreeFetcher {
+public final class DefaultCategoryTreeFetcher extends AbstractCategoryTreeFetcher {
 
     private final List<String> sortExpressions;
 
     @Inject
-    DefaultCategoryTreeFetcher(final SphereClient sphereClient, final HookRunner hookRunner, final CategorySettings settings) {
-        super(sphereClient, hookRunner);
+    DefaultCategoryTreeFetcher(final HookRunner hookRunner, final SphereClient sphereClient,
+                               final CategorySettings settings) {
+        super(hookRunner, sphereClient);
         this.sortExpressions = settings.sortExpressions();
-
     }
 
     @Override
-    public Optional<CategoryQuery> defaultRequest() {
-        return Optional.of(CategoryQuery.of().plusSort(sortExpressions()));
+    protected CategoryQuery buildRequest() {
+        return CategoryQuery.of().plusSort(sortExpressions());
     }
 
     private List<QuerySort<Category>> sortExpressions() {

@@ -1,19 +1,21 @@
 package com.commercetools.sunrise.cms;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
+import com.commercetools.sunrise.core.hooks.application.HttpRequestHook;
 import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import play.mvc.Http;
+import play.mvc.Result;
 
 import javax.inject.Provider;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 import static java.util.Collections.singletonList;
 
-public abstract class AbstractCmsComponent implements ControllerComponent, HttpRequestStartedHook, PageDataHook {
+public abstract class AbstractCmsComponent implements ControllerComponent, HttpRequestHook, PageDataHook {
 
     private final CmsService cmsService;
     private final Provider<Locale> localeProvider;
@@ -26,8 +28,9 @@ public abstract class AbstractCmsComponent implements ControllerComponent, HttpR
     }
 
     @Override
-    public void onHttpRequestStarted(final Http.Context httpContext) {
+    public CompletionStage<Result> on(final Http.Context ctx, final Function<Http.Context, CompletionStage<Result>> nextComponent) {
         cmsPageStage = cmsService.page(pageKey(), singletonList(localeProvider.get()));
+        return nextComponent.apply(ctx);
     }
 
     @Override

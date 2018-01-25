@@ -1,14 +1,13 @@
 package com.commercetools.sunrise.core.localization;
 
-import com.google.inject.ProvisionException;
-import io.sphere.sdk.projects.Project;
+import com.commercetools.sunrise.models.project.CachedProject;
+import io.sphere.sdk.client.SphereTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.Configuration;
 import play.i18n.Lang;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -32,12 +31,12 @@ public final class DefaultCurrencies implements Currencies {
     }
 
     @Inject
-    DefaultCurrencies(final Configuration configuration, final Provider<Project> projectProvider) {
+    DefaultCurrencies(final Configuration configuration, final CachedProject cachedProject) {
         this(configuredCurrencies(configuration)
                 .map(countries -> countries.stream()
                         .map(Monetary::getCurrency)
                         .collect(toList()))
-                .orElseGet(() -> loadFallbackCurrencies(projectProvider)));
+                .orElseGet(() -> loadFallbackCurrencies(cachedProject)));
     }
 
     @Override
@@ -60,11 +59,11 @@ public final class DefaultCurrencies implements Currencies {
         return currencies.isEmpty() ? Optional.empty() : Optional.of(currencies);
     }
 
-    private static List<CurrencyUnit> loadFallbackCurrencies(final Provider<Project> projectProvider) {
+    private static List<CurrencyUnit> loadFallbackCurrencies(final CachedProject cachedProject) {
         try {
-            final List<CurrencyUnit> projectCurrencies = projectProvider.get().getCurrencyUnits();
+            final List<CurrencyUnit> projectCurrencies = cachedProject.blockingGet().getCurrencyUnits();
             return projectCurrencies.isEmpty() ? singletonList(SYSTEM_DEFAULT_CURRENCY) : projectCurrencies;
-        } catch (ProvisionException e) {
+        } catch (SphereTimeoutException e) {
             LOGGER.warn("Currencies from CTP could not be provided, falling back to default currency", e);
             return singletonList(SYSTEM_DEFAULT_CURRENCY);
         }

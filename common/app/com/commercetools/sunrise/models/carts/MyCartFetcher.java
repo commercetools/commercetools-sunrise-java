@@ -1,18 +1,15 @@
 package com.commercetools.sunrise.models.carts;
 
 import com.commercetools.sunrise.core.NotFoundResourceException;
-import com.commercetools.sunrise.core.SingleResourceFetcher;
+import com.commercetools.sunrise.core.ResourceFetcher;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.queries.CartQuery;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 @ImplementedBy(DefaultMyCartFetcher.class)
-public interface MyCartFetcher extends SingleResourceFetcher<Cart, CartQuery> {
-
-    Optional<CartQuery> defaultRequest();
+public interface MyCartFetcher extends ResourceFetcher {
 
     CompletionStage<Optional<Cart>> get();
 

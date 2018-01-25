@@ -12,7 +12,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractSortSelectorControllerComponent<T> extends Base implements ControllerComponent, PageDataHook {
+public abstract class AbstractSortSelectorControllerComponent<T, P extends PagedResult<T>> extends Base implements ControllerComponent, PageDataHook {
 
     private final SortFormSettings<T> sortFormSettings;
     private final AbstractSortSelectorViewModelFactory<T> sortSelectorViewModelFactory;
@@ -28,13 +28,14 @@ public abstract class AbstractSortSelectorControllerComponent<T> extends Base im
     }
 
     @Nullable
-    protected abstract PagedResult<T> getPagedResult();
+    protected abstract CompletionStage<P> getResultStage();
 
     @Override
     public CompletionStage<PageData> onPageDataReady(final PageData pageData) {
-        final PagedResult<T> pagedResult = getPagedResult();
+        final CompletionStage<P> pagedResult = getResultStage();
         if (pagedResult != null) {
-            pageData.put("sortSelector", sortSelectorViewModelFactory.create(pagedResult));
+            return pagedResult.thenApply(result ->
+                    pageData.put("sortSelector", sortSelectorViewModelFactory.create(result)));
         }
         return completedFuture(pageData);
     }

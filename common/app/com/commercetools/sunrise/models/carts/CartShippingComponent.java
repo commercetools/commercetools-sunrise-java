@@ -1,15 +1,14 @@
 package com.commercetools.sunrise.models.carts;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.ctprequests.CartQueryHook;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.expansion.CartExpansionModel;
 import io.sphere.sdk.carts.expansion.ShippingInfoExpansionModel;
 import io.sphere.sdk.carts.queries.CartQuery;
 
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-
-import static java.util.concurrent.CompletableFuture.completedFuture;
+import java.util.function.Function;
 
 /**
  * This controller component expands the carts shipping info with the shipping methods.
@@ -18,10 +17,10 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * @see CartExpansionModel#shippingInfo()
  * @see ShippingInfoExpansionModel#shippingMethod()
  */
-public final class CartShippingComponent implements ControllerComponent, CartQueryHook {
+public final class CartShippingComponent implements ControllerComponent, MyCartFetcherHook {
 
     @Override
-    public CompletionStage<CartQuery> onCartQuery(final CartQuery query) {
-        return completedFuture(query.plusExpansionPaths(m -> m.shippingInfo().shippingMethod()));
+    public CompletionStage<Optional<Cart>> on(final CartQuery request, final Function<CartQuery, CompletionStage<Optional<Cart>>> nextComponent) {
+        return nextComponent.apply(request.plusExpansionPaths(c -> c.shippingInfo().shippingMethod()));
     }
 }

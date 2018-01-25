@@ -6,7 +6,6 @@ import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.core.viewmodels.PageData;
-import com.commercetools.sunrise.core.viewmodels.content.messages.MessageType;
 import com.commercetools.sunrise.myaccount.resetpassword.ResetPasswordFormAction;
 import com.commercetools.sunrise.myaccount.resetpassword.ResetPasswordRequestFormAction;
 import play.mvc.Result;
@@ -43,7 +42,7 @@ public class ResetPasswordController extends SunriseController {
     @EnableHooks
     public CompletionStage<Result> requestResetPassword() {
         return resetPasswordRequestFormAction.apply(
-                () -> routes.ResetPasswordController.showRequestResetPasswordForm(),
+                routes.ResetPasswordController::showRequestResetPasswordForm,
                 form -> templateEngine.render(REQUEST_RESET_PASSWORD_TEMPLATE, PageData.of().put("resetPasswordRequestForm", form)));
     }
 
@@ -56,13 +55,13 @@ public class ResetPasswordController extends SunriseController {
     @EnableHooks
     public CompletionStage<Result> resetPassword() {
         return resetPasswordFormAction.apply(
-                () -> routes.AuthenticationController.show(),
+                routes.AuthenticationController::show,
                 form -> templateEngine.render(RESET_PASSWORD_TEMPLATE, PageData.of().put("resetPasswordForm", form)));
     }
 
-    @Override
-    protected Result onPasswordResetRequested() {
-        saveMessage(MessageType.SUCCESS, "my-account.forgotPassword.feedbackMessage");
-        return redirect(routes.ResetPasswordController.showRequestResetPasswordForm());
-    }
+//    @Override
+//    protected Result onPasswordResetRequested() {
+//        saveMessage(MessageType.SUCCESS, "my-account.forgotPassword.feedbackMessage");
+//        return redirect(routes.ResetPasswordController.showRequestResetPasswordForm());
+//    }
 }

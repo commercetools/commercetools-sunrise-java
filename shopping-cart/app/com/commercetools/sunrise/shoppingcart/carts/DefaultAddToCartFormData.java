@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.carts;
 
-import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
+import io.sphere.sdk.carts.LineItemDraft;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
@@ -19,7 +19,7 @@ public class DefaultAddToCartFormData extends Base implements AddToCartFormData 
     private Long quantity;
 
     @Override
-    public AddLineItem addLineItem() {
-        return AddLineItem.of(productId, variantId, quantity);
+    public LineItemDraft lineItemDraft() {
+        return LineItemDraft.of(productId, variantId, quantity);
     }
 }

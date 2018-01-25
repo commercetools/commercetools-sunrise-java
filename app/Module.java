@@ -11,8 +11,6 @@ import com.commercetools.sunrise.models.carts.CartComponentSupplier;
 import com.commercetools.sunrise.models.categories.CategoryNavigationComponent;
 import com.commercetools.sunrise.models.customers.CustomerComponentSupplier;
 import com.commercetools.sunrise.models.customers.MyCustomerInSession;
-import com.commercetools.sunrise.models.products.ProductListFetcher;
-import com.commercetools.sunrise.models.products.ProductListFetcherWithMatchingVariants;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.AlphabeticallySortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.CustomSortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.TermFacetViewModelFactory;
@@ -71,10 +69,6 @@ public class Module extends AbstractModule {
                 .annotatedWith(Names.named("customSorted"))
                 .to(CustomSortedTermFacetViewModelFactory.class)
                 .in(RequestScoped.class);
-
-        // Binding to enable matching variants on listing products
-        // IMPORTANT: comment the following line if your project does not require this functionality, leaving it on can severely affect performance
-        bind(ProductListFetcher.class).to(ProductListFetcherWithMatchingVariants.class);
 
         // Provide here your own bindings
     }

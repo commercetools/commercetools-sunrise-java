@@ -6,14 +6,12 @@ import com.commercetools.sunrise.models.carts.MyCartInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerDraftBuilder;
+import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
-final class DefaultMyCustomerCreator extends AbstractMyCustomerCreator {
+public final class DefaultMyCustomerCreator extends AbstractMyCustomerCreator {
 
     private final MyCartInSession myCartInSession;
 
@@ -21,13 +19,13 @@ final class DefaultMyCustomerCreator extends AbstractMyCustomerCreator {
     DefaultMyCustomerCreator(final SphereClient sphereClient, final HookRunner hookRunner,
                              final MyCustomer myCustomer, final MyCart myCart,
                              final MyCartInSession myCartInSession) {
-        super(sphereClient, hookRunner, myCustomer, myCart);
+        super(hookRunner, sphereClient, myCustomer, myCart);
         this.myCartInSession = myCartInSession;
     }
 
     @Override
-    public CompletionStage<CustomerDraft> defaultDraft(final String email, final String password) {
-        return completedFuture(CustomerDraftBuilder.of(email, password)
+    protected CustomerCreateCommand buildRequest(final CustomerDraft customerDraft) {
+        return CustomerCreateCommand.of(CustomerDraftBuilder.of(customerDraft)
                 .customerNumber(generateCustomerNumber())
                 .anonymousCartId(myCartInSession.findId().orElse(null))
                 .build());

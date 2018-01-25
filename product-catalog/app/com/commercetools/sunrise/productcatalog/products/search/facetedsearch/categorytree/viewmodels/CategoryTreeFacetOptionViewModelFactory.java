@@ -6,16 +6,12 @@ import com.commercetools.sunrise.models.categories.CachedCategoryTree;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.AbstractFacetOptionViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOption;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.time.Duration;
 import java.util.*;
-
-import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
 
 @RequestScoped
 public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOptionViewModelFactory<TermFacetResult, Category, Category> {
@@ -23,21 +19,17 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
     private static final Set<String> IGNORED_PARAMS = Collections.singleton("page");
 
     private final I18nResolver i18nResolver;
-    private final CategoryTree categoryTree;
+    private final CachedCategoryTree cachedCategoryTree;
 
     @Inject
     public CategoryTreeFacetOptionViewModelFactory(final I18nResolver i18nResolver,
                                                    final CachedCategoryTree cachedCategoryTree) {
         this.i18nResolver = i18nResolver;
-        this.categoryTree = blockingWait(cachedCategoryTree.require(), Duration.ofSeconds(30));
+        this.cachedCategoryTree = cachedCategoryTree;
     }
 
     protected final I18nResolver getI18nResolver() {
         return i18nResolver;
-    }
-
-    protected final CategoryTree getCategoryTree() {
-        return categoryTree;
     }
 
     @Override
@@ -80,7 +72,7 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
 
     protected void fillChildren(final FacetOption viewModel, final TermFacetResult stats, final Category category, @Nullable final Category selectedValue) {
         final List<FacetOption> childrenViewModels = new ArrayList<>();
-        categoryTree.findChildren(category).forEach(child -> {
+        cachedCategoryTree.blockingGet().findChildren(category).forEach(child -> {
             final FacetOption childViewModel = create(stats, child, selectedValue);
             if (childViewModel.getCount() > 0) {
                 childrenViewModels.add(childViewModel);

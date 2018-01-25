@@ -10,7 +10,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractUserResourceInCache<T extends Resource<T>> implements ResourceInCache<T> {
+public abstract class AbstractUserResourceInCache<T extends Resource<T>> implements UserResourceInCache<T> {
 
     private final ResourceInSession<T> resourceInSession;
     private final CacheApi cacheApi;
@@ -28,6 +28,7 @@ public abstract class AbstractUserResourceInCache<T extends Resource<T>> impleme
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
+    // TODO use expiration date!
     private CompletionStage<Optional<T>> findInCacheOrFetch(final String cacheKey) {
         final T nullableResource = cacheApi.get(cacheKey);
         return Optional.ofNullable(nullableResource)

@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.core;
 
-import com.commercetools.sunrise.core.NotFoundResourceException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Resource;
 
@@ -10,8 +9,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.singletonList;
 
-@FunctionalInterface
-public interface ResourceUpdater<T extends Resource<T>> {
+public interface ResourceUpdater<T extends Resource<T>, R> {
 
     CompletionStage<Optional<T>> apply(List<? extends UpdateAction<T>> updateActions);
 
@@ -19,7 +17,7 @@ public interface ResourceUpdater<T extends Resource<T>> {
         return apply(singletonList(updateAction));
     }
 
-    default CompletionStage<T> force(List<? extends UpdateAction<T>> updateActions) {
+    default CompletionStage<T> force(final List<? extends UpdateAction<T>> updateActions) {
         return apply(updateActions).thenApply(resource -> resource.orElseThrow(NotFoundResourceException::new));
     }
 

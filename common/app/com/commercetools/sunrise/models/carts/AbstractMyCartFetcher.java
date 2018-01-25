@@ -1,9 +1,7 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.AbstractSingleResourceFetcher;
+import com.commercetools.sunrise.core.AbstractHookRunner;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpevents.CartLoadedHook;
-import com.commercetools.sunrise.core.hooks.ctprequests.CartQueryHook;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.queries.CartQuery;
 import io.sphere.sdk.client.SphereClient;
@@ -11,27 +9,35 @@ import io.sphere.sdk.queries.PagedQueryResult;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractMyCartFetcher extends AbstractSingleResourceFetcher<Cart, CartQuery, PagedQueryResult<Cart>> implements MyCartFetcher {
+public abstract class AbstractMyCartFetcher extends AbstractHookRunner<Optional<Cart>, CartQuery> implements MyCartFetcher {
 
-    protected AbstractMyCartFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
-        super(sphereClient, hookRunner);
+    private final SphereClient sphereClient;
+
+    protected AbstractMyCartFetcher(final HookRunner hookRunner, final SphereClient sphereClient) {
+        super(hookRunner);
+        this.sphereClient = sphereClient;
     }
 
     @Override
     public CompletionStage<Optional<Cart>> get() {
-        return defaultRequest().map(this::executeRequest).orElseGet(() -> completedFuture(Optional.empty()));
+        return buildRequest()
+                .map(request -> runHook(request, r -> sphereClient.execute(r).thenApply(this::selectResult)))
+                .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
     @Override
-    protected final CompletionStage<CartQuery> runRequestHook(final HookRunner hookRunner, final CartQuery baseRequest) {
-        return CartQueryHook.runHook(hookRunner, baseRequest);
+    protected final CompletionStage<Optional<Cart>> runHook(final CartQuery request,
+                                                            final Function<CartQuery, CompletionStage<Optional<Cart>>> execution) {
+        return hookRunner().run(MyCartFetcherHook.class, request, execution, h -> h::on);
     }
 
-    @Override
-    protected final void runResourceLoadedHook(final HookRunner hookRunner, final Cart resource) {
-        hookRunner.run(CartLoadedHook.class, h -> h.onLoaded(resource));
+    protected abstract Optional<CartQuery> buildRequest();
+
+    protected Optional<Cart> selectResult(final PagedQueryResult<Cart> results) {
+        return results.head();
     }
 }

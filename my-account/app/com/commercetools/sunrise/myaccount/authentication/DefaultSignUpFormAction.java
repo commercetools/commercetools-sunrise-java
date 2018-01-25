@@ -5,6 +5,8 @@ import com.commercetools.sunrise.models.customers.MyCustomerCreator;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
+import play.mvc.Results;
+import play.twirl.api.Content;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
@@ -37,10 +39,10 @@ public class DefaultSignUpFormAction extends AbstractFormAction<SignUpFormData> 
 
     @Override
     protected CompletionStage<Result> onFailedRequest(final Form<? extends SignUpFormData> form, final Throwable throwable,
-                                                      final Function<Form<? extends SignUpFormData>, CompletionStage<Result>> onBadRequest) {
+                                                      final Function<Form<? extends SignUpFormData>, CompletionStage<Content>> onBadRequest) {
         if (isDuplicatedEmailFieldError(throwable.getCause())) {
             form.reject("errors.emailAlreadyExists");
-            return onBadRequest.apply(form);
+            return onBadRequest.apply(form).thenApply(Results::badRequest);
         }
         return super.onFailedRequest(form, throwable, onBadRequest);
     }

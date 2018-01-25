@@ -1,9 +1,7 @@
 package com.commercetools.sunrise.models.customers;
 
-import com.commercetools.sunrise.core.AbstractSingleResourceFetcher;
+import com.commercetools.sunrise.core.AbstractHookRunner;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpevents.CustomerLoadedHook;
-import com.commercetools.sunrise.core.hooks.ctprequests.CustomerQueryHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.queries.CustomerQuery;
@@ -11,27 +9,34 @@ import io.sphere.sdk.queries.PagedQueryResult;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractMyCustomerFetcher extends AbstractSingleResourceFetcher<Customer, CustomerQuery, PagedQueryResult<Customer>> implements MyCustomerFetcher {
+public abstract class AbstractMyCustomerFetcher extends AbstractHookRunner<Optional<Customer>, CustomerQuery> implements MyCustomerFetcher {
 
-    protected AbstractMyCustomerFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
-        super(sphereClient, hookRunner);
+    private final SphereClient sphereClient;
+
+    protected AbstractMyCustomerFetcher(final HookRunner hookRunner, final SphereClient sphereClient) {
+        super(hookRunner);
+        this.sphereClient = sphereClient;
     }
 
     @Override
     public CompletionStage<Optional<Customer>> get() {
-        return defaultRequest().map(this::executeRequest).orElseGet(() -> completedFuture(Optional.empty()));
+        return buildRequest()
+                .map(request -> runHook(request, r -> sphereClient.execute(r).thenApply(this::selectResult)))
+                .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
     @Override
-    protected final CompletionStage<CustomerQuery> runRequestHook(final HookRunner hookRunner, final CustomerQuery baseRequest) {
-        return CustomerQueryHook.runHook(hookRunner, baseRequest);
+    protected final CompletionStage<Optional<Customer>> runHook(final CustomerQuery request, final Function<CustomerQuery, CompletionStage<Optional<Customer>>> execution) {
+        return hookRunner().run(MyCustomerFetcherHook.class, request, execution, h -> h::on);
     }
 
-    @Override
-    protected final void runResourceLoadedHook(final HookRunner hookRunner, final Customer resource) {
-        CustomerLoadedHook.runHook(hookRunner, resource);
+    protected abstract Optional<CustomerQuery> buildRequest();
+
+    protected Optional<Customer> selectResult(final PagedQueryResult<Customer> results) {
+        return results.head();
     }
 }

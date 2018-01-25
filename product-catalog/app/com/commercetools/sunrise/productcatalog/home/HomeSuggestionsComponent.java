@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.home;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
+import com.commercetools.sunrise.core.hooks.application.HttpRequestHook;
 import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.models.categories.CachedCategoryTree;
@@ -17,17 +17,19 @@ import play.Configuration;
 import play.cache.CacheApi;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
+import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
-public final class HomeSuggestionsComponent implements ControllerComponent, HttpRequestStartedHook, PageDataHook {
+public final class HomeSuggestionsComponent implements ControllerComponent, HttpRequestHook, PageDataHook {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeSuggestionsComponent.class);
     private static final String CACHE_KEY = "home-suggestions-ids";
@@ -54,8 +56,9 @@ public final class HomeSuggestionsComponent implements ControllerComponent, Http
     }
 
     @Override
-    public void onHttpRequestStarted(final Http.Context context) {
+    public CompletionStage<Result> on(final Http.Context ctx, final Function<Http.Context, CompletionStage<Result>> nextComponent) {
         this.suggestionsStage = getSuggestionsCategoryIds().thenCompose(this::fetchRelatedProducts);
+        return nextComponent.apply(ctx);
     }
 
     @Override
@@ -103,7 +106,7 @@ public final class HomeSuggestionsComponent implements ControllerComponent, Http
     }
 
     private CompletionStage<List<String>> fetchResource() {
-        return cachedCategoryTree.require()
+        return cachedCategoryTree.get()
                 .thenApply(categoryTree -> categoryExternalIds.parallelStream()
                         .map(externalId -> categoryTree.findByExternalId(externalId).map(Resource::getId))
                         .filter(Optional::isPresent)

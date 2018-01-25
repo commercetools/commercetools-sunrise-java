@@ -2,7 +2,6 @@ package com.commercetools.sunrise.myaccount.resetpassword;
 
 import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.core.hooks.ctpevents.CustomerTokenCreatedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.CustomerCreatePasswordTokenCommandHook;
 import com.commercetools.sunrise.email.EmailDeliveryException;
 import com.commercetools.sunrise.email.EmailSender;
@@ -14,6 +13,8 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
+import play.mvc.Results;
+import play.twirl.api.Content;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
@@ -55,7 +56,7 @@ public class DefaultResetPasswordRequestFormAction extends AbstractFormAction<Re
 
     @Override
     protected CompletionStage<Result> onFailedRequest(final Form<? extends ResetPasswordRequestFormData> form, final Throwable throwable,
-                                                      final Function<Form<? extends ResetPasswordRequestFormData>, CompletionStage<Result>> onBadRequest) {
+                                                      final Function<Form<? extends ResetPasswordRequestFormData>, CompletionStage<Content>> onBadRequest) {
         if (throwable.getCause() instanceof NotFoundException) {
             form.reject("errors.emailNotFound");
         } else if (throwable.getCause() instanceof EmailDeliveryException) {
@@ -63,13 +64,10 @@ public class DefaultResetPasswordRequestFormAction extends AbstractFormAction<Re
         } else {
             return super.onFailedRequest(form, throwable, onBadRequest);
         }
-        return onBadRequest.apply(form);
+        return onBadRequest.apply(form).thenApply(Results::badRequest);
     }
 
-    protected final CompletionStage<CustomerToken> executeRequestWithHooks(final CustomerCreatePasswordTokenCommand baseCommand) {
-        final CompletionStage<CustomerToken> resultStage = CustomerCreatePasswordTokenCommandHook.runHook(hookRunner, baseCommand)
-                .thenCompose(sphereClient::execute);
-        resultStage.thenAcceptAsync(result -> CustomerTokenCreatedHook.runHook(hookRunner, result), HttpExecution.defaultContext());
-        return resultStage;
+    protected final CompletionStage<CustomerToken> executeRequestWithHooks(final CustomerCreatePasswordTokenCommand request) {
+        return hookRunner.run(CustomerCreatePasswordTokenCommandHook.class, request, sphereClient::execute, h -> h::on);
     }
 }

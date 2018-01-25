@@ -2,8 +2,6 @@ package com.commercetools.sunrise.models.shoppinglists;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataHook;
-import com.commercetools.sunrise.core.hooks.ctprequests.ShoppingListQueryHook;
-import com.commercetools.sunrise.core.hooks.ctprequests.ShoppingListUpdateCommandHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.google.inject.Inject;
 import io.sphere.sdk.expansion.ExpansionPath;
@@ -14,11 +12,11 @@ import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
-public final class MyWishlistComponent implements ControllerComponent, PageDataHook, ShoppingListQueryHook, ShoppingListUpdateCommandHook {
+public final class MyWishlistComponent implements ControllerComponent, PageDataHook, MyWishlistFetcherHook, MyWishlistUpdaterHook {
 
     private final MyWishlist myWishlist;
 
@@ -28,13 +26,13 @@ public final class MyWishlistComponent implements ControllerComponent, PageDataH
     }
 
     @Override
-    public CompletionStage<ShoppingListQuery> onShoppingListQuery(final ShoppingListQuery query) {
-        return completedFuture(query.plusExpansionPaths(productInformationExpansion()));
+    public CompletionStage<Optional<ShoppingList>> on(final ShoppingListQuery request, final Function<ShoppingListQuery, CompletionStage<Optional<ShoppingList>>> nextComponent) {
+        return nextComponent.apply(request.plusExpansionPaths(productInformationExpansion()));
     }
 
     @Override
-    public CompletionStage<ShoppingListUpdateCommand> onShoppingListUpdateCommand(final ShoppingListUpdateCommand command) {
-        return completedFuture(command.plusExpansionPaths(productInformationExpansion()));
+    public CompletionStage<ShoppingList> on(final ShoppingListUpdateCommand request, final Function<ShoppingListUpdateCommand, CompletionStage<ShoppingList>> nextComponent) {
+        return nextComponent.apply(request.plusExpansionPaths(productInformationExpansion()));
     }
 
     @Override

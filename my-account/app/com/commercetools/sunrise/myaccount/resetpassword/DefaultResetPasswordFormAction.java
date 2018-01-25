@@ -10,6 +10,8 @@ import io.sphere.sdk.customers.commands.CustomerPasswordResetCommand;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
+import play.mvc.Results;
+import play.twirl.api.Content;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
@@ -42,15 +44,15 @@ public class DefaultResetPasswordFormAction extends AbstractFormAction<ResetPass
 
     @Override
     protected CompletionStage<Result> onFailedRequest(final Form<? extends ResetPasswordFormData> form, final Throwable throwable,
-                                                      final Function<Form<? extends ResetPasswordFormData>, CompletionStage<Result>> onBadRequest) {
+                                                      final Function<Form<? extends ResetPasswordFormData>, CompletionStage<Content>> onBadRequest) {
         if (throwable.getCause() instanceof NotFoundException) {
             form.reject("errors.invalidPasswordToken");
-            return onBadRequest.apply(form);
+            return onBadRequest.apply(form).thenApply(Results::badRequest);
         }
         return super.onFailedRequest(form, throwable, onBadRequest);
     }
 
-    protected final CompletionStage<Customer> executeWithHooks(final CustomerPasswordResetCommand baseCommand) {
-        return CustomerPasswordResetCommandHook.runHook(hookRunner, baseCommand).thenCompose(sphereClient::execute);
+    protected final CompletionStage<Customer> executeWithHooks(final CustomerPasswordResetCommand request) {
+        return hookRunner.run(CustomerPasswordResetCommandHook.class, request, sphereClient::execute, h -> h::on);
     }
 }

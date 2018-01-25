@@ -8,25 +8,25 @@ import io.sphere.sdk.orders.queries.OrderQuery;
 import javax.inject.Inject;
 import java.util.Optional;
 
-final class DefaultMyOrderFetcher extends AbstractOrderFetcher {
+final class DefaultMyOrderFetcher extends AbstractMyOrderFetcher {
 
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
-    DefaultMyOrderFetcher(final SphereClient sphereClient, final HookRunner hookRunner, final MyCustomerInSession myCustomerInSession) {
-        super(sphereClient, hookRunner);
+    DefaultMyOrderFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
+                          final MyCustomerInSession myCustomerInSession) {
+        super(hookRunner, sphereClient);
         this.myCustomerInSession = myCustomerInSession;
     }
 
     @Override
-    public Optional<OrderQuery> defaultRequest(final String identifier) {
+    protected Optional<OrderQuery> buildRequest(final String orderNumber) {
         return myCustomerInSession.findId()
                 .map(customerId -> OrderQuery.of().byCustomerId(customerId)
-                        .plusPredicates(order -> order.orderNumber().is(identifier))
+                        .plusPredicates(order -> order.orderNumber().is(orderNumber))
                         .plusExpansionPaths(order -> order.shippingInfo().shippingMethod())
                         .plusExpansionPaths(order -> order.paymentInfo().payments())
                         .plusExpansionPaths(order -> order.discountCodes().discountCode())
                         .withLimit(1));
     }
-
 }

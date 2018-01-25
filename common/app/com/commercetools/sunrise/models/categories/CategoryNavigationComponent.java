@@ -77,7 +77,7 @@ public final class CategoryNavigationComponent implements ControllerComponent, H
     }
 
     private CompletionStage<CategoryTree> fetchAndStoreResource() {
-        final CompletionStage<CategoryTree> categoryTreeStage = cachedCategoryTree.require()
+        final CompletionStage<CategoryTree> categoryTreeStage = cachedCategoryTree.get()
                 .thenComposeAsync(categoryTreeFilter::filter, HttpExecution.defaultContext());
         categoryTreeStage.thenAcceptAsync(categoryTree -> cacheApi.set(CACHE_KEY, categoryTree));
         return categoryTreeStage;

@@ -2,17 +2,11 @@ package com.commercetools.sunrise.models.customers;
 
 import com.commercetools.sunrise.core.ResourceUpdater;
 import com.google.inject.ImplementedBy;
-import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
+import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
-
-@ImplementedBy(MyCustomerUpdaterImpl.class)
+@ImplementedBy(DefaultMyCustomerUpdater.class)
 @FunctionalInterface
-public interface MyCustomerUpdater extends ResourceUpdater<Customer> {
+public interface MyCustomerUpdater extends ResourceUpdater<Customer, CustomerUpdateCommand> {
 
-    @Override
-    CompletionStage<Optional<Customer>> apply(List<? extends UpdateAction<Customer>> updateActions);
 }

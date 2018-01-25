@@ -2,8 +2,8 @@ package com.commercetools.sunrise.models.products;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.HandlebarsHook;
-import com.commercetools.sunrise.models.categories.CategorySettings;
 import com.commercetools.sunrise.models.categories.CachedCategoryTree;
+import com.commercetools.sunrise.models.categories.CategorySettings;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Helper;
 import io.sphere.sdk.categories.CategoryTree;
@@ -71,7 +71,7 @@ public final class NewProductFlagComponent implements ControllerComponent, Handl
     }
 
     private CompletionStage<List<String>> fetchResource(@Nonnull final String extId) {
-        return cachedCategoryTree.require()
+        return cachedCategoryTree.get()
                 .thenApply(categoryTree -> categoryTree.findByExternalId(extId)
                         .map(categoryTree::findChildren)
                         .map(categoryTree::getSubtree)
