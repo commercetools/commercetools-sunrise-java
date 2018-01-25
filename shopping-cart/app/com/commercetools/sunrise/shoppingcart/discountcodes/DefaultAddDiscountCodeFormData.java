@@ -8,7 +8,7 @@ public class DefaultAddDiscountCodeFormData extends SunriseModel implements AddD
 
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String code;
+    public String code;
 
     @Override
     public AddDiscountCode addDiscountCode() {

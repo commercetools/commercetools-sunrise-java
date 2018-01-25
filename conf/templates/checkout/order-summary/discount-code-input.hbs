@@ -6,12 +6,12 @@
             {{> form/global-errors errors=content.cart.addDiscountCodeForm.errors}}
         </div>
         <div class="col-sm-12">
-            <form id="form-add-discount-code" class="text-right promotion-info" action="{{@root.meta._links.addDiscountCode.href}}" method="post">
+            <form id="form-add-discount-code" class="text-right promotion-info" action="/cart/discount/add" method="post">
                 <span class="text-uppercase promo-info-text" title="{{i18n "checkout:discountTooltip"}}">
                     {{i18n "checkout:discountPromoInfo"}}
-                    <img class="info-icon" src="{{@root.meta.assetsPath}}img/information-3787f70287d781184eef270161383e9f.png" alt="information icon">
+                    <img class="info-icon" src="/assets/img/information-3787f70287d781184eef270161383e9f.png" alt="information icon">
                 </span>
-                <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+                <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
                 <input id="promo-code" type="text" name="code" value="{{content.cart.addDiscountCodeForm.code}}">
                 <button id="cart-apply-promocode-btn" class="text-uppercase promo-apply-btn">
                     {{i18n "checkout:discountApply"}}

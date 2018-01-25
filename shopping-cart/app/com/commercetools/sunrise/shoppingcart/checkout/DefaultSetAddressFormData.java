@@ -11,81 +11,81 @@ import play.data.validation.Constraints.Email;
 
 public class DefaultSetAddressFormData extends Base implements SetAddressFormData {
 
-    private String titleShipping;
+    public String titleShipping;
     
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String firstNameShipping;
+    public String firstNameShipping;
     
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String lastNameShipping;
+    public String lastNameShipping;
     
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String streetNameShipping;
+    public String streetNameShipping;
     
-    private String additionalStreetInfoShipping;
-    
-    @Constraints.Required
-    @Constraints.MinLength(1)
-    private String cityShipping;
+    public String additionalStreetInfoShipping;
     
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String postalCodeShipping;
+    public String cityShipping;
     
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String countryShipping;
+    public String postalCodeShipping;
     
-    private String regionShipping;
+    @Constraints.Required
+    @Constraints.MinLength(1)
+    public String countryShipping;
     
-    private String phoneShipping;
+    public String regionShipping;
+    
+    public String phoneShipping;
     
     @Constraints.Required
     @Constraints.MinLength(1)
     @Constraints.Email
-    private String emailShipping;
+    public String emailShipping;
 
-    private String titleBilling;
+    public String titleBilling;
     
     @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
-    private String firstNameBilling;
+    public String firstNameBilling;
     
     @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
-    private String lastNameBilling;
+    public String lastNameBilling;
     
     @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
-    private String streetNameBilling;
+    public String streetNameBilling;
     
-    private String additionalStreetInfoBilling;
-    
-    @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
-    @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
-    private String cityBilling;
+    public String additionalStreetInfoBilling;
     
     @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
-    private String postalCodeBilling;
+    public String cityBilling;
     
     @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
-    private String countryBilling;
+    public String postalCodeBilling;
     
-    private String regionBilling;
+    @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
+    @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
+    public String countryBilling;
     
-    private String phoneBilling;
+    public String regionBilling;
+    
+    public String phoneBilling;
     
     @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Email(groups = BillingAddressDifferentToShippingAddressGroup.class)
-    private String emailBilling;
+    public String emailBilling;
 
-    private boolean billingAddressDifferentToBillingAddress;
+    public boolean billingAddressDifferentToBillingAddress;
 
     @Override
     public SetShippingAddress setShippingAddress() {

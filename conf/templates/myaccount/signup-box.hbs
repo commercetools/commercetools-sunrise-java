@@ -1,7 +1,7 @@
 <!-- start myaccount/signup-box.hbs -->
 <div class="signup-box-wrapper">
-  <form id="form-sign-up" method="post" action="{{@root.meta._links.signUpSubmit.href}}">
-    <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+  <form id="form-sign-up" method="post" action="/signup">
+    <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
     <div class="clearfix">
       <div class="pull-left">
         <div class="signup-box-title">{{i18n "my-account-login:signupBox.title"}}</div>

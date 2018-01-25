@@ -8,15 +8,15 @@ public class DefaultAddToCartFormData extends Base implements AddToCartFormData 
 
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String productId;
+    public String productId;
 
     @Constraints.Required
     @Constraints.Min(1)
-    private Integer variantId;
+    public Integer variantId;
 
     @Constraints.Required
     @Constraints.Min(1)
-    private Long quantity;
+    public Long quantity;
 
     @Override
     public LineItemDraft lineItemDraft() {

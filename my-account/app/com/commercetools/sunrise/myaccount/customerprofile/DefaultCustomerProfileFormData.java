@@ -6,16 +6,16 @@ import play.data.validation.Constraints;
 
 public class DefaultCustomerProfileFormData extends Base implements CustomerProfileFormData {
 
-    private String title;
+    public String title;
 
     @Constraints.Required
-    private String firstName;
+    public String firstName;
 
     @Constraints.Required
-    private String lastName;
+    public String lastName;
 
     @Constraints.Required
-    private String email;
+    public String email;
 
     @Override
     public CustomerName customerName() {

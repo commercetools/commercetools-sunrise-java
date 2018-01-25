@@ -10,35 +10,35 @@ import play.data.validation.Constraints;
 public class DefaultChangeAddressFormData extends Base implements ChangeAddressFormData {
 
     @Constraints.Required
-    private String addressId;
+    public String addressId;
 
-    private String title;
-
-    @Constraints.Required
-    private String firstName;
+    public String title;
 
     @Constraints.Required
-    private String lastName;
+    public String firstName;
 
     @Constraints.Required
-    private String streetName;
-
-    private String additionalStreetInfo;
+    public String lastName;
 
     @Constraints.Required
-    private String city;
+    public String streetName;
+
+    public String additionalStreetInfo;
 
     @Constraints.Required
-    private String postalCode;
+    public String city;
 
     @Constraints.Required
-    private String country;
+    public String postalCode;
 
-    private String region;
+    @Constraints.Required
+    public String country;
 
-    private boolean defaultShippingAddress;
+    public String region;
 
-    private boolean defaultBillingAddress;
+    public boolean defaultShippingAddress;
+
+    public boolean defaultBillingAddress;
 
     @Override
     public ChangeAddress changeAddress() {

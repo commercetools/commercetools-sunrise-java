@@ -6,7 +6,7 @@ import play.data.validation.Constraints;
 public class DefaultSetPaymentFormData extends Base implements SetPaymentFormData {
 
     @Constraints.Required
-    private String payment;
+    public String payment;
 
     @Override
     public String paymentMethod() {

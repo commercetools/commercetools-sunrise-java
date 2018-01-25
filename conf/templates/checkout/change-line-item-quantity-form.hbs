@@ -1,6 +1,6 @@
 <!-- start checkout/change-line-item-quantity-form.hbs -->
-<form action="{{@root.meta._links.changeLineItem.href}}" method="post">
-    <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+<form action="/cart/quantity" method="post">
+    <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
     <input type="hidden" name="lineItemId" value="{{id}}">
     <div class="sm-pull-right visible-xs">
         <button type="submit" id="cart-quantity-submit-btn-{{@index}}" class="quantity-submit-btn"><span class="glyphicon glyphicon-refresh"></span></button>

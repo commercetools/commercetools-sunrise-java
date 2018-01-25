@@ -6,11 +6,11 @@ import play.data.validation.Constraints;
 public class DefaultLogInFormData extends Base implements LogInFormData {
 
     @Constraints.Required
-    private String username;
+    public String username;
 
     @Constraints.MinLength(1)
     @Constraints.Required
-    private String password;
+    public String password;
 
     @Override
     public String username() {

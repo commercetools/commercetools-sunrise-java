@@ -7,7 +7,7 @@ import play.data.validation.Constraints;
 public class DefaultRemoveAddressFormData extends Base implements RemoveAddressFormData {
 
     @Constraints.Required
-    private String addressId;
+    public String addressId;
 
     @Override
     public RemoveAddress removeAddress() {

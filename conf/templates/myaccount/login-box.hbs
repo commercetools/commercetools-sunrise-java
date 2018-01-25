@@ -11,8 +11,8 @@
   <hr class="login-box-hr">
   <div class="login-box-description">{{i18n "my-account-login:loginBox.description"}}</div>
   <div class="login-box-input-wrapper">
-    <form id="form-sign-in" method="POST" action="{{@root.meta._links.logInSubmit.href}}">
-      <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+    <form id="form-sign-in" method="POST" action="/login">
+      <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
       <div class="row">
         {{> form/global-messages messages=form.messages}}
         {{> form/global-errors errors=form.errors}}
@@ -34,7 +34,7 @@
         </div>
         <div class="pull-right">
           <div class="login-box-forgot-password">
-            <a href="{{@root.meta._links.recoveryEmail.href}}">{{i18n "my-account-login:loginBox.forgotPassword"}}</a>
+            <a href="/password/recovery">{{i18n "my-account-login:loginBox.forgotPassword"}}</a>
           </div>
         </div>
       </div>

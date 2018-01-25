@@ -5,14 +5,14 @@ import play.data.validation.Constraints;
 public class DefaultResetPasswordFormData implements ResetPasswordFormData {
 
     @Constraints.Required
-    private String resetToken;
+    public String resetToken;
 
     @Constraints.MinLength(4)
     @Constraints.Required
-    private String newPassword;
+    public String newPassword;
 
     @Constraints.Required
-    private String confirmPassword;
+    public String confirmPassword;
 
     @Override
     public String resetToken() {

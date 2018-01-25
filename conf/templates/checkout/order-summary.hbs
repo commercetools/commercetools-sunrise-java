@@ -4,11 +4,11 @@
   {{#each cart.lineItems}}
       <div class="row single-cart-item">
           <div class="col-sm-1 col-xs-4 product-img-col">
-              <img class="img-responsive cart-item-img" src="{{imageUrl variant}}" alt="{{name}}">
+              <img class="img-responsive cart-item-img" src="{{variant.images.[0].url}}" alt="{{name}}">
           </div>
           <div class="col-sm-3 col-xs-8 product-info-text">
               <p class="cart-item-name">
-                <a href="{{variantUrlFromLineItem this}}">{{name}}</a>
+                <a href="/{{product.slug}}-{{variant.sku}}.html">{{name}}</a>
               </p>
               <p class="grey-p">{{variant.sku}}</p>
               <!-- TODO MiSc -->
@@ -56,9 +56,11 @@
               <div class="text-right cart-item-price">
                   <span class="visible-xs xs-price-title">{{i18n "main:common.price"}}</span>
                 {{#if price.discounted.value}}
-                    <span class="discounted-price">{{oldPriceForLineItem this}}</span>
+                    <span class="discounted-price">{{price.value}}</span>
+                    <span>{{price.discounted.value}}</span>
+                {{else}}
+                    <span>{{price.value}}</span>
                 {{/if}}
-                  <span>{{currentPriceForLineItem this}}</span>
               </div>
           </div>
           <div class="col-sm-2 {{#if editable}}col-xs-12 sm-pull-right{{else}}col-xs-5{{/if}}">

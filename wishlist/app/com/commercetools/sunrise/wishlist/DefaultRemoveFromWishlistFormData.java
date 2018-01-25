@@ -8,7 +8,7 @@ public class DefaultRemoveFromWishlistFormData extends Base implements RemoveFro
 
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String lineItemId;
+    public String lineItemId;
 
     @Override
     public RemoveLineItem removeLineItem() {

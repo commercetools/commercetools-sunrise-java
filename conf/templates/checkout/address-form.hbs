@@ -1,6 +1,6 @@
 <!-- start checkout/address-form.hbs -->
-<form method="post" action="{{@root.meta._links.checkoutAddressesSubmit.href}}">
-  <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+<form method="post" action="/checkout/address">
+  <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
   <div class="shipping-info">
     <span class="text-uppercase shipping-info-title">{{i18n "checkout:shippingInformation"}}</span>
     <span class="pull-right required-fields">{{i18n "main:form.required"}}*</span>

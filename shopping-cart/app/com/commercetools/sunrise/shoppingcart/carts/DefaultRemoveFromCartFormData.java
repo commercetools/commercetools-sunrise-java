@@ -8,7 +8,7 @@ public class DefaultRemoveFromCartFormData extends Base implements RemoveFromCar
 
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String lineItemId;
+    public String lineItemId;
 
     @Override
     public RemoveLineItem removeLineItem() {

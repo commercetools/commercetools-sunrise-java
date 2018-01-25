@@ -61,6 +61,7 @@ POST        /cart/discount/remove        @controllers.DiscountCodesController.re
 # CHECKOUT
 # ~~~~~
 
+GET         /checkout                    controllers.Default.redirect(to = "/checkout/address")
 # Shows the form to enter shipping address and billing address
 GET         /checkout/address            @controllers.CheckoutController.showSetAddressForm
 # Processes the form of the shipping address and billing address

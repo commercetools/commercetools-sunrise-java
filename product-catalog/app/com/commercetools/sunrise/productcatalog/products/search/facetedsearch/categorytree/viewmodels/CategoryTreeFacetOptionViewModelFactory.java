@@ -80,9 +80,7 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
                 viewModel.setSelected(viewModel.isSelected() || childViewModel.isSelected());
             }
         });
-        System.out.println(viewModel);
-        System.out.println(viewModel.isSelected());
-        if (viewModel.isSelected()) {
+        if (viewModel != null && viewModel.isSelected()) {
             viewModel.setChildren(childrenViewModels);
         }
     }

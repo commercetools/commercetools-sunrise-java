@@ -8,11 +8,11 @@ public class DefaultChangeQuantityInCartFormData extends Base implements ChangeQ
 
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String lineItemId;
+    public String lineItemId;
 
     @Constraints.Min(1)
     @Constraints.Required
-    private Long quantity;
+    public Long quantity;
 
     @Override
     public ChangeLineItemQuantity changeLineItemQuantity() {

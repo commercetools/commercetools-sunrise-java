@@ -9,7 +9,7 @@ public class DefaultRemoveDiscountCodeFormData extends Base implements RemoveDis
 
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String discountCodeId;
+    public String discountCodeId;
 
     @Override
     public RemoveDiscountCode removeDiscountCode() {

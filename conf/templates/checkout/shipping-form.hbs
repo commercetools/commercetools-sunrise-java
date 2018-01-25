@@ -1,6 +1,6 @@
 <!-- start checkout/shipping-form.hbs -->
-<form id="form-edit-shipping" method="post" action="{{@root.meta._links.checkoutShippingSubmit.href}}">
-  <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+<form id="form-edit-shipping" method="post" action="/checkout/shipping">
+  <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
   <div class="shipping-method input-block" id="shipping-methods-setting">
     <div class="text-uppercase shipping-method-title">{{i18n "checkout:shippingForm"}}</div>
       <div class="row">

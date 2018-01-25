@@ -10,7 +10,7 @@ public class DefaultSetShippingFormData extends Base implements SetShippingFormD
 
     @Required
     @MinLength(1)
-    private String shippingMethodId;
+    public String shippingMethodId;
 
     @Override
     public SetShippingMethod setShippingMethod() {

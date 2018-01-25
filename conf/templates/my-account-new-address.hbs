@@ -31,8 +31,8 @@
                       </div>
                     </div>
                   </div>
-                  <form id="form-add-my-address-book" action="{{@root.meta._links.myAddressBookAddAddressSubmit.href}}" method="POST">
-                    <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+                  <form id="form-add-my-address-book" action="/user/addressbook/add" method="POST">
+                    <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
                     <div class="row">
                       {{> form/global-messages messages=content.newAddressForm.messages}}
                       {{> form/global-errors errors=content.newAddressForm.errors}}
@@ -46,7 +46,7 @@
                       <div class="col-sm-12">
                         <div class="edit-address-book-footer">
                           <div class="btn-grey push-left">
-                            <a href="{{@root.meta._links.myAddressBook.href}}">{{i18n "my-account:addressBook.buttons.cancelAddressBtn"}}</button>
+                            <a href="/user/addressbook">{{i18n "my-account:addressBook.buttons.cancelAddressBtn"}}</button>
                           </div>
                           <div class="add-new-address-btn push-right">
                             <button type="submit">{{i18n "my-account:addressBook.buttons.saveAddressBtn"}}</button>

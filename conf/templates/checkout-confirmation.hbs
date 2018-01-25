@@ -22,8 +22,8 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="checkout">
-                    <form method="post" action="{{@root.meta._links.checkoutConfirmationSubmit.href}}">
-                        <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+                    <form method="post" action="/checkout/confirmation">
+                        <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
                         {{> form/global-errors errors=content.checkoutForm.errors}}
                         <div class="row">
                             <div class="col-sm-4 checkout-first-col">

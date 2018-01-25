@@ -49,14 +49,14 @@
                             <div>{{i18n "my-account:personalDetails.subscribedToNewsletter"}}</div>
                             {{/if}}
                           <div class="personal-details-box-edit">
-                            <button class="personal-details-edit-show-btn"><img src="{{@root.meta.assetsPath}}img/edit-1-e76b284c78cd97506e3b64cfd0c089ae.png" alt="edit icon">{{i18n "main:form.edit"}}</button>
+                            <button class="personal-details-edit-show-btn"><img src="/assets/img/edit-1-e76b284c78cd97506e3b64cfd0c089ae.png" alt="edit icon">{{i18n "main:form.edit"}}</button>
                           </div>
                         </div>
                   </div>
 
                   <div class="personal-details-edit personal-details-edit-show {{#if content.personalDetailsForm.errors}}in{{/if}}">
-                      <form id="form-edit-personal-details" action="{{@root.meta._links.editMyPersonalDetails.href}}" method="POST">
-                          <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+                      <form id="form-edit-personal-details" action="/user" method="POST">
+                          <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
                           <div class="row">
                             {{> form/global-messages messages=content.personalDetailsForm.messages}}
                             {{> form/global-errors errors=content.personalDetailsForm.errors}}

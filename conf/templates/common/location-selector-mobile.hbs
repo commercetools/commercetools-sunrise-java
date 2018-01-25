@@ -19,7 +19,7 @@
 {{#withCountryOptions}}
 {{#if this.[1]}}
   <form id="form-select-country-mobile" action="/country" method="POST">
-    <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+    <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
     <ul>
       <li>
         <select name="country" id="country-select-mobile" class="select location-select">

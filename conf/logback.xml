@@ -11,7 +11,7 @@
 
     <logger name="play" level="INFO" />
     <logger name="application" level="DEBUG" />
-    <logger name="com.commercetools.sunrise.core.hooks.HookContext" level="DEBUG" />
+    <logger name="com.commercetools.sunrise.core.hooks.HookContext" level="OFF" />
     <logger name="com.commercetools.sunrise.core.viewmodels.PageDataJson" level="OFF" />
     <logger name="com.commercetools.sunrise.controllers.metrics.MetricsLogger" level="DEBUG" />
     <logger name="com.commercetools.sunrise.email.EmailSender" level="DEBUG" />

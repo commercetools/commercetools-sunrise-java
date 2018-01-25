@@ -9,8 +9,8 @@
       <ul>
         {{#each cart.lineItems}}
         <li>
-          <form action="{{@root.meta._links.deleteLineItem.href}}" method="post">
-            <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+          <form action="/cart/remove" method="post">
+            <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
             <a class="img" href="/{{productSlug}}-{{variant.sku}}.html"><img src="{{variant.images.[0].url}}" alt="{{name}}" /></a>
             <p class="product-title"><a href="/{{productSlug}}-{{variant.sku}}.html">{{name}}</a></p>
             <div class="details">
@@ -30,12 +30,12 @@
       </ul>
       <div class="gradient"></div>
       <p class="total-price">{{i18n "main:common.totalPrice" totalPrice=(total cart)}}</p>
-      <a href="{{@root.meta._links.cart.href}}" class="btn-grey">{{i18n "main:header.viewBag"}}</a>
-      <a href="{{@root.meta._links.checkout.href}}" class="btn-yellow">{{i18n "main:header.checkout"}}</a>
+      <a href="/cart" class="btn-grey">{{i18n "main:header.viewBag"}}</a>
+      <a href="/checkout" class="btn-yellow">{{i18n "main:header.checkout"}}</a>
     </div>
   </div>
 {{else}}
-<a href="{{@root.meta._links.cart.href}}" class="not-empty link-your-bag icon-hand-bag">
+<a href="/cart" class="not-empty link-your-bag icon-hand-bag">
     <span class="hidden-xs hidden-sm">{{i18n "main:header.miniCart"}}</span>
     <span class="cart-item-number">
         {{#if cart}}

@@ -7,27 +7,27 @@ import play.data.validation.Constraints;
 
 public class DefaultSignUpFormData extends Base implements SignUpFormData {
 
-    private String title;
+    public String title;
 
     @Constraints.Required
-    private String firstName;
+    public String firstName;
 
     @Constraints.Required
-    private String lastName;
+    public String lastName;
 
     @Constraints.Required
-    private String email;
+    public String email;
 
     @Constraints.Required
     @Constraints.MinLength(4)
-    private String password;
+    public String password;
 
 
     @Constraints.Required
-    private String confirmPassword;
+    public String confirmPassword;
 
     @Constraints.Required
-    private boolean agreeToTerms;
+    public boolean agreeToTerms;
 
     @Override
     public CustomerDraft customerDraft() {

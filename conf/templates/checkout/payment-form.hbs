@@ -1,6 +1,6 @@
 <!-- start checkout/payment-form.hbs -->
-<form method="post" action="{{@root.meta._links.checkoutPaymentSubmit.href}}">
-  <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+<form method="post" action="/checkout/payment">
+  <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
   <div class="shipping-info">
     <span class="text-uppercase payment-info-title">{{i18n "checkout:paymentInformation"}}</span>
     <span class="pull-right-fields">{{i18n "main:form.required"}}*</span>
@@ -21,7 +21,7 @@
     <div class="col-lg-3 col-md-4 col-sm-4">
       <div class="payment-type">
         <label for="payment-type-{{value}}">
-          {{#if image}}<img src="{{@root.meta.assetsPath}}{{image}}" class="payment-type-icon" alt="{{label}}">{{/if}}<br>
+          {{#if image}}<img src="/assets/{{image}}" class="payment-type-icon" alt="{{label}}">{{/if}}<br>
           <input id="payment-type-{{value}}" class="payment-text" type="radio" name="payment" value="{{value}}" {{#if selected}}checked{{/if}}>{{label}}
         </label>
       </div>
@@ -69,7 +69,7 @@
         <div class="security-code">
           <span class="text-uppercase">{{i18n "checkout:paymentPage.securityCode"}}*</span><br>
           <input id="payment-securitycode-input" class="checkout-input-field security-code-input" type="text">
-          <span class="security-code-info" title="{{i18n "checkout:paymentPage.securityCodeTooltip"}}"><img class="info-icon" src="{{@root.meta.assetsPath}}img/information-3787f70287d781184eef270161383e9f.png" alt="information icon"></span>
+          <span class="security-code-info" title="{{i18n "checkout:paymentPage.securityCodeTooltip"}}"><img class="info-icon" src="/assets/img/information-3787f70287d781184eef270161383e9f.png" alt="information icon"></span>
         </div>
       </div>
     </div>

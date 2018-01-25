@@ -50,8 +50,8 @@
               {{> catalog/product-availability availability=this.availability}}
 
                 <div class="action">
-                    <form id="form-reserve-in-store{{@index}}" name="reserve-in-store" method="post" action="{{@root.meta._links.reserveInStore.href}}">
-                        <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+                    <form id="form-reserve-in-store{{@index}}" name="reserve-in-store" method="post" action="">
+                        <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
                         <input type="hidden" name="storeId" value="{{this.storeInfo.id}}">
                         <button type="submit" class="btn btn-standard">{{i18n "main:storeLocation.reserve"}}</button>
                     </form>

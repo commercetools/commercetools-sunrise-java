@@ -10,7 +10,7 @@ public class DefaultResetPasswordRequestFormData implements ResetPasswordRequest
 
     @Constraints.Required
     @Constraints.Email
-    private String email;
+    public String email;
 
     @Override
     public String email() {

@@ -9,11 +9,11 @@ public class DefaultAddToWishlistFormData extends Base implements AddToWishlistF
 
     @Constraints.Required
     @Constraints.MinLength(1)
-    private String productId;
+    public String productId;
 
     @Constraints.Required
     @Constraints.Min(1)
-    private Integer variantId;
+    public Integer variantId;
 
     @Override
     public LineItemDraft lineItemDraft() {

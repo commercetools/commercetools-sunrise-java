@@ -6,13 +6,13 @@ import play.data.validation.Constraints;
 public class DefaultChangePasswordFormData extends Base implements ChangePasswordFormData {
 
     @Constraints.Required
-    private String oldPassword;
+    public String oldPassword;
 
     @Constraints.Required
-    private String newPassword;
+    public String newPassword;
 
     @Constraints.Required
-    private String repeatPassword;
+    public String repeatPassword;
 
     @Override
     public String oldPassword() {
