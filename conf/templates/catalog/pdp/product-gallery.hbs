@@ -24,7 +24,7 @@
 </div>
 <div class="gallery-mobile visible-xs">
   {{#each variant.images}}
-    <img src="{{url}}" alt="Product Image" />
+    <img src="{{url}}" {{#if label}}alt="{{label}}"{{/if}} />
   {{/each}}
 </div>
 <!-- end catalog/pdp/product-gallery.hbs -->

@@ -17,6 +17,6 @@ public interface CachedProject extends ResourceInCache<Project> {
     CompletionStage<Project> get();
 
     default Project blockingGet() throws SphereTimeoutException {
-        return blockingWait(get(), Duration.ofSeconds(2));
+        return blockingWait(get(), Duration.ofSeconds(30));
     }
 }

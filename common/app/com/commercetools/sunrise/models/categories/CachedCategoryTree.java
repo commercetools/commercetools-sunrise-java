@@ -17,6 +17,6 @@ public interface CachedCategoryTree extends ResourceInCache<CategoryTree> {
     CompletionStage<CategoryTree> get();
 
     default CategoryTree blockingGet() throws SphereTimeoutException {
-        return blockingWait(get(), Duration.ofSeconds(2));
+        return blockingWait(get(), Duration.ofSeconds(30));
     }
 }

@@ -47,7 +47,7 @@
           </div>
           <!-- End mobile version -->
 
-          <form id="form-filter-products" name="filter-products" action="{{#if category}}{{category.slug}}{{else}}search{{/if}}">
+          <form id="form-filter-products" name="filter-products" action="/{{#if category}}{{category.slug}}{{else}}search{{/if}}">
             {{#if searchTerm}}
               <input type="hidden" name="q" value="{{searchTerm}}"/>
             {{/if}}

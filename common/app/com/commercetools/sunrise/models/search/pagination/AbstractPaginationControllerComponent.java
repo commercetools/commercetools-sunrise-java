@@ -5,7 +5,6 @@ import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.models.search.pagination.viewmodels.AbstractEntriesPerPageSelectorViewModelFactory;
 import com.commercetools.sunrise.models.search.pagination.viewmodels.AbstractPaginationViewModelFactory;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.queries.PagedResult;
 import play.mvc.Http;
 
@@ -14,7 +13,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractPaginationControllerComponent<P extends PagedResult<?>> extends Base implements ControllerComponent, PageDataHook {
+public abstract class AbstractPaginationControllerComponent<P extends PagedResult<?>> implements ControllerComponent, PageDataHook {
 
     private final PaginationSettings paginationSettings;
     private final EntriesPerPageFormSettings entriesPerPageFormSettings;

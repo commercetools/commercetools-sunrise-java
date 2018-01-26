@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static io.sphere.sdk.utils.CompletableFutureUtils.successful;
@@ -33,17 +32,6 @@ final class HookContextImpl extends AbstractComponentRegistry implements HookCon
     HookContextImpl(final GlobalComponentRegistry globalComponentRegistry, final Injector injector) {
         this.injector = injector;
         addAll(globalComponentRegistry.components());
-    }
-
-    @Override
-    public <H extends ConsumerHook> void run(final Class<H> hookClass, final Consumer<H> consumer) {
-        LOGGER.debug("Running ConsumerHook {}", hookClass.getSimpleName());
-        components().stream()
-                .filter(hookClass::isAssignableFrom)
-                .map(this::getComponent)
-                .peek(component -> LOGGER.debug("Executing {} triggered by {}", component.getClass().getSimpleName(), hookClass.getSimpleName()))
-                .map(component -> (H) component)
-                .forEach(consumer);
     }
 
     @Override
