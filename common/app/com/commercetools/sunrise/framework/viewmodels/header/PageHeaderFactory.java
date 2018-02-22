@@ -20,8 +20,13 @@ public class PageHeaderFactory extends SimpleViewModelFactory<PageHeader, PageCo
     }
 
     @Override
-    protected final PageHeader newViewModelInstance(final PageContent pageContent) {
+    protected PageHeader newViewModelInstance(final PageContent pageContent) {
         return new PageHeader();
+    }
+
+    @Override
+    public final PageHeader create(final PageContent input) {
+        return super.create(input);
     }
 
     @Override
