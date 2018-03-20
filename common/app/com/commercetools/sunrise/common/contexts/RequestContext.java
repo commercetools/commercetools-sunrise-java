@@ -1,52 +1,32 @@
 package com.commercetools.sunrise.common.contexts;
 
-import io.sphere.sdk.models.Base;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.joining;
+public interface RequestContext {
 
-public final class RequestContext extends Base {
+    /**
+     * Path of the current request, excluding the query string.
+     * @return the path without the query string
+     */
+    String getPath();
 
-    private final String path;
-    private final Map<String, List<String>> queryString;
+    /**
+     * Map for every value of the query string.
+     * Each entry of the form [key - [foo, bar]] corresponds to the query string {@code key=foo&key=bar}.
+     * @return the key-values of the query string
+     */
+    Map<String, List<String>> getQueryString();
 
-    private RequestContext(final Map<String, List<String>> queryString, final String path) {
-        this.path = path;
-        this.queryString = new HashMap<>(queryString);
-    }
+    /**
+     * Returns the URI built with the path and query string, together with the given {@code key} and {@code values}.
+     * @param key query string key
+     * @param values query string values for the given key
+     * @return the built URI
+     */
+    String buildUrl(final String key, final List<String> values);
 
-    public String getPath() {
-        return path;
-    }
-
-    public Map<String, List<String>> getQueryString() {
-        return queryString;
-    }
-
-    public String buildUrl(final String key, final List<String> values) {
-        final HashMap<String, List<String>> copyQueryString = new HashMap<>(queryString);
-        copyQueryString.put(key, values);
-        return buildUrl(path, buildQueryString(copyQueryString));
-    }
-
-    public static RequestContext of(final Map<String, List<String>> queryString, final String path) {
-        return new RequestContext(queryString, path);
-    }
-
-    private static String buildQueryString(final Map<String, List<String>> queryString) {
-        return queryString.entrySet().stream()
-                .map(parameter -> buildQueryStringOfParameter(parameter.getKey(), parameter.getValue()))
-                .collect(joining("&"));
-    }
-
-    private static String buildUrl(final String path, final String queryString) {
-        return path + (queryString.isEmpty() ? "" : "?" + queryString);
-    }
-
-    private static String buildQueryStringOfParameter(final String key, final List<String> values) {
-        return values.stream().collect(joining("&" + key + "=", key + "=", ""));
+    static RequestContext of(final Map<String, List<String>> queryString, final String path) {
+        return new RequestContextImpl(queryString, path);
     }
 }
