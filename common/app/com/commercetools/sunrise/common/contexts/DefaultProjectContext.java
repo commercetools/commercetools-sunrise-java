@@ -32,7 +32,7 @@ import static java.util.stream.Collectors.toList;
  */
 
 @Singleton
-final class ProjectContextImpl extends Base implements ProjectContext {
+public class DefaultProjectContext extends Base implements ProjectContext {
 
     private static final Logger logger = LoggerFactory.getLogger(ProjectContext.class);
     private static final String CONFIG_LANGUAGES = "application.i18n.languages";
@@ -44,7 +44,7 @@ final class ProjectContextImpl extends Base implements ProjectContext {
     private final List<CurrencyUnit> currencies;
 
     @Inject
-    private ProjectContextImpl(final Configuration configuration, @Named("global") final SphereClient client) {
+    protected DefaultProjectContext(final Configuration configuration, @Named("global") final SphereClient client) {
         try {
             final SphereRequest<Project> request = ProjectGet.of();
             final Project project = blockingWait(client.execute(request), Duration.ofMinutes(1));

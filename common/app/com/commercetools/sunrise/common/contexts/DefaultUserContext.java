@@ -32,7 +32,7 @@ import static java.util.stream.Collectors.toList;
  */
 
 @RequestScoped
-final class UserContextImpl extends Base implements UserContext {
+public class DefaultUserContext extends Base implements UserContext {
 
     private static final Logger logger = LoggerFactory.getLogger(UserContext.class);
     private final List<Locale> locales;
@@ -44,7 +44,7 @@ final class UserContextImpl extends Base implements UserContext {
     private final Reference<Channel> channel;
 
     @Inject
-    private UserContextImpl(final Http.Context context, final ProjectContext projectContext) {
+    protected DefaultUserContext(final Http.Context context, final ProjectContext projectContext) {
         this.locales = acceptedLocales(context, projectContext);
         this.country = userCountry(context, projectContext);
         this.currency = userCurrency(context, projectContext, country);

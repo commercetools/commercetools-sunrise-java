@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * A container for all information related to the current user, such as selected country, language or customer group.
  */
-@ImplementedBy(UserContextImpl.class)
+@ImplementedBy(DefaultUserContext.class)
 public interface UserContext {
 
 

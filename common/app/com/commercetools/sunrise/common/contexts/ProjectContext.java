@@ -10,7 +10,7 @@ import java.util.Locale;
 /**
  * A container for all information related to the project, such as supported countries, languages or currencies.
  */
-@ImplementedBy(ProjectContextImpl.class)
+@ImplementedBy(DefaultProjectContext.class)
 public interface ProjectContext {
 
     /**
