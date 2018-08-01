@@ -22,7 +22,7 @@ import static play.mvc.Results.unauthorized;
 /**
  * Request filter that enables HTTP Access Authentication.
  */
-public final class HttpAuthenticationFilter extends Filter {
+public class HttpAuthenticationFilter extends Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpAuthenticationFilter.class);
 
