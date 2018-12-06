@@ -5,7 +5,7 @@ import sbt._
 object Dependencies {
   private val sunriseThemeVersion = "0.72.0"
   val sunriseEmailVersion = "0.3.0"
-  private val jvmSdkVersion = "1.17.0"
+  private val jvmSdkVersion = "1.37.0"
   private val jacksonVersion = "2.7.5"
 
   lazy val jvmSdk = Seq (

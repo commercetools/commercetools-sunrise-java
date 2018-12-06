@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.test;
 
+import io.sphere.sdk.client.SphereApiConfig;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;
 import io.sphere.sdk.client.TimeoutSphereClientDecorator;
@@ -25,6 +26,21 @@ public class TestableSphereClient implements SphereClient {
     @Override
     public void close() {
 
+    }
+
+    @Override
+    public SphereApiConfig getConfig() {
+        return new SphereApiConfig() {
+            @Override
+            public String getApiUrl() {
+                return "fakeUrl";
+            }
+
+            @Override
+            public String getProjectKey() {
+                return "fakeProject";
+            }
+        };
     }
 
     @Override
