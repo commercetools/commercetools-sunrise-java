@@ -128,6 +128,11 @@ public class PaginationBeanFactoryTest {
             }
 
             @Override
+            public Long getLimit() {
+                return 0L; // not used
+            }
+
+            @Override
             public Long getTotal() {
                 return totalProducts;
             }

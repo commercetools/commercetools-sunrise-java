@@ -55,6 +55,11 @@ public final class RefreshableCategoryTree extends Base implements CategoryTree 
     }
 
     @Override
+    public Optional<Category> findByKey(final String key) {
+        return categoryTree.findByKey(key);
+    }
+
+    @Override
     public List<Category> getAllAsFlatList() {
         return categoryTree.getAllAsFlatList();
     }
