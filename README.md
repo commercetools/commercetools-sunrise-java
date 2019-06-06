@@ -6,6 +6,9 @@ Sunrise Java Shop Framework :sunrise:
 [![stability-frozen](https://img.shields.io/badge/stability-locked-blue.svg)](https://github.com/orangemug/stability-badges#locked)
 [![Heroku](http://heroku-badge.herokuapp.com/?app=ct-sunrise-prod&style=flat&svg=1)](http://ct-sunrise-prod.herokuapp.com/)
 
+> :warning: **The Sunrise Java Shop Framework is no longer maintained.**
+If you would nevertheless like to use it for your own developments you should fork this repository under the given license and continue developing your version, but please be aware that there will be no more updates and no support provided to this framework.
+
 The next generation shop framework. 
 
 * [Demo](https://demo.commercetools.com)
